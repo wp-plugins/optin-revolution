@@ -15,6 +15,10 @@ A WordPress popup plugin. Quite possibly the best way in the world for you to cr
 
 = Optin Revolution =
 
+Optin Revolution is a WordPress popup plugin is quite possibly the best way in the world for you to create supercharged unblockable popups to grow your list of subscribers! Optin Revolution is a killer free plugin for people who want to have unlimited customization on their option popups, with the ability to be highly creative without having to know how to code.
+
+= Optin Revolution Pro =
+
 [Upgrade to Optin Revolution Pro](http://optinrevolution.com "Upgrade to Optin Revolution Pro")
 
 *Optin Revolution Pro* is a **significant upgrade** to *Optin Revolution* that adds many tools including A/B/C/D/E split testing, analytics that will allows you to track conversion and view statistics on your optin popups plus in-post forms that can be split tested. You can learn more about *Optin Revolution* here:
@@ -64,10 +68,6 @@ Allows custom variables for popup window. Support for the following custom varia
 The Image Uploader allows you to easily add images to your WordPress popup.
 
 The Button Uploader allows you to add custom call to action button to your WordPress Popup.
-
-= Optin Revolution =
-
-Optin Revolution is a WordPress popup plugin is quite possibly the best way in the world for you to create unblockable, unique popups to grow your list of email subscribers. Optin Revolution is a killer free plugin for people who want to have unlimited customization on their option popups, with the ability to be highly creative without having to know how to code.
 
 == Installation ==
 
