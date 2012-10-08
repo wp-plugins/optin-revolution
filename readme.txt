@@ -21,11 +21,9 @@ Optin Revolution is a WordPress popup plugin is quite possibly the best way in t
 
 [Upgrade to Optin Revolution Pro](http://optinrevolution.com "Upgrade to Optin Revolution Pro")
 
-*Optin Revolution Pro* is a **significant upgrade** to *Optin Revolution* that adds many tools including A/B/C/D/E split testing, analytics that will allows you to track conversion and view statistics on your optin popups plus in-post forms that can be split tested. You can learn more about *Optin Revolution* here:
+*Optin Revolution Pro* is a **significant upgrade** to *Optin Revolution* that adds many tools including A/B/C/D/E split testing, analytics that will allows you to track conversion and view statistics on your optin popups plus in-post forms that can be split tested. You can learn more about *Optin Revolution Pro* here: [Optin Revolution Pro](http://optinrevolution.com/ "Optin Revolution Pro")
 
-[Optin Revolution Pro](http://optinrevolution.com/ "Optin Revolution Pro")
-
-Check out the [Optin Revolution for WordPress video](http://www.youtube.com/watch?v=-SHDzo3bzx4):
+Check Out the [Optin Revolution for WordPress Video](http://www.youtube.com/watch?v=-SHDzo3bzx4&autoplay=1):
 
 http://www.youtube.com/watch?v=-SHDzo3bzx4&hd=1
 
