@@ -83,7 +83,7 @@ The Button Uploader allows you to add custom call to action button to your WordP
 
 == Screenshots ==
 
-1. Optin Revolution main settings.
+1. Optin Revolution main settings
 2. Optin Revolution popup settings.
 3. Optin Revolution image uploader.
 4. Optin Revolution button uploader.
