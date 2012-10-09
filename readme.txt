@@ -3,7 +3,7 @@ Contributors: optinrevolution
 Donate link: http://optinrevolution.com/
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Tags: post, plugin, admin, posts, page, pages, email, optin, popup, wordpress popup, ,optin popup, administration, stats, statistics, stat, statistic,  affiliate, affiliates, automation, widget, widgets, dashboard, shortcode, sidebar
+Tags: post, plugin, admin, posts, page, pages, email, optin, pop-up, popup, wordpress popup, ,optin popup, administration, stats, statistics, stat, statistic,  affiliate, affiliates, automation, widget, widgets, dashboard, shortcode, sidebar
 Requires at least: 3.1
 Tested up to: 3.4
 Stable tag: 1.0
@@ -83,7 +83,7 @@ The Button Uploader allows you to add custom call to action button to your WordP
 
 == Screenshots ==
 
-1. Optin Revolution main settings
+1. Optin Revolution main settings.
 2. Optin Revolution popup settings.
 3. Optin Revolution image uploader.
 4. Optin Revolution button uploader.
