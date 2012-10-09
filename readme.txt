@@ -3,7 +3,7 @@ Contributors: optinrevolution
 Donate link: http://optinrevolution.com/
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Tags: post, plugin, admin, posts, page, pages, email, optin, popup, wordpress popup, ,optin popup, administration, stats, statistics, stat, statistic,  affiliate, affiliates, automation, widget, widgets, dashboard, shortcode, sidebar
+Tags: post, plugin, admin, posts, page, pages, email, optin, pop-up, popup, wordpress popup, ,optin popup, administration, stats, statistics, stat, statistic,  affiliate, affiliates, automation, widget, widgets, dashboard, shortcode, sidebar
 Requires at least: 3.1
 Tested up to: 3.4
 Stable tag: 1.0
