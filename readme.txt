@@ -1,21 +1,19 @@
-=== Optin Revolution ===
+=== Optin Revolution: WordPress Popup ===
 Contributors: optinrevolution
 Donate link: http://optinrevolution.com/
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Tags: post, plugin, admin, posts, page, pages, email, optin, pop-up, popup, wordpress popup, ,optin popup, administration, stats, statistics, stat, statistic,  affiliate, affiliates, automation, widget, widgets, dashboard, shortcode, sidebar
+Tags: post, plugin, admin, post, posts, page, pages, email, optin, pop-up, popup, wordpress popup, ,optin popup, administration, stats, statistics, stat, statistic,  affiliate, affiliates, automation, widget, widgets, dashboard, shortcode, sidebar 
 Requires at least: 3.1
 Tested up to: 3.4
-Stable tag: 1.0
+Stable tag: 1.0.1
 
 
-A WordPress popup plugin. Quite possibly the best way in the world for you to create supercharged unblockable popups to grow your list of subscribers!
+Supercharged WordPress Popup Plugin. Quite possibly the best way in the world for you to create supercharged unblockable popups to grow your list of subscribers!
 
 == Description ==
 
 = Optin Revolution =
 
-Optin Revolution is a WordPress popup plugin is quite possibly the best way in the world for you to create supercharged unblockable popups to grow your list of subscribers! Optin Revolution is a killer free plugin for people who want to have unlimited customization on their option popups, with the ability to be highly creative without having to know how to code.
+Optin Revolution is a WordPress popup plugin is quite possibly the best way in the world for you to create supercharged unblockable popups to grow your list of subscribers! Optin Revolution is a killer free popup plugin for people who want to have unlimited customization on their optin popups, with the ability to be highly creative without having to know how to code.
 
 = Optin Revolution Pro =
 
@@ -77,6 +75,11 @@ The Button Uploader allows you to add custom call to action button to your WordP
 
 
 == Changelog ==
+
+= 1.0.1 =
+
+* Bug Fix: Off/On slider enabling and disabling optin popup not functioning properly.
+* Bug Fix: Issue with permission on the optin-revolution/uploads directory on some installs.
 
 = 1.0 =
 * Initial release.

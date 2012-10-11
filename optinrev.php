@@ -2,7 +2,7 @@
 /**
  * @package Optin Revolution
  * 7/4/2012 AM 
- * @version 1.0
+ * @version 1.0.1
  */
 
 /*
@@ -10,9 +10,9 @@
   Plugin URI: http://wordpress.org/extend/plugins/optin-revolution/
   Description: Optin Revolution is a WordPress popup plugin is quite possibly the best way in the world for you to create supercharged unblockable popups to grow your list of subscribers! To get started: 1) Click the "Activate" link to the left of this description, 2) Go to your Optin Revolution settings page, and 3) Watch the video on the settings page which will show you how to get started creating your cool popups.
   Author: Optin Revolution
-  Version: 1.0
+  Version: 1.0.1
   Author URI: http://optinrevolution.com/
-  License: Use GNU General Public License v2 on the free version needs to be this on the documentation for submitting the plugin to wordpress.org. 
+  License: GPL2+
 */
 
 if (!session_start()) {
@@ -29,7 +29,7 @@ $plugin_url;
 //init
 $plugin_name = 'optin-revolution/optinrev.php';
 $optinrev_db_version = '1.0';
-$optinrev_installed_version = '1.0';
+$optinrev_installed_version = '1.0.1';
 
 function optinrev_admin_actions()
 {
@@ -56,10 +56,10 @@ function optinrev_plugin_admin_init()
 {  
  global $plugin_page;
   
- $dir = plugin_dir_url( __FILE__ );  
+ $dir = plugin_dir_url( __FILE__ );
  
   //Clear all cookies
-  if ( isset($_GET['cookies']) && $cls_cookies = htmlspecialchars( $_GET['cookies'] ) ) {
+  if ( isset($_GET['cookies']) && $cls_cookies = esc_html( $_GET['cookies'] ) ) {
       if ( $cls_cookies === 'clear' ) {            
           foreach ( $_COOKIE as $key => $value ) {
           setcookie( $key, $value, time() - 3600, '/' );
@@ -68,6 +68,13 @@ function optinrev_plugin_admin_init()
           wp_redirect( 'admin.php?page=optin' ); exit;
       }
   } 
+  
+  //set 777 in upload directory
+  if ( isset($_GET['optinvrev-upload']) && $isupload = esc_html($_GET['optinvrev-upload']) ) {
+      chmod( OPTINREV_DIR_PATH . 'uploads', 0777 );
+      optinrev_update( 'optinrev_upload', true );
+      wp_redirect( 'admin.php?page='. $plugin_page ); exit;   
+  }
  
   // Browser Issue Alert
   if ( $plugin_page !== 'browser-issue' )
@@ -77,6 +84,12 @@ function optinrev_plugin_admin_init()
       { 
           wp_redirect( 'admin.php?page=browser-issue' ); exit;        
       }
+  }
+  
+  //enabled
+  if (isset( $_GET['enable'] )) {
+  optinrev_update('optinrev_popup_enabled', 'true');
+  wp_redirect( 'admin.php?page='. $plugin_page ); exit;
   }
   
   //optin
@@ -155,7 +168,7 @@ function optinrev_transient_update_plugins($transient)
         if ( $download_url = optinrev_download_url() ) {
             $obj = new stdClass();
             $obj->slug = 'optin';  
-            $obj->new_version = '1.0';  
+            $obj->new_version = '1.0.1';  
             $obj->url = 'http://optinrevolution.com';
             $obj->package = $download_url;  
             $transient->response[$plugin_name] = $obj;
@@ -181,15 +194,26 @@ add_action('after_plugin_row', 'optinrev_pro_action_needed');
 function optinrev_pro_get_started_headline()
 { 
   global $plugin_name;
+  
   $this_uri = preg_replace('#&.*?$#', '', str_replace( '%7E', '~', $_SERVER['REQUEST_URI']));
   
   if(isset($_GET['action']) && $_GET['action'] == 'upgrade-plugin')
   return;
   
+  if ( isset( $_GET['page'] ) ) {
+  
+  if ( !is_writable( OPTINREV_DIR_PATH . 'uploads' ) ) {  
+  ?>  
+  <div class="error" style="padding:8px;"><?php echo __('Would you like us to change the permissions on the Optin Revolution Upload Directory <a href="'.$this_uri.'&optinrev-upload=1">Yes</a> | <a href="'.$this_uri.'&optinrev-upload=0">No</a> ?'); ?></div>
+  <?php
+  }
+  
   if ( !optinrev_get('optinrev_popup_enabled') || optinrev_get('optinrev_popup_enabled') == 'false' ) {
   ?>
-  <div class="error" id="_disopt" style="padding:8px;"><?php printf(__('Optin Revolution Popup is disabled.<br/>%1$sEnable it now.%2$s', 'optin'), '<a href="'. $this_url .'?page=optin&enable=1">','</a>'); ?></div>  
+  <div class="error" id="_disopt" style="padding:8px;"><?php printf(__('Optin Revolution Popup is disabled.<br/>%1$sEnable it now.%2$s', 'optin'), '<a href="'. $this_uri .'&enable=1">','</a>'); ?></div>  
   <?php
+  }
+  
   }
 
   if( optinrev_is_pro_authorized() &&
@@ -291,6 +315,9 @@ function optinrev_js()
       optinrev_update( 'optinrev_active_action_button', $is_actionbtn );
       optinrev_delete( 'optinrev_add_button_briefcase' );
   }      
+  
+  $is_upload = optinrev_get( 'optinrev_upload' );
+  $is_upload = ( empty( $is_upload ) ) ? 0 : $is_upload;
     
   $ht = '';
   //setting page
@@ -897,9 +924,18 @@ function optinrev_modal_wphead()
 add_action( 'wp_head', 'optinrev_modal_wphead' );
 
 function optinrev_wphead() {
-  if ( !optinrev_get('optinrev_popup_enabled') ) return;  
+  //optinrev_popup_enabled
+  if ( $ispop = optinrev_get('optinrev_popup_enabled') ) {
+  if ( $ispop == 'false' ) return false;
+  } else return false;
+    
   //default  
   $optin_id = 1;
+  
+  //is popup enabled
+  if ( $pop = optinrev_get('optinrev_optin1_enabled') ) {
+  if ( $pop == 'false' ) return false;  
+  } else return false;
   
   //optin popup
   $optin = optinrev_get( 'optin' . $optin_id );
