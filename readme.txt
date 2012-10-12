@@ -7,7 +7,7 @@ Tested up to: 3.4
 Stable tag: 1.0.1
 
 
-Supercharged WordPress Popup Plugin. Quite possibly the best way in the world for you to create supercharged unblockable popups to grow your list of subscribers!
+Supercharged WordPress Popup. Quite possibly the best way in the world for you to create unquie unblockable popups to grow your list of subscribers!
 
 == Description ==
 
