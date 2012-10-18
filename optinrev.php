@@ -1,8 +1,7 @@
 <?php
 /**
  * @package Optin Revolution
- * 7/4/2012 AM 
- * @version 1.0.1
+ * @version 1.0
  */
 
 /*
@@ -10,7 +9,7 @@
   Plugin URI: http://wordpress.org/extend/plugins/optin-revolution/
   Description: Optin Revolution is a WordPress popup plugin is quite possibly the best way in the world for you to create supercharged unblockable popups to grow your list of subscribers! To get started: 1) Click the "Activate" link to the left of this description, 2) Go to your Optin Revolution settings page, and 3) Watch the video on the settings page which will show you how to get started creating your cool popups.
   Author: Optin Revolution
-  Version: 1.0.1
+  Version: 1.0.2
   Author URI: http://optinrevolution.com/
   License: GPL2+
 */
@@ -25,11 +24,13 @@ global
 $optinrev_db_version, 
 $optinrev_installed_version, 
 $plugin_name, 
-$plugin_url;   
+$plugin_url,
+$wp_version;   
 //init
 $plugin_name = 'optin-revolution/optinrev.php';
 $optinrev_db_version = '1.0';
-$optinrev_installed_version = '1.0.1';
+$optinrev_installed_version = '1.0.2';
+$wp_version = get_bloginfo('version');
 
 function optinrev_admin_actions()
 {
@@ -41,8 +42,6 @@ function optinrev_admin_actions()
   foreach( $optin as $ok => $ov )
   add_submenu_page( 'optin', __( $ov ), __( $ov ), 0, $ok, 'optinrev_setup' );
   //submenu list
-  add_submenu_page( 'optin', __('Image Uploader'), __('Image Uploader'), 0, 'optin-image-uploader', 'optinrev_image_uploader' );
-  add_submenu_page( 'optin', __('Button Uploader'), __('Button Uploader'), 0, 'optin-action-button-uploader', 'optinrev_action_button_uploader' );
   add_submenu_page( 'optin', 'Optin Revolution <code>Pro</code>', 'Optin Revolution <code>Pro</code>', 0, 'optin-pro-settings', 'optinrev_pro' );
   add_submenu_page( '', __(''), __(''), 0, 'browser-issue', 'optinrev_browser_alert' );  
         
@@ -67,13 +66,6 @@ function optinrev_plugin_admin_init()
           update_option('optinrev_cookies', 'cleaned');
           wp_redirect( 'admin.php?page=optin' ); exit;
       }
-  } 
-  
-  //set 777 in upload directory
-  if ( isset($_GET['optinvrev-upload']) && $isupload = esc_html($_GET['optinvrev-upload']) ) {
-      chmod( OPTINREV_DIR_PATH . 'uploads', 0777 );
-      optinrev_update( 'optinrev_upload', true );
-      wp_redirect( 'admin.php?page='. $plugin_page ); exit;   
   }
  
   // Browser Issue Alert
@@ -102,7 +94,7 @@ function optinrev_plugin_admin_init()
     optinrev_enqueue(0);
     
     
-  } else if ( preg_match('/optin[1-5]|optin-image-uploader|optin-action-button-uploader/', $plugin_page) )
+  } else if ( preg_match('/optin[1-5]/', $plugin_page) )
   { 
     optinrev_enqueue(1);    
     //wotoptin images
@@ -120,7 +112,7 @@ function optinrev_plugin_admin_init()
 
    //wotoptin uploaded images
    if ( !optinrev_get( 'optinrev_default_uploads_images' ) ) {
-      $wot_imgs = array( 'arrow-animated' => $dir . 'uploads/arrow-animated.gif', 'optin-box' => $dir . 'uploads/optin-box.png');      
+      $wot_imgs = array( 'arrow-animated' => $dir . 'assets/arrow-animated.gif', 'optin-box' => $dir . 'assets/optin-box.png');      
       optinrev_update( 'optinrev_default_uploads_images', serialize( $wot_imgs ) );  
       //init get access button  
       foreach( $wot_imgs as $km => $vm ) {      
@@ -134,12 +126,12 @@ function optinrev_plugin_admin_init()
         $default_optin = array(
             'action' => 'optinrev_action',
             'save_setup_settings' => 'optin1',
-            'optinrev_data' => '<div style="position: absolute; left: 29px; top: 8px; z-index: 1; text-align: center; width: 90%;border: 1px solid transparent;"><span><span style="font-family: impact, chicago; font-size: 30pt; color: #ff0000;" data-mce-style="font-family: impact, chicago; font-size: 30pt; color: #ff0000;">DISCOVER HOW I INCREASED MY OPTIN RATE BY 500% IN 5 MINS!</span><br></span></div><div style="position: absolute; left: 285px; top: 325px;border: 1px solid transparent;"><img id="wm" src="'.$dir.'uploads/get_access2.png" alt="" border="0"></div><div style="position: absolute; left: 1px; top: 104px; z-index: 1; width: 100%; text-align: center;border: 1px solid transparent;"><span style="font-size: 14pt; background-color: #ffff99;" data-mce-style="font-size: 14pt; background-color: #ffff99;"><strong><span style="font-family: tahoma, arial, helvetica, sans-serif;" data-mce-style="font-family: tahoma, arial, helvetica, sans-serif;">Enter your email address to get your <span style="text-decoration: underline;" data-mce-style="text-decoration: underline;">FREE</span> video!</span></strong></span></div><div style="position: absolute; left: 0px; top: 148px;border: 1px solid transparent;"><img id="optinrev_uid_28" src="'.$dir.'uploads/optin-box.png" alt="" border="0"></div><div style="position: absolute; left: 317px; top: 142px;border: 1px solid transparent;"><img id="optinrev_uid_33" src="'.$dir.'uploads/arrow-animated.gif" alt="" border="0"></div><br><a id="poweredby" data-mce-href="http://wordpress.org/extend/plugins/optin-revolution/" href="http://wordpress.org/extend/plugins/optin-revolution/" target="_new" style="position: absolute; left: 220px; top: 430px; ">Powered by : Optin Revolution</a><form method="post" id="mce_getaccessed" action="http://www.aweber.com/scripts/addlead.pl" target="_blank"><div style="display:none;"><input type="hidden" name="listname" value="optinrev_plug"><input type="hidden" name="meta_web_form_id" value="258192310"><input type="hidden" name="meta_message" value="1"><input type="hidden" name="meta_adtracking" value="wordpress_plugin"><input type="hidden" name="redirect" value="http://www.aweber.com/thankyou-coi.htm?m=audio"></div><div style="position:absolute; left: 0px; top: 0px;border: 1px solid transparent;display:none;"><input type="text" name="name" id="name" value="Enter Your Name..." style="font-size:20px !important;color:#000000 !important;height:50px !important;width:240px !important;background-color:#FFFFCC !important;border:5px solid #666666 !important;"></div><div style="position:absolute; left: 302px; top: 259px;border: 1px solid transparent;"><input type="text" name="email" id="email" value="Enter Your Email..." style="font-size:20px !important;color:#000000 !important;height:50px !important;width:240px !important;background-color:#FFFFCC !important;border:5px solid #666666 !important;"></div><span style="display:none;"><img src="http://forms.aweber.com/form/displays.htm?id=TKwcjJxMzIwM"></span></form>',
+            'optinrev_data' => '<div style="position: absolute; left: 29px; top: 8px; z-index: 1; text-align: center; width: 90%;border: 1px solid transparent;"><span><span style="font-family: impact, chicago; font-size: 30pt; color: #ff0000;" data-mce-style="font-family: impact, chicago; font-size: 30pt; color: #ff0000;">DISCOVER HOW I INCREASED MY OPTIN RATE BY 500% IN 5 MINS!</span><br></span></div><div style="position: absolute; left: 285px; top: 325px;border: 1px solid transparent;"><img id="wm" src="'.$dir.'assets/get_access2.png" alt="" border="0"></div><div style="position: absolute; left: 1px; top: 104px; z-index: 1; width: 100%; text-align: center;border: 1px solid transparent;"><span style="font-size: 14pt; background-color: #ffff99;" data-mce-style="font-size: 14pt; background-color: #ffff99;"><strong><span style="font-family: tahoma, arial, helvetica, sans-serif;" data-mce-style="font-family: tahoma, arial, helvetica, sans-serif;">Enter your email address to get your <span style="text-decoration: underline;" data-mce-style="text-decoration: underline;">FREE</span> video!</span></strong></span></div><div style="position: absolute; left: 0px; top: 148px;border: 1px solid transparent;"><img id="optinrev_uid_28" src="'.$dir.'assets/optin-box.png" alt="" border="0"></div><div style="position: absolute; left: 317px; top: 142px;border: 1px solid transparent;"><img id="optinrev_uid_33" src="'.$dir.'assets/arrow-animated.gif" alt="" border="0"></div><br><a id="poweredby" data-mce-href="http://wordpress.org/extend/plugins/optin-revolution/" href="http://wordpress.org/extend/plugins/optin-revolution/" target="_new" style="position: absolute; left: 220px; top: 430px; ">Powered by : Optin Revolution</a><form method="post" id="mce_getaccessed" action="http://www.aweber.com/scripts/addlead.pl" target="_blank"><div style="display:none;"><input type="hidden" name="listname" value="optinrev_plug"><input type="hidden" name="meta_web_form_id" value="258192310"><input type="hidden" name="meta_message" value="1"><input type="hidden" name="meta_adtracking" value="wordpress_plugin"><input type="hidden" name="redirect" value="http://www.aweber.com/thankyou-coi.htm?m=audio"></div><div style="position:absolute; left: 0px; top: 0px;border: 1px solid transparent;display:none;"><input type="text" name="name" id="name" value="Enter Your Name..." style="font-size:20px !important;color:#000000 !important;height:50px !important;width:240px !important;background-color:#FFFFCC !important;border:5px solid #666666 !important;"></div><div style="position:absolute; left: 302px; top: 259px;border: 1px solid transparent;"><input type="text" name="email" id="email" value="Enter Your Email..." style="font-size:20px !important;color:#000000 !important;height:50px !important;width:240px !important;background-color:#FFFFCC !important;border:5px solid #666666 !important;"></div><span style="display:none;"><img src="http://forms.aweber.com/form/displays.htm?id=TKwcjJxMzIwM"></span></form>',
             'optinrev_close_button' => 'left:592px;top:37px;',
             'optinrev_close_button_class' => 'close2',
             'optinrev_dragging' => null,
             'optinrev_call_action_button' => 'get_access2',
-            'optinrev_excerpt' => '<div id="simplemodal-container" style="width: 600px; height: 420px; border: 8px solid #000000; background-color: #ffffff; -moz-border-radius: 25px; -webkit-border-radius: 25px; border-radius: 25px;"><div id="close" class="close2" style="left:574px; top:-26px;"> </div><div id="simplemodal-data" class="simplemodal-data"><div style="position: absolute; left: 29px; top: 8px; z-index: 1; text-align: center; width: 90%;"><span><span style="font-family: impact, chicago; font-size: 30pt; color: #ff0000;">DISCOVER HOW I INCREASED MY OPTIN RATE BY 500% IN 5 MINS!</span><br /></span></div><div style="position: absolute; left: 285px; top: 325px;"><img id="wm" src="'.$dir.'uploads/get_access2.png" alt="" border="0" /></div><div style="position: absolute; left: 1px; top: 104px; z-index: 1; width: 100%; text-align: center;"><span style="font-size: 14pt; background-color: #ffff99;"><strong><span style="font-family: tahoma, arial, helvetica, sans-serif;">Enter your email address to get your <span style="text-decoration: underline;">FREE</span> video!</span></strong></span></div><div style="position: absolute; left: 0px; top: 148px;"><img id="optinrev_uid_28" src="'.$dir.'uploads/optin-box.png" alt="" border="0" /></div><div style="position: absolute; left: 317px; top: 142px;"><img id="optinrev_uid_33" src="'.$dir.'uploads/arrow-animated.gif" alt="" border="0" /></div><br /><a id="poweredby" style="position: absolute; left: 220px; top: 430px;" href="http://wordpress.org/extend/plugins/optin-revolution/" target="_new">Powered by : Optin Revolution</a><form id="mce_getaccessed" action="http://www.aweber.com/scripts/addlead.pl" method="post" target="_blank"><div style="display: none;"><input type="hidden" name="listname" value="optinrev_plug" /><input type="hidden" name="meta_web_form_id" value="258192310" /><input type="hidden" name="meta_message" value="1" /><input type="hidden" name="meta_adtracking" value="wordpress_plugin" /><input type="hidden" name="redirect" value="http://www.aweber.com/thankyou-coi.htm?m=audio" /></div><div style="position: absolute; left: 0px; top: 0px; border: 1px solid transparent; display: none;"><input id="name" style="font-size: 20px !important; color: #000000 !important; height: 50px !important; width: 240px !important; background-color: #ffffcc !important; border: 5px solid #666666 !important;" type="text" name="name" value="Enter Your Name..." /></div><div style="position: absolute; left: 302px; top: 259px;"><input id="email" style="font-size: 20px !important; color: #000000 !important; height: 50px !important; width: 240px !important; background-color: #ffffcc !important; border: 5px solid #666666 !important;" type="text" name="email" value="Enter Your Email..." /></div><span style="display: none;"><img src="http://forms.aweber.com/form/displays.htm?id=TKwcjJxMzIwM" alt="" /></span></form></div></div>',
+            'optinrev_excerpt' => '<div id="simplemodal-container" style="width: 600px; height: 420px; border: 8px solid #000000; background-color: #ffffff; -moz-border-radius: 25px; -webkit-border-radius: 25px; border-radius: 25px;"><div id="close" class="close2" style="left:574px; top:-26px;"> </div><div id="simplemodal-data" class="simplemodal-data"><div style="position: absolute; left: 29px; top: 8px; z-index: 1; text-align: center; width: 90%;"><span><span style="font-family: impact, chicago; font-size: 30pt; color: #ff0000;">DISCOVER HOW I INCREASED MY OPTIN RATE BY 500% IN 5 MINS!</span><br /></span></div><div style="position: absolute; left: 285px; top: 325px;"><img id="wm" src="'.$dir.'assets/get_access2.png" alt="" border="0" /></div><div style="position: absolute; left: 1px; top: 104px; z-index: 1; width: 100%; text-align: center;"><span style="font-size: 14pt; background-color: #ffff99;"><strong><span style="font-family: tahoma, arial, helvetica, sans-serif;">Enter your email address to get your <span style="text-decoration: underline;">FREE</span> video!</span></strong></span></div><div style="position: absolute; left: 0px; top: 148px;"><img id="optinrev_uid_28" src="'.$dir.'assets/optin-box.png" alt="" border="0" /></div><div style="position: absolute; left: 317px; top: 142px;"><img id="optinrev_uid_33" src="'.$dir.'assets/arrow-animated.gif" alt="" border="0" /></div><br /><a id="poweredby" style="position: absolute; left: 220px; top: 430px;" href="http://wordpress.org/extend/plugins/optin-revolution/" target="_new">Powered by : Optin Revolution</a><form id="mce_getaccessed" action="http://www.aweber.com/scripts/addlead.pl" method="post" target="_blank"><div style="display: none;"><input type="hidden" name="listname" value="optinrev_plug" /><input type="hidden" name="meta_web_form_id" value="258192310" /><input type="hidden" name="meta_message" value="1" /><input type="hidden" name="meta_adtracking" value="wordpress_plugin" /><input type="hidden" name="redirect" value="http://www.aweber.com/thankyou-coi.htm?m=audio" /></div><div style="position: absolute; left: 0px; top: 0px; border: 1px solid transparent; display: none;"><input id="name" style="font-size: 20px !important; color: #000000 !important; height: 50px !important; width: 240px !important; background-color: #ffffcc !important; border: 5px solid #666666 !important;" type="text" name="name" value="Enter Your Name..." /></div><div style="position: absolute; left: 302px; top: 259px;"><input id="email" style="font-size: 20px !important; color: #000000 !important; height: 50px !important; width: 240px !important; background-color: #ffffcc !important; border: 5px solid #666666 !important;" type="text" name="email" value="Enter Your Email..." /></div><span style="display: none;"><img src="http://forms.aweber.com/form/displays.htm?id=TKwcjJxMzIwM" alt="" /></span></form></div></div>',
             'optinrev_email_form_opt' => 'aweber',
             'optinrev_email_form' => array('aweber' => array('name' => 'Enter Your Name...', 'email' => 'Enter Your Email...', 'listname' => 'optinrevolution', 'meta_web_form_id' => '258192310', 'meta_message' => 1,'meta_adtracking' => 'wordpress_plugin', 'redirect' => 'http://www.aweber.com/thankyou-coi.htm?m=audio', 'meta_redirect_onlist' => null, 'pixel_tracking_id' => 'TKwcjJxMzIwM')),
             'optinrev_input_enabled' => array('name' => 0), 'validate' => array('email' => 1), 'optinrev_inputh' => 50, 'optinrev_inputw' => 240, 'optinrev_inputtc' => '#000000', 'optinrev_inputfz' => 20, 'optinrev_inputc' => '#FFFFCC', 'optinrev_inputb' => '#666666', 'optinrev_inputbt' => 5, 'optinrev_wbg_color' => '#000000', 'optinrev_wbg_opacity' => 50, 'optinrev_delay' => 0, 'optinrev_pwbg_color' => '#FFFFFF', 'optinrev_border_color' => '#000000', 'optinrev_border_thickness' => 8, 'optinrev_border_opacity' => 75, 'optinrev_border_radius' => 25, 'optinrev_round_border' => 'on', 'optinrev_top_margin' => 127, 'optinrev_wwidth' => 600, 'optinrev_hheight' => 420, 'optinrev_close_popup_image' => 'close2', 'optinrev_gotowebsite' => 'top'
@@ -168,7 +160,7 @@ function optinrev_transient_update_plugins($transient)
         if ( $download_url = optinrev_download_url() ) {
             $obj = new stdClass();
             $obj->slug = 'optin';  
-            $obj->new_version = '1.0.1';  
+            $obj->new_version = '1.0.2';  
             $obj->url = 'http://optinrevolution.com';
             $obj->package = $download_url;  
             $transient->response[$plugin_name] = $obj;
@@ -180,7 +172,8 @@ add_filter('pre_set_site_transient_update_plugins', 'optinrev_transient_update_p
 
 function optinrev_pro_action_needed( $plugin )
 {
-  if( $plugin == 'optinrevolution/optinrev.php' && optinrev_is_pro_authorized() && !optinrev_is_pro_installed() )      
+  global $plugin_name;
+  if( $plugin == $plugin_name && optinrev_is_pro_authorized() && !optinrev_is_pro_installed() )      
   {
     optinrev_manually_queue_update();
     $inst_install_url = wp_nonce_url('update.php?action=upgrade-plugin&plugin=' . $plugin, 'upgrade-plugin_' . $plugin);
@@ -200,24 +193,22 @@ function optinrev_pro_get_started_headline()
   if(isset($_GET['action']) && $_GET['action'] == 'upgrade-plugin')
   return;
   
+
+  
   if ( isset( $_GET['page'] ) ) {
-  
-  if ( !is_writable( OPTINREV_DIR_PATH . 'uploads' ) ) {  
-  ?>  
-  <div class="error" style="padding:8px;"><?php echo __('Would you like us to change the permissions on the Optin Revolution Upload Directory <a href="'.$this_uri.'&optinrev-upload=1">Yes</a> | <a href="'.$this_uri.'&optinrev-upload=0">No</a> ?'); ?></div>
-  <?php
-  }
-  
-  if ( !optinrev_get('optinrev_popup_enabled') || optinrev_get('optinrev_popup_enabled') == 'false' ) {
-  ?>
-  <div class="error" id="_disopt" style="padding:8px;"><?php printf(__('Optin Revolution Popup is disabled.<br/>%1$sEnable it now.%2$s', 'optin'), '<a href="'. $this_uri .'&enable=1">','</a>'); ?></div>  
-  <?php
-  }
-  
+      
+      ?>
+      <div class="error" style="padding:8px;"><?php echo __('Notice: The image and button uploader has been removed due to problems with folder permissions. You may need to re-add your images and buttons back to the stage. To upload or attach an image/button to the stage use the Wordpress Media Library. <a href="http://www.youtube.com/watch?v=3LMZqiRV-JE&autoplay=1&rel=0" target="_blank">Click here for a video tutorial on adding images and buttons to the stage.</a>'); ?></div>
+      <?php
+          
+      if ( !optinrev_get('optinrev_popup_enabled') || optinrev_get('optinrev_popup_enabled') == 'false' ) {
+      ?>
+      <div class="error" id="_disopt" style="padding:8px;"><?php printf(__('Optin Revolution Popup is disabled.<br/>%1$sEnable it now.%2$s', 'optin'), '<a href="'. $this_uri .'&enable=1">','</a>'); ?></div>  
+      <?php
+      }  
   }
 
-  if( optinrev_is_pro_authorized() &&
-      !optinrev_is_pro_installed())
+  if ( optinrev_is_pro_authorized() && !optinrev_is_pro_installed() )
   {     
     optinrev_manually_queue_update();
     $inst_install_url = wp_nonce_url('update.php?action=upgrade-plugin&plugin=' . $plugin_name, 'upgrade-plugin_' . $plugin_name);
@@ -269,7 +260,7 @@ register_deactivation_hook( __FILE__, 'optinrev_deactivate' );
 
 function optinrev_js()
 {
-  global $plugin_page;
+  global $plugin_page, $wp_version;
   
   $dir = plugin_dir_url( __FILE__ );  
     
@@ -316,8 +307,7 @@ function optinrev_js()
       optinrev_delete( 'optinrev_add_button_briefcase' );
   }      
   
-  $is_upload = optinrev_get( 'optinrev_upload' );
-  $is_upload = ( empty( $is_upload ) ) ? 0 : $is_upload;
+  $is_upload = optinrev_get( 'optinrev_upload' );  
     
   $ht = '';
   //setting page
@@ -330,8 +320,8 @@ function optinrev_js()
   jQuery(document).ready(function($){<?php echo $ht;?>});
   </script>  
   <?php }
-  else if ( preg_match('/optin[1-5]|optin-image-uploader|optin-action-button-uploader/', $plugin_page ) ) { include('js/optinrev-js.php'); echo '<script type="text/javascript" src="'.$dir.'js/optinrev.js?ver=3.3.1"></script>'; }
-  else if ( $plugin_page == 'optin-pro-settings' ) { echo '<script type="text/javascript" src="'.$dir.'js/optinrev-pro-setting.js?ver=3.3.1"></script>'; }
+  else if ( preg_match('/optin[1-5]/', $plugin_page ) ) { include('js/optinrev-js.php'); echo '<script type="text/javascript" src="'.$dir.'js/optinrev.js?ver='.$wp_version.'"></script>'; }
+  else if ( $plugin_page == 'optin-pro-settings' ) { echo '<script type="text/javascript" src="'.$dir.'js/optinrev-pro-setting.js?ver='. $wp_version .'"></script>'; }
 }//jsload
 
 if (is_optinrev())
@@ -382,7 +372,7 @@ function optinrev_pro()
 //Optin Setting
 function optinrev_admin()
 {
-  global $plugin_name;  
+  global $plugin_name, $wp_version;
   
   $dir = plugin_dir_url( __FILE__ );
   
@@ -463,7 +453,7 @@ function optinrev_admin()
         <?php $r++;}?>
     <div class="row"><label><?php _e('Cookies'); ?></label><span class="submit"><input type="button" name="optinrev_clean_cookies" value="Clear Cookies" onclick="admin.cookies();"/></span></div>             
   </form>
-  <?php echo '<script type="text/javascript" src="'.$dir.'js/optinrev-admin-setting.js?ver=3.3.1"></script>';?>
+  <?php echo '<script type="text/javascript" src="'.$dir.'js/optinrev-admin-setting.js?ver='.$wp_version.'"></script>';?>
   <p><iframe width="640" height="360" src="http://www.youtube.com/embed/-SHDzo3bzx4?rel=0" frameborder="0" allowfullscreen></iframe></p>    
 </div>
 </div>
@@ -575,21 +565,22 @@ function optinrev_setup() {
     <span class="spin" id="save_setting_spin"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="submit"><input type="submit" class="button-primary" name="action_save_settings" value="<?php _e('Save Settings') ?>" /></span>    
     <span class="submit"><input alt="" title="<?php echo $optin[$plugin_page];?> Preview" id="action_preview" type="button" value="Preview" /></span>
     </div>
-    <div class="clear"></div><br />
+    <div class="clear"></div>
     </p>    
     <?php wp_editor( $content, 'optinrev_excerpt', array('textarea_rows' => 14, 'media_buttons' => false) );?><br />
-    <div class="row"><label class="title" style="width:160px;"><?php _e('Email Marketing Form'); ?></label><span>&nbsp;</span></div><br />
-    <div>
+    
+    <div class="row"><label class="title"><a class="toggle" id="_box1-t"><?php _e('Email Marketing Form'); ?><span class="_box1-x">[+]</span><span class="_box1-c">[-]</span></a></label><span>&nbsp;</span></div><br />
+    <div id="_box1">
     <?php foreach( $mail_form as $k => $v ) { $sel = ($email_form_opt === $k)? 'checked' : ''; ?>
     <div class="mail_opt" style="margin-top:10px;margin-right:8px;"><input type="radio" name="optinrev_email_form_opt" value="<?php echo $k;?>" <?php echo $sel;?>/></div><div class="mail_opt"><img src="<?php echo $dir.'images/'. (($k === 'constantcontact')? 'constant_contact': $k);?>.png" id="<?php echo $k;?>" border="0"/></div>
     <?php }?>
-    <div class="clear"></div>
-    </div>      
-    <p>
-    <div class="row"><label class="title"><?php _e('Input Fields'); ?></label>&nbsp;<span>&nbsp;</span></div>
+    <div class="clear"></div>    
+    
+    <div class="row"><label class="title"><?php _e('Input Fields'); ?></label>&nbsp;<span>&nbsp;</span></div>    
     <div id="wotinput_fields"></div>
-    </p>    
-    <div class="row"><label class="title"><?php _e('Input Fields Setup'); ?></label>&nbsp;<span>&nbsp;</span></div>    
+    </div>
+    <div class="row"><label class="title"><a class="toggle" id="_box2-t"><?php _e('Input Fields Setup'); ?><span class="_box2-x">[+]</span><span class="_box2-c">[-]</span></a></a></label>&nbsp;<span>&nbsp;</span></div>    
+    <div id="_box2">
     <div class="row"><label><?php _e('Height'); ?></label>    
     <div class="fbox"><input type="text" name="optinrev_inputh" id="optinrev_inputh" value="<?php echo (post('optinrev_inputh',true))?post('optinrev_inputh',true):'50';?>" size="10" readonly>px</div>
     <div class="wjui-box"><div id="optinrev_inpuths" class="wjui"></div></div>
@@ -617,10 +608,11 @@ function optinrev_setup() {
     <div class="wjui-box"><div id="optinrev_inputbts" class="wjui"></div></div>
     <div class="clear"></div>    
     </div>
-    
-    <br />
-    <div class="row"><label class="title"><?php _e('Window Setup'); ?></label>&nbsp;<span>&nbsp;</span></div>        
-    <div class="row"><label><?php _e('Background Color'); ?></label><input type="text" name="optinrev_wbg_color" class="color {hash:true}" value="<?php post('optinrev_wbg_color');?>" size="10"></div>
+    </div>
+    <br />    
+    <div class="row"><label class="title"><a class="toggle" id="_box3-t"><?php _e('Window Setup'); ?><span class="_box3-x">[+]</span><span class="_box3-c">[-]</span></a></a></label>&nbsp;<span>&nbsp;</span></div>
+    <div id="_box3">        
+    <div class="row"><label><?php _e('Background Color'); ?></label><input type="text" name="optinrev_wbg_color" id="optinrev_wbg_color" class="color {hash:true}" value="<?php post('optinrev_wbg_color');?>" size="10"></div>
     <div class="row"><label><?php _e('Background Opacity'); ?></label>
     <div class="fbox"><input type="text" name="optinrev_wbg_opacity" id="optinrev_wbg_opacity" value="<?php echo (post('optinrev_wbg_opacity',true))?post('optinrev_wbg_opacity',true):'0';?>" size="10" readonly>%</div>
     <div class="wjui-box"><div id="wbg_opacity_slider" class="wjui"></div></div>
@@ -631,10 +623,10 @@ function optinrev_setup() {
     <div class="wjui-box"><div id="optinrev_sdelay" class="wjui"></div></div>
     <div class="clear"></div>
     </div>
+    </div>
     <br />
-        
-    <div class="row"><label class="title"><?php _e('Pop Windows Setting'); ?></label>&nbsp;<span>&nbsp;</span></div>    
-        
+    <div class="row"><label class="title"><a class="toggle" id="_box4-t"><?php _e('Pop Windows Setting'); ?><span class="_box4-x">[+]</span><span class="_box4-c">[-]</span></a></a></label>&nbsp;<span>&nbsp;</span></div>    
+    <div id="_box4">    
     <div class="row"><label><?php _e('Background Color'); ?></label><input type="text" name="optinrev_pwbg_color" class="color {hash:true}" value="<?php echo (post('optinrev_pwbg_color',true))?post('optinrev_pwbg_color',true):'ffffff';?>" size="10"></div>
     <div class="row"><label><?php _e('Border Color'); ?></label><input type="text" name="optinrev_border_color" class="color {hash:true}" value="<?php echo (post('optinrev_border_color',true))?post('optinrev_border_color',true):'000000';?>" size="10"></div>
     
@@ -674,7 +666,10 @@ function optinrev_setup() {
     <div class="wjui-box"><div id="optinrev_sheight" class="wjui"></div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="description">Maximum height = 600px</span></div>
     <div class="clear"></div>
     </div>
-    <div class="row"><label class="title"><?php _e('Close Popup Image'); ?></label>&nbsp;<span>&nbsp;</span></div>
+    </div>
+    <br />
+    <div class="row"><label class="title"><a class="toggle" id="_box5-t"><?php _e('Close Popup Image'); ?><span class="_box5-x">[+]</span><span class="_box5-c">[-]</span></a></a></label>&nbsp;<span>&nbsp;</span></div>
+    <div id="_box5">
     <p>
     <?php $cb = 0;foreach( $close_btns as $bk => $bv ) { $sel = ( $is_close_btn == $bk ) ? 'checked' : '';?>    
         <input type="radio" name="optinrev_close_popup_image" value="<?php echo $bk;?>" <?php echo $sel; ?>>&nbsp;<img src="<?php echo $bv;?>" border="0"/>&nbsp;&nbsp;&nbsp;
@@ -685,7 +680,8 @@ function optinrev_setup() {
         <option value="top" <?php echo ($gw == 'top')?'selected':'';?>>Top</option>
         <option value="bottom" <?php echo ($gw == 'bottom')?'selected':'';?>>Bottom</option>
         </select></p>
-    </p>    
+    </p>
+    </div>    
     <p>&nbsp;</p>    
     <script type="text/javascript">
         jQuery(document).ready(function($){
@@ -742,149 +738,7 @@ function optinrev_setup() {
 <?php
 }
 
-function optinrev_image_uploader() {
-$dir = plugin_dir_url( __FILE__ );
-$upload_id = 'optinrev_uid_' . optinrev_unique_id(); 
-?>
-<div>
-<div class="or-social-icons">
-<div class="social-center">
-  <ul>
-      <li><a href="http://www.facebook.com/share.php?u=<?php echo SOCIAL_URL;?>&title=<?php echo SOCIAL_TITLE;?>" title="<?php echo SOCIAL_TITLE;?>" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="flike"></a></li>
-      <li><a href="https://twitter.com/share?url=<?php echo SOCIAL_URL;?>&text=<?php echo SOCIAL_TITLE;?>" title="<?php echo SOCIAL_TITLE;?>" target="_new" class="tweet"></a></li>
-      <li><a href="https://plus.google.com/share?url=<?php echo SOCIAL_URL;?>" title="<?php echo SOCIAL_TITLE;?>" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="googleplus"></a></li>
-      <li><a href="http://del.icio.us/post?url=<?php echo SOCIAL_URL;?>&title=<?php echo SOCIAL_TITLE;?>" title="<?php echo SOCIAL_TITLE;?>" target="_new" class="delicious"></a></li>
-      <li><a href="http://www.stumbleupon.com/submit?url=<?php echo SOCIAL_URL;?>" title="<?php echo SOCIAL_TITLE;?>" target="_new" class="stumbleupon"></a></li>
-      <li><a href="http://digg.com/submit?url=<?php echo urlencode(SOCIAL_URL);?>&title=<?php echo SOCIAL_TITLE;?>" title="<?php echo SOCIAL_TITLE;?>" target="_new" class="digg"></a></li>
-      <li><a href="http://www.linkedin.com/shareArticle?mini=true&url=<?php echo urlencode(SOCIAL_URL);?>&title=<?php echo SOCIAL_TITLE;?>&summary=<?php echo SOCIAL_TITLE;?>" title="<?php echo SOCIAL_TITLE;?>" target="_new" class="inshare"></a></li>
-      <li><a href="http://pinterest.com/pin/create/button/?url=<?php echo urlencode(SOCIAL_URL);?>&media=http://optinrevolution.com/img/pin.png&description=<?php echo SOCIAL_TITLE; ?>" title="<?php echo SOCIAL_TITLE;?>" target="_new" class="pinit"></a></li>
-  </ul>
-</div>  
-</div>
-<div class="get-help">Get Help : <a href="http://optinrevolution.com/tutorials/" target="_new">Tutorials</a> | <a href="http://optinrevolution.com" target="_new">Upgrade to Pro</a></div>
-<div class="col1">
-<div class="wrap fform">
-  <div id="post-message" class="updated"></div>
-  <h2>Image Uploader</h2><br />
-  <form id="optinrev_fuploads" method="post" enctype="multipart/form-data" action="admin-ajax.php">
-  <input type="hidden" name="action" value="optinrev_action"/>
-  <input type="hidden" name="optinrev_upload_id" id="optinrev_upload_id" value="<?php echo $upload_id;?>"/>    
-  <div class="row"><label><?php _e('Upload Images'); ?></label><input type="file" name="optinrev_file_upload" id="optinrev_file_upload" value="Add Image">&nbsp;<span class="spin"></span></div>
-  <div id="load_list_img"></div>  
-  </form>
-  <script type="text/javascript">
-  j(document).ready(function($){$('#load_list_img').load('admin-ajax.php', {action : 'optinrev_action', optinrev_load_uploads : 1});});
-  </script>
-</div>
-</div>
-<div class="col2">
-  <div class="need-support-box">
-  <h2>Need support?</h2>
-  <p>If you are having problems with this plugin, please talk about them in the <a href="<?php echo OPTINREV_SUPPORT;?>" target="_new">Support forums</a>.</p>      
-  </div>
-  <div class="social-box">
-  <h2>Be Social, Share Me!</h2>  
-  <ul>
-        <li><a href="http://www.facebook.com/share.php?u=<?php echo SOCIAL_URL;?>&title=<?php echo SOCIAL_TITLE;?>" title="<?php echo SOCIAL_TITLE;?>" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="flike"></a></li>
-        <li><a href="https://twitter.com/share?url=<?php echo SOCIAL_URL;?>&text=<?php echo SOCIAL_TITLE;?>" title="<?php echo SOCIAL_TITLE;?>" target="_new" class="tweet"></a></li>
-        <li><a href="https://plus.google.com/share?url=<?php echo SOCIAL_URL;?>" title="<?php echo SOCIAL_TITLE;?>" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="googleplus"></a></li>
-        <li><a href="http://del.icio.us/post?url=<?php echo SOCIAL_URL;?>&title=<?php echo SOCIAL_TITLE;?>" title="<?php echo SOCIAL_TITLE;?>" target="_new" class="delicious"></a></li>
-        <li><a href="http://www.stumbleupon.com/submit?url=<?php echo SOCIAL_URL;?>" title="<?php echo SOCIAL_TITLE;?>" target="_new" class="stumbleupon"></a></li>
-        <li><a href="http://digg.com/submit?url=<?php echo urlencode(SOCIAL_URL);?>&title=<?php echo SOCIAL_TITLE;?>" title="<?php echo SOCIAL_TITLE;?>" target="_new" class="digg"></a></li>
-        <li><a href="http://www.linkedin.com/shareArticle?mini=true&url=<?php echo urlencode(SOCIAL_URL);?>&title=<?php echo SOCIAL_TITLE;?>&summary=<?php echo SOCIAL_TITLE;?>" title="<?php echo SOCIAL_TITLE;?>" target="_new" class="inshare"></a></li>
-        <li><a href="http://pinterest.com/pin/create/button/?url=<?php echo urlencode(SOCIAL_URL);?>&media=http://optinrevolution.com/img/pin.png&description=<?php echo SOCIAL_TITLE; ?>" title="<?php echo SOCIAL_TITLE;?>" target="_new" class="pinit"></a></li>
-  </ul>
-  <div class="clear"></div>
-  </div>  
-  <div class="spread-the-word-box">
-  <h2>Spread the Word!</h2>
-  <p>Want to help make this plugin even better? All donations are used to improve this plugin, so donate $5, $10 or $20 now!</p>
-  <p>
-  <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-  <input type="hidden" name="cmd" value="_s-xclick">
-  <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----">
-  <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-  <img alt="" border="0" src="https://www.paypalobjects.com/en_AU/i/scr/pixel.gif" width="1" height="1">
-  </form>
-  </p>
-  </div>
-</div>
-<div class='clear'></div>
-</div>
-<?php
-}
 
-function optinrev_action_button_uploader() {
-$dir = plugin_dir_url( __FILE__ );
-$upload_id = 'optinrev_cuid_' . optinrev_unique_id(); 
-?>
-<div>
-<div class="or-social-icons">
-<div class="social-center">
-  <ul>
-      <li><a href="http://www.facebook.com/share.php?u=<?php echo SOCIAL_URL;?>&title=<?php echo SOCIAL_TITLE;?>" title="<?php echo SOCIAL_TITLE;?>" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="flike"></a></li>
-      <li><a href="https://twitter.com/share?url=<?php echo SOCIAL_URL;?>&text=<?php echo SOCIAL_TITLE;?>" title="<?php echo SOCIAL_TITLE;?>" target="_new" class="tweet"></a></li>
-      <li><a href="https://plus.google.com/share?url=<?php echo SOCIAL_URL;?>" title="<?php echo SOCIAL_TITLE;?>" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="googleplus"></a></li>
-      <li><a href="http://del.icio.us/post?url=<?php echo SOCIAL_URL;?>&title=<?php echo SOCIAL_TITLE;?>" title="<?php echo SOCIAL_TITLE;?>" target="_new" class="delicious"></a></li>
-      <li><a href="http://www.stumbleupon.com/submit?url=<?php echo SOCIAL_URL;?>" title="<?php echo SOCIAL_TITLE;?>" target="_new" class="stumbleupon"></a></li>
-      <li><a href="http://digg.com/submit?url=<?php echo urlencode(SOCIAL_URL);?>&title=<?php echo SOCIAL_TITLE;?>" title="<?php echo SOCIAL_TITLE;?>" target="_new" class="digg"></a></li>
-      <li><a href="http://www.linkedin.com/shareArticle?mini=true&url=<?php echo urlencode(SOCIAL_URL);?>&title=<?php echo SOCIAL_TITLE;?>&summary=<?php echo SOCIAL_TITLE;?>" title="<?php echo SOCIAL_TITLE;?>" target="_new" class="inshare"></a></li>
-      <li><a href="http://pinterest.com/pin/create/button/?url=<?php echo urlencode(SOCIAL_URL);?>&media=http://optinrevolution.com/img/pin.png&description=<?php echo SOCIAL_TITLE; ?>" title="<?php echo SOCIAL_TITLE;?>" target="_new" class="pinit"></a></li>
-  </ul>
-  </div>
-</div>
-<div class="get-help">Get Help : <a href="http://optinrevolution.com/tutorials/" target="_new">Tutorials</a> | <a href="http://optinrevolution.com" target="_new">Upgrade to Pro</a></div>
-<div class="col1">
-<div class="wrap fform">  
-  <div id="post-message" class="updated"></div>
-  <h2>Button Uploader</h2><br />
-  <form id="optinrev_fuploads" method="post" enctype="multipart/form-data" action="admin-ajax.php">
-  <input type="hidden" name="action" value="optinrev_action"/>
-  <input type="hidden" name="optinrev_upload_id" id="optinrev_upload_id" value="<?php echo $upload_id;?>"/>    
-  <div class="row"><label><?php _e('Call action button uploaded'); ?></label><input type="file" name="optinrev_file_upload" id="optinrev_file_upload" value="Add Image">&nbsp;<span class="spin"></span></div>
-  <div id="load_list_img2"></div>  
-  </form>
-  <script type="text/javascript">
-  j(document).ready(function($){$('#load_list_img2').load('admin-ajax.php', {action : 'optinrev_action', optinrev_action_button_uploads : 1});});
-  </script>
-</div>
-</div>
-<div class="col2">
-  <div class="need-support-box">
-  <h2>Need support?</h2>
-  <p>If you are having problems with this plugin, please talk about them in the <a href="<?php echo OPTINREV_SUPPORT;?>" target="_new">Support forums</a>.</p>      
-  </div>
-  <div class="social-box">
-  <h2>Be Social, Share Me!</h2>
-  <ul>
-        <li><a href="http://www.facebook.com/share.php?u=<?php echo SOCIAL_URL;?>&title=<?php echo SOCIAL_TITLE;?>" title="<?php echo SOCIAL_TITLE;?>" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="flike"></a></li>
-        <li><a href="https://twitter.com/share?url=<?php echo SOCIAL_URL;?>&text=<?php echo SOCIAL_TITLE;?>" title="<?php echo SOCIAL_TITLE;?>" target="_new" class="tweet"></a></li>
-        <li><a href="https://plus.google.com/share?url=<?php echo SOCIAL_URL;?>" title="<?php echo SOCIAL_TITLE;?>" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="googleplus"></a></li>
-        <li><a href="http://del.icio.us/post?url=<?php echo SOCIAL_URL;?>&title=<?php echo SOCIAL_TITLE;?>" title="<?php echo SOCIAL_TITLE;?>" target="_new" class="delicious"></a></li>
-        <li><a href="http://www.stumbleupon.com/submit?url=<?php echo SOCIAL_URL;?>" title="<?php echo SOCIAL_TITLE;?>" target="_new" class="stumbleupon"></a></li>
-        <li><a href="http://digg.com/submit?url=<?php echo urlencode(SOCIAL_URL);?>&title=<?php echo SOCIAL_TITLE;?>" title="<?php echo SOCIAL_TITLE;?>" target="_new" class="digg"></a></li>
-        <li><a href="http://www.linkedin.com/shareArticle?mini=true&url=<?php echo urlencode(SOCIAL_URL);?>&title=<?php echo SOCIAL_TITLE;?>&summary=<?php echo SOCIAL_TITLE;?>" title="<?php echo SOCIAL_TITLE;?>" target="_new" class="inshare"></a></li>
-        <li><a href="http://pinterest.com/pin/create/button/?url=<?php echo urlencode(SOCIAL_URL);?>&media=http://optinrevolution.com/img/pin.png&description=<?php echo SOCIAL_TITLE; ?>" title="<?php echo SOCIAL_TITLE;?>" target="_new" class="pinit"></a></li>
-  </ul>
-  <div class="clear"></div>
-  </div>  
-  <div class="spread-the-word-box">
-  <h2>Spread the Word!</h2>
-  <p>Want to help make this plugin even better? All donations are used to improve this plugin, so donate $5, $10 or $20 now!</p>
-  <p>
-  <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-  <input type="hidden" name="cmd" value="_s-xclick">
-  <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----MIIHPwYJKoZIhvcNAQcEoIIHMDCCBywCAQExggEwMIIBLAIBADCBlDCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20CAQAwDQYJKoZIhvcNAQEBBQAEgYBXibFf8phtcnACwK3YoleP2BMgr4H4SwLZOE2a2HBTTHcRelnj7dIFmXrcx+Qe20ikcPtDWi+wMGcgVU+X+YzsCyRWY20yTwQPuVk3deTr980Lfz4Ub+kUf123sYaFEVYRM7khA6fpkYPclL79kRmu3C41SPkFQimSq9Xl7i21czELMAkGBSsOAwIaBQAwgbwGCSqGSIb3DQEHATAUBggqhkiG9w0DBwQIhqnixhC96HuAgZh4oRTfUnw4BRNGX3cbUe7PbM5BYJenbIaOsn2Q2FbKXnVxv+KX9kt0f4q3CSjCII/2yI8JSLOYqh5qbjmRmcqfrLmxUMjZBbAbCiLXXVc509waUlN28c5Gva5CL4oKwYwi7y4hyaQmRPa+BkStg2Uuq4Rub8w8NaBhkKxLLKPfKSXYD6cugzays0o56q5FJ9dCyrvJhp8D76CCA4cwggODMIIC7KADAgECAgEAMA0GCSqGSIb3DQEBBQUAMIGOMQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExFjAUBgNVBAcTDU1vdW50YWluIFZpZXcxFDASBgNVBAoTC1BheVBhbCBJbmMuMRMwEQYDVQQLFApsaXZlX2NlcnRzMREwDwYDVQQDFAhsaXZlX2FwaTEcMBoGCSqGSIb3DQEJARYNcmVAcGF5cGFsLmNvbTAeFw0wNDAyMTMxMDEzMTVaFw0zNTAyMTMxMDEzMTVaMIGOMQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExFjAUBgNVBAcTDU1vdW50YWluIFZpZXcxFDASBgNVBAoTC1BheVBhbCBJbmMuMRMwEQYDVQQLFApsaXZlX2NlcnRzMREwDwYDVQQDFAhsaXZlX2FwaTEcMBoGCSqGSIb3DQEJARYNcmVAcGF5cGFsLmNvbTCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAwUdO3fxEzEtcnI7ZKZL412XvZPugoni7i7D7prCe0AtaHTc97CYgm7NsAtJyxNLixmhLV8pyIEaiHXWAh8fPKW+R017+EmXrr9EaquPmsVvTywAAE1PMNOKqo2kl4Gxiz9zZqIajOm1fZGWcGS0f5JQ2kBqNbvbg2/Za+GJ/qwUCAwEAAaOB7jCB6zAdBgNVHQ4EFgQUlp98u8ZvF71ZP1LXChvsENZklGswgbsGA1UdIwSBszCBsIAUlp98u8ZvF71ZP1LXChvsENZklGuhgZSkgZEwgY4xCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEUMBIGA1UEChMLUGF5UGFsIEluYy4xEzARBgNVBAsUCmxpdmVfY2VydHMxETAPBgNVBAMUCGxpdmVfYXBpMRwwGgYJKoZIhvcNAQkBFg1yZUBwYXlwYWwuY29tggEAMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAgV86VpqAWuXvX6Oro4qJ1tYVIT5DgWpE692Ag422H7yRIr/9j/iKG4Thia/Oflx4TdL+IFJBAyPK9v6zZNZtBgPBynXb048hsP16l2vi0k5Q2JKiPDsEfBhGI+HnxLXEaUWAcVfCsQFvd2A1sxRr67ip5y2wwBelUecP3AjJ+YcxggGaMIIBlgIBATCBlDCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20CAQAwCQYFKw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTEyMDkyNTIzMjgwM1owIwYJKoZIhvcNAQkEMRYEFI0h1Az6gL+mLFJIWk4rTum6yYOJMA0GCSqGSIb3DQEBAQUABIGAR6wiZ0aN4LVij511Ev6DIU1hDMtz5pyxGGtdHUgD/42x7xwlyauJEVtyBep2TLwJs8tIwf2eeZmE2Wups7NFNNrrnk8b247BtFw8XDZWIGoGXdS0HFJOnuhbjBJtOLqdwydn6q4ZpyLKi+5zh5NYvFvitfiesYecL5J7rLfkruQ=-----END PKCS7-----">
-  <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-  <img alt="" border="0" src="https://www.paypalobjects.com/en_AU/i/scr/pixel.gif" width="1" height="1">
-  </form>
-  </p>
-  </div>
-</div>
-<div class='clear'></div>
-</div>
-<?php
-}
 
 function optinrev_browser_alert() {
 $dir = plugin_dir_url( __FILE__ );
@@ -946,10 +800,8 @@ function optinrev_wphead() {
   $dir = plugin_dir_url( __FILE__ );
   
   $content = str_replace("'", "", stripcslashes( $optin['optinrev_data'] ));
-  $modal_delay = $optin['optinrev_delay'];  
+  $modal_delay = $optin['optinrev_delay'];
     
-  //jspopup;
-  $jsmessages = json_encode(optinrev_jsmessages());    
   //Popup show  
   $show_time = optinrev_get('optinrev_show_popup');
   $tshow = 0; 
@@ -1005,7 +857,7 @@ function optinrev_wphead() {
   
   $pop_show = optinrev_get('optinrev_show_where');
   
-  echo '<script type="text/javascript">var ms = '.$jsmessages.', el = document.createElement(\'div\'), ch = jQuery(window).height(), exh = 30, c = jQuery(el).html(\''. preg_replace('/\s+/', ' ', $content ). '\'), tshow = '.$tshow.', isvalid = '.((isset($optin['validate']))?json_encode($optin['validate']):'{}').', mail_form_name = \''.$optin['optinrev_email_form_opt'].'\',optinrev_close_button_class = \''. $optin['optinrev_close_button_class'].'\', optinrev_top_margin = '.$optin['optinrev_top_margin'].',optinrev_wbg_opacity = '.$optin['optinrev_wbg_opacity'].', modal_delay = '.$modal_delay.',box_delay = box_started = 0;</script>';
+  echo '<script type="text/javascript">var ms = "", el = document.createElement(\'div\'), ch = jQuery(window).height(), exh = 30, c = jQuery(el).html(\''. preg_replace('/\s+/', ' ', $content ). '\'), tshow = '.$tshow.', isvalid = '.((isset($optin['validate']))?json_encode($optin['validate']):'{}').', mail_form_name = \''.$optin['optinrev_email_form_opt'].'\',optinrev_close_button_class = \''. $optin['optinrev_close_button_class'].'\', optinrev_top_margin = '.$optin['optinrev_top_margin'].',optinrev_wbg_opacity = '.$optin['optinrev_wbg_opacity'].', modal_delay = '.$modal_delay.',box_delay = box_started = 0;</script>';
     
   //select to load
   if ( $pop_show == 'show_on_load' ) {
@@ -1075,8 +927,7 @@ echo '<script type="text/javascript" src="'.$dir.'js/optinrev-showonexit.js?ver=
   {
     $dir = plugin_dir_url( __FILE__ );
     $plugin['layer'] = $dir . 'js/mce_layer.js';
-    $plugin['lineheight'] = $dir . 'js/mce_lineheight.js';
-    $plugin['jspopupimg'] = $dir . 'js/mce_jspopupimg.js';
+    $plugin['lineheight'] = $dir . 'js/mce_lineheight.js';    
     $plugin['textbox'] = $dir . 'js/mce_textbox.js';
     $plugin['input_align'] = $dir . 'js/mce_inputalign.js';
     $plugin['ifdragedit'] = $dir . 'js/mce_ifdragedit.js';
@@ -1088,6 +939,40 @@ echo '<script type="text/javascript" src="'.$dir.'js/optinrev-showonexit.js?ver=
   
   if (is_optinrev())
   add_action('init', 'optinrev_mce_addbuttons');
+
+  function optinrev_media_column( $posts_columns ) {
+	$posts_columns['optinrev_media'] = _x('Optin Revolution', 'column name'); 
+	return $posts_columns;
+  }
+  add_filter( 'manage_media_columns', 'optinrev_media_column' );  
+  
+  function optinrev_manage_attachment_media_column( $column_name, $id ) {
+  	switch( $column_name ) {
+  	case 'optinrev_media':
+    $ac_id = 'action_button_' . $id;
+    $stg_id = 'stage_img_' . $id;
+    $img = optinrev_get_media($id);    
+    $imgurl = parse_url($img->guid);
+    
+    $cr_btn = optinrev_get_action_button();
+        
+    $is_action_button = ( $cr_btn->ID == $id ) ? 'checked="true"' : '';
+    $is_stage_image = (optinrev_has_optinmedia( $id, 'stage_img')) ? 'checked="true"' : '';
+    
+    echo '<div style="padding:8px;"><div style="padding-bottom:6px;"><input type="checkbox" name="'.$ac_id.'" id="'.$ac_id.'" '.$is_action_button.' onchange="wtfnm.action_update_button(\''.$ac_id.'\',\''.$imgurl['path'].'\');"/>&nbsp;<a href="javascript:;" title="Changed action button in the stage." onclick="jQuery(\'#'.$ac_id.'\').prop(\'checked\', !(jQuery(\'#'.$ac_id.'\').is(\':checked\')));wtfnm.action_update_button(\''.$ac_id.'\',\''.$imgurl['path'].'\');">Action Button</a>&nbsp;<span id="'.$ac_id.'_msg" class="optrmsg"></span></div>
+          <div><input type="checkbox" name="'.$stg_id.'" id="'.$stg_id.'" '.$is_stage_image.' onchange="wtfnm.action_add_image(\''.$stg_id.'\');"/>&nbsp;<a href="javascript:;" title="Attach this image in the stage." onclick="jQuery(\'#'.$stg_id.'\').prop(\'checked\', !(jQuery(\'#'.$stg_id.'\').is(\':checked\')));wtfnm.action_add_image(\''.$stg_id.'\');">Attach to Stage&nbsp;<span id="'.$stg_id.'_msg" class="optrmsg"></span></div></div>';  
+  	break;
+  	default:
+  	break;
+  	}   
+  }
+	add_action('manage_media_custom_column', 'optinrev_manage_attachment_media_column', 10, 2);
+  
+  if ( is_admin() ) {  
+  if ( strstr( $_SERVER['SCRIPT_NAME'], 'wp-admin/upload.php' ) ) {
+  wp_enqueue_script( 'optinrev_mediajs', plugin_dir_url( __FILE__ ) . 'js/optinrev-media.js' );
+  }
+  }    
   
   function is_optinrev() {
     if ( isset($_GET['page']) && $page = htmlspecialchars($_GET['page']) )

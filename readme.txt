@@ -61,9 +61,8 @@ Allows custom variables for popup window. Support for the following custom varia
 * Popup Width
 * Popup Height
 
-The Image Uploader allows you to easily add images to your WordPress popup.
+Integrates with the WordPress Image Library to allow importing images and button to the optin popup stage.
 
-The Button Uploader allows you to add custom call to action button to your WordPress Popup.
 
 == Installation ==
 
@@ -76,12 +75,22 @@ The Button Uploader allows you to add custom call to action button to your WordP
 
 == Changelog ==
 
+= 1.0.2 =
+
+* Bug Fix: Issue with permission on the optin-revolution/uploads directory, remove image/button uploader integrate with WordPress Image Library to allow importing images and buttons to stage from the WordPress Image Library. [Video tutorial can be Viewed Here](http://www.youtube.com/watch?v=3LMZqiRV-JE&autoplay=1)
+* Bug Fix: Fix for MailChimp not submitting.
+* Feature: Add collapsable menus on optin popup setting page.
+* Feature: Add visibility of the background on the stage.
+* Feature: Add loading icon when loading stage and text box
+* Updated: Replace email provider logos
+
 = 1.0.1 =
 
 * Bug Fix: Off/On slider enabling and disabling optin popup not functioning properly.
 * Bug Fix: Issue with permission on the optin-revolution/uploads directory on some installs.
 
 = 1.0 =
+
 * Initial release.
 
 == Screenshots ==

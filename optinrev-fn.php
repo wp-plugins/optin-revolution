@@ -60,16 +60,6 @@
         $res = $wpdb->get_results( $wpdb->prepare("select name, content from $tb_options where name like %s", '%_img_uid_%' ));
         return ( $wpdb->num_rows > 0 ) ? $res : false;    
       }
-  }   
-    
-  
-  if ( !function_exists('optinrev_jsmessages') ) {
-      function optinrev_jsmessages() {
-        global $wpdb;
-        $tb_options = $wpdb->prefix . 'optinrev';
-        $res = $wpdb->get_results( $wpdb->prepare("select name, content from $tb_options where name like %s", 'optinrev_jsmessages_%' ));
-        return ( $wpdb->num_rows > 0 ) ? $res : 0;    
-      }
   }
   
   if ( !function_exists('optinrev_action_button_uploads') ) {
@@ -86,13 +76,6 @@
         $optin = array( 'optin1' => 'Optin Popup 1' );
         optinrev_update( 'optinrev_popups', serialize($optin) );
         return $optin;
-      }
-  }
-  
-  if ( !function_exists('optinrev_alert_messages') ) {
-      function optinrev_alert_messages( $wtpage ) {
-        $pc = unserialize(optinrev_get( $wtpage ));
-        return ( isset($pc['optinrev_jspopup_images']) ) ? $pc['optinrev_jspopup_images'] : false;
       }
   }
   
@@ -150,24 +133,6 @@
       }
   }
   
-  if ( !function_exists('optinrev_tip') ) {
-      function optinrev_tip( $idx, $title = null ) {
-         global $plugin_page;
-          
-         $tip = optinrev_helper( ( ($plugin_page == 'optin')? 'admin' : 'popup_edit' ) ); 
-         //direct title option
-         if ( !empty($title) ) {
-         $idx = rand();
-         return '<a href="javascript:;" class="ifo" id="ifo'. $idx .'" title="'. $title  .'"></a>';
-         }
-         //array option
-         if ( $tip ) {   
-         return '<a href="javascript:;" class="ifo" id="ifo'. $idx .'" title="'. $tip[$idx]  .'"></a>';
-         }
-         return false; 
-      }
-  }        
-  
   if ( !function_exists('optinrev_is_pro_authorized') ) {
       function optinrev_is_pro_authorized() 
       {
@@ -222,10 +187,7 @@
           //IE curvy corner
           wp_enqueue_script( 'curvyc', $dir . 'js/curvycorners.js' );
          break;
-         }
-         
-         //social network
-         //wp_enqueue_script( 'tweet', 'https://platform.twitter.com/widgets.js' );       
+         }         
       }
   }
   
@@ -252,13 +214,12 @@
                                  'hidden' => 'webform_id',
                                  'text' => 'name,email',
                                  'input' => 'name,email,webform_id'
-                                ),
-                                
+                                ),                                
                     'mailchimp' => array (
-                                 'action' => 'http://google.us5.list-manage1.com/subscribe/post',  
-                                 'hidden' => 'mcu,mcid',
+                                 'action' => 'http://wotcoupon.us4.list-manage1.com/subscribe/post',  
+                                 'hidden' => 'mcu,mcid,mcaction',
                                  'text' => 'email',
-                                 'input' => 'email,mcu,mcid' 
+                                 'input' => 'email,mcu,mcid,mcaction' 
                                 ),
                                 
                     'constantcontact' => array (
@@ -373,6 +334,34 @@
   }
   }
   
+  if ( !function_exists('optinrev_get_media') ) {
+      function optinrev_get_media( $id ) {
+      global $wpdb;
+      $tb_posts = $wpdb->prefix . 'posts';
+      $res = $wpdb->get_row( $wpdb->prepare( "select ID, post_title, post_name, guid from $tb_posts where ID = %d", $id ) );
+      return ( $wpdb->num_rows > 0 ) ? $res : false;
+      }  
+  }
+  
+  
+  if ( !function_exists('optinrev_has_optinmedia') ) {      
+      function optinrev_has_optinmedia( $id, $type = 'action_button' ) {
+      return ( $m = optinrev_get( $type .'_'. $id ) );
+      }
+  }
+  
+  //action button  
+  if ( !function_exists('optinrev_get_action_button') ) {      
+      function optinrev_get_action_button() {
+      global $wpdb;
+      $cr_btn = basename(optinrev_get('optinrev_active_action_button'));
+      $cr_btn = explode( '.', $cr_btn );      
+      $tb_posts = $wpdb->prefix . 'posts';
+      $res = $wpdb->get_row( $wpdb->prepare( "select ID, post_title, post_name, guid from $tb_posts where guid like %s", '%'.$cr_btn[0].'%' ) );
+      return ( $wpdb->num_rows > 0 ) ? $res : false;      
+      }
+  }
+  
         
 
 /**
@@ -409,14 +398,14 @@
           exit();
       }
       //optinrev_show_where
-      if (isset( $_POST['optinrev_show_where'] ) && $show_on = htmlentities( $_POST['optinrev_show_where'] ))
+      if (isset( $_POST['optinrev_show_where'] ) && $show_on = esc_html( $_POST['optinrev_show_where'] ))
       {
           optinrev_update( 'optinrev_show_where', $show_on );        
           exit();
       }
       
       //showing popup
-      if (isset( $_POST['optinrev_show_popup'] ) && $setp = $_POST['optinrev_show_popup']) {
+      if (isset( $_POST['optinrev_show_popup'] ) && $setp = esc_html($_POST['optinrev_show_popup'])) {
           $setp_ar = explode('|',  $setp );
           $setv = $setp;
           if ( count($setp_ar) > 0 ) {
@@ -429,257 +418,66 @@
           optinrev_update( 'optinrev_show_popup', $setv );        
           exit();
       }
-      //optinrev_pixel_tracking
+      //optinrev_pixel_tracking                                                   
       if (isset( $_POST['optinrev_pixel_tracking'] )) {
-          optinrev_update( 'optinrev_pixel_tracking', $_POST['optinrev_pixel_tracking'] );        
-          exit();
-      }   
-      //uploader
-      if (isset( $_POST['optinrev_upload_id'] ) && $uid = $_POST['optinrev_upload_id']) {
-          
-          $path = dirname( __FILE__ ) . '/uploads/';
-          
-          $valid_formats = array( 'jpg', 'png', 'gif', 'bmp', 'jpeg' );
-          
-          $name = $_FILES['optinrev_file_upload']['name'];
-          $size = $_FILES['optinrev_file_upload']['size'];
-          
-          if ( strlen($name) )
-          {
-              list($txt, $ext) = explode( '.', $name );
-              if ( in_array( strtolower($ext), $valid_formats ) )
-              {
-                
-                  $actual_image_name = md5( time() ) . "." . strtolower($ext);
-                  $tmp = $_FILES['optinrev_file_upload']['tmp_name'];
-                  
-                  if( move_uploaded_file( $tmp, $path . $actual_image_name ) )
-                  {                       
-                    optinrev_update( $uid, $actual_image_name.'|'.$name );                                      
-                    echo json_encode( array('action' => 'success', 'btn_count' => optinrev_unique_id()) );                      
-                  }
-              }
-          }
-          else echo 'Please select image..!';          
-          
+          optinrev_update( 'optinrev_pixel_tracking', esc_html($_POST['optinrev_pixel_tracking']) );        
           exit();
       }
       
       //delete img
-      if ( isset( $_POST['optinrev_remove_img'] ) && $img = $_POST['optinrev_remove_img'])
+      if ( isset( $_POST['optinrev_remove_img'] ) && $img = esc_html($_POST['optinrev_remove_img']))
       {       
          optinrev_delete( $img );
          echo json_encode( array('action' => 'success') );
          exit();      
       }
       
-      //delete uploads
-      if ( isset( $_POST['optinrev_del_upload'] ) && $img = $_POST['optinrev_del_upload'])
-      {
-         $delimg = optinrev_get( $img );
-         $delimg = explode( '|', $delimg );
-         unlink( plugin_dir_path( __FILE__ ) . '/uploads/' . $delimg[0] );
-         optinrev_delete( $img );
-         echo json_encode( array('action' => 'success', 'btn_count' => optinrev_unique_id()) );
-         exit();      
-      }
-    
-      //delete action button uploads
-      if ( isset( $_POST['optinrev_del_cupload'] ) && $img = $_POST['optinrev_del_cupload'])
-      {
-         optinrev_update( 'optinrev_add_button_briefcase', OPTINREV_DIR . 'uploads/get_access1.png' ); 
-         $delimg = optinrev_get( $img );
-         $delimg = explode( '|', $delimg );
-         unlink( plugin_dir_path( __FILE__ ) . '/uploads/' . $delimg[0] );
-         optinrev_delete( $img );
-         echo json_encode( array('action' => 'success', 'btn_count' => optinrev_unique_id()) );
-         exit();      
-      }    
-      
       //add images
-      if ( isset( $_POST['optinrev_add_image'] ) && $add_img = $_POST['optinrev_add_image'] )
-      {
-          $add_img_id = $_POST['optinrev_curr_page'] . '_img_uid_' . optinrev_unique_id();
+      if ( isset( $_POST['optinrev_add_image'] ) && $add_img = esc_html($_POST['optinrev_add_image']) )
+      {          
+          //images from wp/content/uploads
+          $img_id = explode( '_', $add_img );
+          $img_id = $img_id[2];
           
-          $add_imgo = optinrev_get( $add_img );
-          $name = explode( '|', $add_imgo );          
+          $add_img_id = $_POST['optinrev_curr_page'] . '_img_uid_' . optinrev_unique_id() . '_' . $img_id;
           
-          $src = OPTINREV_DIR . 'uploads/' . $name[0];
+          $img = optinrev_get_media( $img_id );    
+          $imgurl = parse_url( $img->guid );          
             
-          optinrev_update( $add_img_id, $add_imgo .'|'. $add_img );
-          echo json_encode( array('action' => 'success', 'image' => $src ) );      
+          optinrev_update( $add_img, basename( $imgurl['path'] ) .'|'. $add_img );                      
+          echo json_encode( array('action' => 'success', 'image' => $imgurl['path'] ) );                
           exit();
-      }
-      
-      //show
-      if ( isset( $_POST['optinrev_jspopup'] ) && $jsp = $_POST['optinrev_jspopup'] )
-      {       
-         if ( $_POST['show'] == 'enabled' )
-         optinrev_delete( $jsp );
-         else
-         optinrev_update( $jsp, 'disabled' );
-         
-         echo 'success';
-         exit(); 
-      }
-      
-      //optinrev_jspopup_images
-      if ( isset( $_POST['optinrev_jspopup_images'] ) &&  $imgs = $_POST['optinrev_jspopup_images'] ) {
-          $ht = '';
-          $brk = 1;
-          $r = 1;     
-          if ( $ups = optinrev_added_images() ) { 
-          foreach( $ups as $b )      
-          {
-            $name = explode('|', $b->content);
-            $src = OPTINREV_DIR . 'uploads/' . $name[0];
-            
-            //messages
-            $jm = optinrev_alert_messages( $imgs );        
-            
-            $opt = optinrev_get('optinrev_jspopup_image_' . $r);
-            //if show
-            $fshow = ( $opt == 'disabled' ) ? '<a href="javascript:;" style="float:left;" onclick="wtfn.jspopup( \'optinrev_jspopup_image_'. $r .'\', \'enabled\' );">Enabled</a>' : '<textarea name="optinrev_jspopup_images[]" cols="40" rows="3">'. $jm[ ($r - 1) ] .'</textarea><a href="javascript:;" class="delete-icj" onclick="wtfn.jspopup(\'optinrev_jspopup_image_'.$r.'\',\'disabled\');"></a>';        
-            $ht .= '<div class="list-img" id="optinrev_jspopup_image_'.$r.'"><span class="jstxt">'. $r .'</span>'. $fshow .'</div>';
-            
-            if ( $brk == 5 ) {
-            $brk = 0;
-            $ht .= '<div style="float:left;width:100%;"></div>';
-          }      
-          $brk++;$r++;}} else $ht = '<b><em>No image!</em></b>';
-          $ht .= '<div class="clear"></div>';
-          echo $ht;
-          exit();
-      }
-      
-      //added list images
-      if ( isset( $_POST['optinrev_added_images'] ) &&  $imgs = $_POST['optinrev_added_images'] ) {
-          $ht = '';
-          $brk = 1;     
-          if ( $ups = optinrev_added_images() ) {
-           
-          foreach( $ups as $b )      
-          {
-            $name = explode('|', $b->content);
-            $src = OPTINREV_DIR . 'uploads/' . $name[0];
-            
-            if ( file_exists( OPTINREV_DIR_PATH . 'uploads/' . $name[0]  ) ) {
-              $ht .= '<div class="list-img" id="'.$b->name.'"><a href="javascript:;" class="delete-ic" onclick="wtfn.remove_img(\''. $b->name .'\',\''.$name[2].'\');"></a><img src="'.$src.'" border="0" /></div>';
-              if ( $brk == 5 ) {
-              $brk = 0;
-              $ht .= '<div style="float:left;width:100%;"></div>';
-            }
-            }      
-          $brk++;}} else $ht = '<b><em>No inserted images!</em></b>';
-          $ht .= '<div class="clear"></div>';
-          echo $ht;
-          exit();
-      }
-    
-      //Upload Images
-      if ( isset( $_POST['optinrev_load_uploads'] ) && intval($_POST['optinrev_load_uploads']) ) {          
-          $ht = '';
-          $brk = 1;
-          $exc = array( 'optin-box', 'arrow-animated' );
-          
-          if ( $ups = optinrev_uploads() ) {
-          foreach( $ups as $b )
-          {
-            $name = explode('|', $b->content);
-            $src = OPTINREV_DIR . 'uploads/' . $name[0];
-            if ( file_exists( OPTINREV_DIR_PATH . 'uploads/' . $name[0]  ) )
-            {     
-                $del = ( strstr( $name[0], 'optin-box' ) ) ? '<a href="javascript:;"></a>':'<a href="javascript:;" class="delete-ic" onclick="wtfn.delete_image(\''.$b->name.'\');"></a>';
-                $del = ( strstr( $name[0], 'arrow-animated' ) ) ? '<a href="javascript:;"></a>': $del;            
-            
-                $ht .= '<div class="list-img" id="'.$b->name.'">'.$del.'<img src="'.$src.'" border="0" /><div><a href="javascript:;" title="Insert / Add to Optin Popup" onclick="wtfn.action_add_image(\''.$b->name.'\');">Add</a></div></div>';
-                if ( $brk == 5 ) {
-                $brk = 0;
-                $ht .= '<div style="float:left;width:100%;"></div>';
-                }
-            } else {
-              optinrev_delete( $b->name );//id remove
-            }      
-          $brk++;}} else $ht = '<b><em>No uploaded images!</em></b>';
-          $ht .= '<div class="clear"></div>';
-          echo $ht;
-          exit();
-      }
-    
-      //Uploaded action button images
-      if ( isset( $_POST['optinrev_action_button_uploads'] ) && intval($_POST['optinrev_action_button_uploads']) ) {
-          $ht = '';
-          $brk = 1;      
-          $active_btn = optinrev_get( 'optinrev_active_action_button' );
-          
-          if ( $ups = optinrev_action_button_uploads() ) { 
-          foreach( $ups as $b )
-          {
-            $name = explode('|', $b->content);
-            $src = OPTINREV_DIR . 'uploads/' . $name[0];
-            if ( file_exists( OPTINREV_DIR_PATH . 'uploads/' . $name[0]  ) )
-            {
-                $del = ( strstr( $name[0], 'get_access' ) ) ? '<a href="javascript:;"></a>':'<a href="javascript:;" class="delete-ic" onclick="wtfn.delete_button(\''.$b->name.'\');"></a>';                
-                
-                //set default
-                if ( empty($active_btn) ) {
-                    if ( substr_count($name[0], 'get_access1') ) {                        
-                        $active_btn = $src;
-                    }     
-                }
-                
-                $sel = ( substr_count( basename($active_btn), $name[0] ) ) ? 'checked' : '';
-                 
-                $ht .= '<div class="list-img" id="'.$b->name.'">'.$del.'<img src="'.$src.'" border="0" /><div><input type="radio" name="action_button_update[]" id="action_button_update" value="'. $src .'" '.$sel.'>&nbsp;Update</div></div>';
-                if ( $brk == 5 ) {
-                $brk = 0;
-                $ht .= '<div style="float:left;width:100%;"></div>';
-            }
-            } else {
-            optinrev_delete( $b->name );//id remove
-            }      
-          $brk++;}
-          $ht .= '<script type="text/javascript">
-          jQuery(document).ready(function($){
-             $(\'input[name="action_button_update[]"]\').change(function(){             
-             wtfn.action_add_button( $(this).val() );
-             });
-          });
-          </script>';
-          
-          } else $ht = '<b><em>No uploaded images!</em></b>';
-          $ht .= '<div class="clear"></div>';
-          echo $ht;
-          exit();
-      }
+      }      
       
       //cloning
-      if ( isset( $_POST['optinrev_popup_cloned'] ) && $cl_optin = $_POST['optinrev_popup_cloned'] ) {
+      if ( isset( $_POST['optinrev_popup_cloned'] ) && $cl_optin = esc_html($_POST['optinrev_popup_cloned']) ) {
           optinrev_update( $_POST['optinrev_curr_page'], optinrev_get( $cl_optin ) );        
           echo 'success';
           exit();
       }
       //reset
-      if ( isset( $_POST['optinrev_popup_reset'] ) && $reset = $_POST['optinrev_popup_reset'] ) {      
+      if ( isset( $_POST['optinrev_popup_reset'] ) && $reset = esc_html($_POST['optinrev_popup_reset']) ) {      
           optinrev_update( $reset, optinrev_get( 'optinrev_default' ) );
           optinrev_update( 'optinrev_active_action_button', 'get_access2.png' );                  
           
           $tb_options = $wpdb->prefix . 'optinrev';
-          $res = $wpdb->query( $wpdb->prepare("delete from $tb_options where name like %s", '%_img_uid_%' ) );
+          $wpdb->query( $wpdb->prepare("delete from $tb_options where name like %s", '%_img_uid_%' ) );
+          $wpdb->query( $wpdb->prepare("delete from $tb_options where name like %s", 'stage_img_%' ) );
+          $wpdb->query( $wpdb->prepare("delete from $tb_options where name like %s", 'action_button_%' ) );
           
           echo 'success';             
           exit();
       }
       
       //get the validator
-      if ( isset( $_POST['optinrev_mce_validator'] ) && $page = $_POST['optinrev_mce_validator'] ) {
+      if ( isset( $_POST['optinrev_mce_validator'] ) && $page = esc_html($_POST['optinrev_mce_validator']) ) {
           $p = unserialize(optinrev_get( $page ));    
           echo json_encode($p['optinrev_input_validator']);              
           exit();
       }
       
       //mail provider form
-      if ( isset( $_POST['optinrev_mail_webform'] ) && $cur_page = $_POST['optinrev_mail_webform'] ) {
+      if ( isset( $_POST['optinrev_mail_webform'] ) && $cur_page = esc_html($_POST['optinrev_mail_webform']) ) {
           //optin setup
           $optin = unserialize( optinrev_get( $cur_page ) );
                       
@@ -718,8 +516,9 @@
                   $autotxt = 'onblur="wtfn.input_autotext(\''.$v.'\', this.value);" id="'. $v .'"';
                 }
                     
-                if ( $prov == 'mailchimp' )
+                if ( $prov == 'mailchimp' ){
                 $lbl = ucfirst(str_replace('Mc', '', $lbl));
+                }
                 
                 //if has an 'id'
                 $lbl = str_replace(' Id', ' ID', $lbl);      
@@ -733,7 +532,7 @@
           exit();
       }
       //Member verification
-      if ( isset( $_POST['authenticate'] ) && $user = htmlspecialchars($_POST['authenticate']) )
+      if ( isset( $_POST['authenticate'] ) && $user = esc_html($_POST['authenticate']) )
       {
           include_once( ABSPATH . 'wp-includes/class-IXR.php' );
           
@@ -754,7 +553,7 @@
           exit;
       }
       //Save the info
-      if ( isset( $_POST['pro_authorized'] ) && $pro = htmlspecialchars($_POST['pro_authorized']) )
+      if ( isset( $_POST['pro_authorized'] ) && $pro = esc_html($_POST['pro_authorized']) )
       {   
           parse_str( str_replace('amp;','', $pro), $post );
           optinrev_update( 'optinrev_pro_authorized', serialize($post) );
@@ -762,54 +561,45 @@
           exit;
       }
 
-      //clear analytics each optin  
-      if ( isset( $_POST['clear_analytics'] ) && intval( $_POST['clear_analytics'] ) && $optin = htmlspecialchars($_POST['clear_analytics']) )
-      {   
-          $tb = $wpdb->prefix . 'wotoptin_analytics';
-          $wpdb->query( $wpdb->prepare("delete from $tb where optin = %d", $optin) );
-          echo 'success';
-          exit();
-      }
-      //clear all analytics
-      if ( isset( $_POST['clear_all_analytics'] ) && intval( $_POST['clear_all_analytics'] ) && $optin = htmlspecialchars($_POST['clear_all_analytics']) )
-      {   
-          $wpdb->query( "delete from " . $wpdb->prefix . "wotoptin_analytics" );
-          echo 'success';
-          exit();
-      }
       //set autosave      
-      if ( isset( $_POST['optinrev_autosave'] ) && $autosave = htmlspecialchars($_POST['optinrev_autosave']) )
+      if ( isset( $_POST['optinrev_autosave'] ) && $autosave = esc_html($_POST['optinrev_autosave']) )
       {             
           optinrev_update( 'optinrev_autosave', $autosave );
           exit();
       }
       //set poweredby      
-      if ( isset( $_POST['optinrev_poweredby'] ) && $poweredby = htmlspecialchars($_POST['optinrev_poweredby']) )
+      if ( isset( $_POST['optinrev_poweredby'] ) && $poweredby = esc_html($_POST['optinrev_poweredby']) )
       {             
           optinrev_update( 'optinrev_poweredby', $poweredby );
           exit();
       }
       
       //optinrev_add_image_briefcase
-      if ( isset( $_POST['optinrev_add_image_briefcase'] ) && $img = htmlspecialchars($_POST['optinrev_add_image_briefcase']) )
+      if ( isset( $_POST['optinrev_add_image_briefcase'] ) && $img = esc_html($_POST['optinrev_add_image_briefcase']) )
       {   
-          $img_id = htmlspecialchars($_POST['optinrev_curr_page']) . '_images_' . optinrev_unique_id();          
+          $img_id = esc_html($_POST['optinrev_curr_page']) . '_images_' . optinrev_unique_id();          
           optinrev_update( $img_id, $img );          
           exit();
       }
       
       //optinrev_del_image_briefcase
-      if ( isset( $_POST['optinrev_del_image_briefcase'] ) && $img = htmlspecialchars($_POST['optinrev_del_image_briefcase']) )
+      if ( isset( $_POST['optinrev_del_image_briefcase'] ) && $img = esc_html($_POST['optinrev_del_image_briefcase']) )
       {   
-          $img_id = htmlspecialchars($_POST['optinrev_curr_page']) . '_delete_images_' . optinrev_unique_id();          
+          $img_id = esc_html($_POST['optinrev_curr_page']) . '_delete_images_' . optinrev_unique_id();          
           optinrev_update( $img_id, $img );          
           exit();
       }
       
       //optinrev_add_action button_briefcase
-      if ( isset( $_POST['optinrev_add_button_briefcase'] ) && $img = htmlspecialchars($_POST['optinrev_add_button_briefcase']) )
+      if ( isset( $_POST['optinrev_add_button_briefcase'] ) && $img = esc_html($_POST['optinrev_add_button_briefcase']) )
       {             
           optinrev_update( 'optinrev_add_button_briefcase', $img );          
+          exit();
+      }
+      
+      //remove an image to the stage
+      if ( isset( $_POST['optinrev_remove_object'] ) && $img_id = esc_html( $_POST['optinrev_remove_object'] ) ) {          
+          optinrev_delete( $img_id );
           exit();
       }      
     }}//end action callback
