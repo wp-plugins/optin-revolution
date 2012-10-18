@@ -50,11 +50,11 @@
         content_css : "css/content.css",
         setup : function( ed ) {        
         ed.onInit.add( function(ed, e) {
-        ed.dom.hide('mceDeleteObj');
+        ed.dom.hide('mceDeleteObj');        
         });
         }    
     });
-    tinyMCE.execCommand( 'mceAddControl', false, 'mce_textedit' );
+       
     
     function is_numtext_width( id ) {
        var dom = tinyMCE.activeEditor.dom, vl = 0; 
@@ -79,13 +79,26 @@
                             
        dom.setStyle(txted, 'width', ((vl=='')?'': vl + '%'));
     }
+    
+    function is_load() {
+    //loading    
+    setTimeout(function(){
+    document.getElementById('mce_textedit').style.display = 'inline';
+    tinyMCE.execCommand( 'mceAddControl', false, 'mce_textedit' );
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('clearb').style.display = 'none';    
+    }, 2000);
+    }
+    
+    window.onload = is_load();
 	</script>  
 </head>
 <body> 
 	<form onsubmit="TextEditDialog.insert();return false;">
     <p>Textbox Width : <input type="text" name="wlayer" id="wlayer" size="10" onfocus="document.getElementById('statwidth').innerHTML='';" onblur="is_numtext_width(this.id);"/>&nbsp;%&nbsp;<span id="statwidth" style="color:red;"></span></p> 
     <div>    
-		<textarea id="mce_textedit" name="mce_textedit" cols="118" rows="16"></textarea>  
+    <div class="loading" id="loading"><em>Editor Loading</em></div><div id="clearb" style="clear:both;"></div>
+		<textarea id="mce_textedit" name="mce_textedit" cols="118" rows="16" style="display:none;"></textarea>  
     </div>
 		<div class="mceActionPanel">
 			<input type="submit" id="insert" name="apply" value="Update" />

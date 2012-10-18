@@ -7,7 +7,8 @@
       _im.attr('src', wtp + 'images/' + v );
       });  
   }};
-  var bkspc = false, crt = 0;  
+  var bkspc = false, crt = 0;
+    
   
   //misc functions
   //wtfn.submit();
@@ -43,6 +44,9 @@
         return false;
       });
       }, 20); 
+  },
+  contrast50 : function(hexcolor){
+    return (parseInt(hexcolor, 16) > 0xffffff/2) ? 'black':'white';
   },
   redraw: function()
   {
@@ -100,13 +104,15 @@
    j('#' + tinyMCE.activeEditor.id + '_ifr').height( parseInt(j('#optinrev_vheight').val()) + 100 );      
    wtdom.setAttrib(wtdom.get('simplemodal-container'),'style', modstyle);
    }   
-   //close button   
+   //close button    
    if ( clb = wtdom.get('close') ) {
        wtdom.setStyles( clb, wtfn.close_button_pos(0) );   
        wtdom.setAttrib( clb, 'data-mce-style', 'left:' + wtfn.close_button_pos(0).left + 'px; top:'+ wtfn.close_button_pos(0).top + 'px;' );
    } 
    j('#' + tinyMCE.activeEditor.id + '_ifr').attr('title', null);
-   wtfn.pwby();     
+   j('#' + tinyMCE.activeEditor.id + '_ifr').css({'background-color': 'rgba(' + wtfn.rgb(j('#optinrev_wbg_color').val()) + ', '+ (j('#optinrev_wbg_opacity').val() / 100) +')'});  
+   
+   wtfn.pwby();  
       
   },//redraw
   remove_img: function( img, img2 )
@@ -194,8 +200,7 @@
     {
         j('.spin').show();
         j.post('admin-ajax.php', {action : "optinrev_action", optinrev_del_cupload : img}, function( res ){        
-        if ( res.length > 0 )
-        {
+        if ( res.length > 0 ) {        
           var ac = j.parseJSON( res );
           if ( ac.action == 'success' ) {
           j('#optinrev_upload_id').val( 'optinrev_cuid_' + ac.btn_count );
@@ -300,7 +305,7 @@
                 
         var t = j("#simplemodal-container").offset().top, plc = {}, redirect = false;                
         if ( t === 0 ) {dialog.container[0].style.marginTop = (Math.ceil(t) + 18) + 'px';}
-        var ids = [], listid = 0;        
+        var ids = [], listid = 0, action_url = '';        
                                                                                                   
         //form inputs        
         j('input, select, radio, checkbox', dialog.data).each(function(i, v){
@@ -309,6 +314,10 @@
         //mailchimp
         if ( j(v).attr('name') == 'mcid' ) { j(v).attr('name', 'id'); }            
         if ( j(v).attr('name') == 'mcu' ) { j(v).attr('name','u'); }
+        if ( j(v).attr('name') == 'mcaction' ) {
+            action_url = j(v).val();
+            j(v).remove();
+        }
         
         //icontact
         if ( j(v).attr('name') == 'listid' ) { listid = j(v).val(); }
@@ -327,21 +336,7 @@
             if ( j(this).val().length == 0 ) j(this).val( plc[ j(this).attr('id') ] );  
             });
         }
-        });
-             
-        //image click
-        j("#imglabel", dialog.data).hide();
-      	j("img", dialog.data).click(function () {
-          var p = j(this).parent();
-          if ( m = j(p).attr('data-mce-popup') ) {
-              j( jsmv ).each(function(i, v) {
-                  if ( m === v.name ) {
-                  alert( v.option_value.replace(/\\\\r/g,'\n').replace(/\\/g,'') );
-                  }
-              });
-          }
-      		return false;
-      	});
+        });  
         
         //onsubmit
         j('#wm', dialog.data).click(function(){        
@@ -399,6 +394,11 @@
             if ( mail_form_name == 'mailchimp' ) {
                 j('#email', dialog.data).attr('name', 'MERGE0');
                 j('#email', dialog.data).attr('id', 'MERGE0');
+                if ( action_url ) {
+                    cur_act = j('#mce_getaccessed', dialog.data).attr('action');
+                    cur_act = cur_act.replace( /wotcoupon/ig, action_url );
+                    j('#mce_getaccessed', dialog.data).attr( 'action', cur_act );
+                }                                
             }            
 
             j('#mce_getaccessed', dialog.data).submit();                 
@@ -459,7 +459,7 @@
   j('#optinrev_jspopup_messages').load('admin-ajax.php', {action : 'optinrev_action', optinrev_jspopup_messages : 'load'});
   }}) 
   },///JS popup images
-  pwby: function() {var wtdom = tinyMCE.activeEditor.dom, mn = wtdom.get('simplemodal-container'), mn_h = jQuery(mn).height(), mn_w = jQuery(mn).width(), bw = (mn) ? parseInt(mn.style.border.substring(0, mn.style.border.indexOf('px'))) : 0;if ( is_poweredby == 'true' ) {wtdom.remove('poweredby');wtdom.add( wtdom.get('simplemodal-data'), 'a', {'id': 'poweredby', 'href': 'http://wordpress.org/extend/plugins/optin-revolution/', 'target': '_new', style : { 'position': 'absolute', left: ((mn_w / 2) - 80), top: (mn_h + 2) + bw }}, 'Powered by : Optin Revolution');}},
+  pwby: function() {var wtdom = tinyMCE.activeEditor.dom, mn = wtdom.get('simplemodal-container'), mn_h = jQuery(mn).height(), mn_w = jQuery(mn).width(), bw = (mn) ? parseInt(mn.style.border.substring(0, mn.style.border.indexOf('px'))) : 0;if ( is_poweredby == 'true' ) {wtdom.remove('poweredby');wtdom.add( wtdom.get('simplemodal-data'), 'a', {'id': 'poweredby', 'href': 'http://wordpress.org/extend/plugins/optin-revolution/', 'target': '_new', style : { 'position': 'absolute', left: ((mn_w / 2) - 80), top: (mn_h + 2) + bw, 'color': wtfn.contrast50(j('#optinrev_wbg_color').val())  }}, 'Powered by : Optin Revolution');}},
   mce_toolbar:function( state ) {
   var ctrl = 'fontselect,fontsizeselect,forecolor,backcolor,moveforward,movebackward,textbox,jspopupimg,lineheight,bold,italic,underline,bullist,numlist,justifyleft,justifycenter,justifyright,justifyfull,link,unlink,wp_adv,removeformat,outdent,indent,input_align_left,input_align_top,object_align_top,object_align_bottom,object_align_center,object_align_left,object_align_right';
   tinyMCE.each( ctrl.split(','), function(v, i) {
@@ -678,7 +678,7 @@
       bwn.attachEvent("oncontrolselect", function(){ return false; });
     } 
     
-     // if has no close button
+     // if has no close button         
      if ( typeof bwn.childNodes[1] === 'undefined' )
      {
         clb = document.createElement('div');
@@ -824,7 +824,16 @@
         //delete an object
         if ( e.target.id === 'mceDeleteObj' ) {             
              if ( confirm('Do you want to remove ?') ) {
-                 ed.dom.remove( el.parentNode );
+                  
+                 if ( el.parentNode.firstChild.nodeName == 'IMG' )
+                 jQuery.post('admin-ajax.php', {action : 'optinrev_action', optinrev_remove_object : el.parentNode.firstChild.id});
+                 
+                 ed.dom.remove( el.parentNode );                 
+                 setTimeout(function(){
+                 wtfn.save(0);
+                 }, 1000);
+                                  
+                 return false;
              }
         }       
       
@@ -862,9 +871,9 @@
               {              
                 ed.dom.setAttrib( el, 'class', 'mceWotlayer' );
                 ed.dom.setAttrib( el, 'id', 'mceWotlayer' );
-                
+                                
                 if ( el.firstChild.id != 'wm' && el.firstChild.nodeName != 'INPUT' )          
-                ed.dom.add(el, 'div', {id : 'mceDeleteObj'});                                               
+                ed.dom.add(el, 'div', {id : 'mceDeleteObj'});  
                 
               }
               
@@ -1070,9 +1079,7 @@
          jQuery.each( jQuery.parseJSON(bfcase), function(i,v) {
             var img = v;
             jQuery.post('admin-ajax.php', {action : 'optinrev_action', optinrev_add_image : img, optinrev_curr_page : wtpage}, function(res){              
-              
-              var ac = j.parseJSON( res );
-              if ( ac.action == 'success' )
+              if ( ac = j.parseJSON( res ) )
               {
                 //set the marker         
                 wtdom.add( wtdom.get('simplemodal-data'), 'div', {
@@ -1087,14 +1094,14 @@
                 wtfn.save(0);
                 }, 2000);
                 
-              }  
+              } 
             });
          });   
      }
   },
   //add image to the canvas
   action_add_image: function( img ) {  
-   if ( confirm('Are you sure, you want to insert this image in Optin Popup 1 ?') ) {
+   if ( confirm('Are you sure, you want to insert this image in Optin Popup 1 ?') ) {   
    jQuery.post('admin-ajax.php', {action : 'optinrev_action', optinrev_add_image_briefcase : img, optinrev_curr_page : 'optin1'}, function(){wtfn.msg( 'Successfully added.' );});
    }
    return false; 
@@ -1110,8 +1117,12 @@
   action_del_image_briefcase: function( delbfcase ) {
      if ( tinyMCE.activeEditor != null ) {
          var wtdom = tinyMCE.activeEditor.dom;
-         jQuery.each( jQuery.parseJSON(delbfcase), function(i,v) {         
-         wtdom.remove(v);                  
+         jQuery.each( jQuery.parseJSON(delbfcase), function(i,v) {
+         if (wi = wtdom.get(v)) {
+            jQuery.post('admin-ajax.php', {action : 'optinrev_action', optinrev_remove_object : v}, function(res){
+            wtdom.remove(wi.parentNode);
+            });            
+         }                                    
          });         
          tinyMCE.activeEditor.isNotDirty = 0;
          is_editing = true;
@@ -1119,7 +1130,7 @@
          setTimeout(function(){
          wtfn.save(0);
          }, 2000);
-     }
+     }     
   },
   /**
    * IMAGES---------------------------------------------------
@@ -1131,20 +1142,26 @@
   //auto add action button from briefcase
   action_add_button_briefcase: function( is_actionbtn ) {   
      if ( tinyMCE.activeEditor != null ) { 
-        var wtdom = tinyMCE.activeEditor.dom, mn = wtdom.get('simplemodal-container'), mn_w = jQuery(mn).width();
+        var wtdom = tinyMCE.activeEditor.dom, mn = wtdom.get('simplemodal-container'), mn_w = jQuery(mn).width(), mn_h = jQuery(mn).height();
         if ( img = wtdom.get('wm') )
-        {        
-          wtdom.replace( wtdom.create('img', {id : 'wm', 'src' : is_actionbtn, 'border' : 0}, null), img );                  
+        { 
+          pos = wtdom.getPos(img);
+          imgh = jQuery(img).height();
+               
+          wtdom.replace( wtdom.create('img', {id : 'wm', 'src' : is_actionbtn, 'border' : 0}, null), img );
+                            
           //prev gap        
           crnb = wtdom.get('wm');
-          pcrnb = crnb.parentNode;          
-          bgp = mn_w - jQuery(crnb).width();          
-          wtdom.setStyle( pcrnb, 'left', (bgp - 30) );
+          pcrnb = crnb.parentNode;
+          
+          wtdom.setStyle( pcrnb, 'left', ( mn_w / 2 ) - Math.floor((jQuery(crnb).width())/2) );
+          wtdom.setStyle( pcrnb, 'top', ( mn_h / 2 ) - Math.floor(jQuery(crnb).height()/2) );
+          
           tinyMCE.activeEditor.isNotDirty = 0;
           
-         setTimeout(function(){
-         wtfn.save(0);
-         }, 2000);
+          setTimeout(function(){
+          wtfn.save(0);
+          }, 2000);
         }   
      }
   },
@@ -1227,16 +1244,27 @@ jQuery(document).ready( function($) {
     			}, 'childNodes');        
         }  
     }
-  
-    if (/^(optin-image-uploader|optin-action-button-uploader)$/i.test(wtpage) == false)
-    {            
+    
+    $.each([1,2,3,4,5], function(i, v){
+      $('#_box'+ v +'-t').click(function(){
+      $('#_box'+ v).slideToggle(function(){
+       $('._box'+ v +'-x').css('display', ($(this).is(':visible')?'none':'inline') );
+       $('._box'+ v +'-c').css('display', ($(this).is(':visible')?'inline':'none') );      
+      });
+      });
+      
+      $('._box'+ v +'-c').hide();
+      $('#_box'+ v).slideUp();
+      
+    });
+            
     $('#optinrev_wbg_opacity').keyup(function(event){
     if (event.which == 13) {event.preventDefault();}
     $('#wbg_opacity_slider').slider({value: eval($(this).val())});    
     });
   
     $('#wbg_opacity_slider').slider({
-       range : 'min', value : optinrev_wbg_opacity, min : 0, max : 100, slide: function(even, ui){$('#optinrev_wbg_opacity').val( ui.value );}
+       range : 'min', value : optinrev_wbg_opacity, min : 0, max : 100, slide: function(even, ui){$('#optinrev_wbg_opacity').val( ui.value );wtfn.redraw();}
     });
     
     $('#optinrev_border_opacity').keyup(function(event){
@@ -1416,42 +1444,6 @@ jQuery(document).ready( function($) {
     }    
     }    
     });
-    
-    }//check other page
-      
-     $('#optinrev_callupbutton').live('change', function() {
-     $('.spin').show();  		  
-     $('#optinrev_fcallupbutton').ajaxForm({complete: function(xhr){ 
-     
-     if ( xhr.responseText ) {
-        var ac = $.parseJSON( xhr.responseText );
-        if ( ac.action == 'success' ) {        
-        $('#optinrev_callaction_btn').val( 'optinrev_callaction_btn' + ac.btn_count );
-        $('.spin').hide();
-        wtfn.msg('Successfully upload.');        
-        }        
-        $('#load_list_img').load('admin-ajax.php', {action : 'optinrev_action', optinrev_load_callbtns : 1});
-     }
-     }}).submit();
-     //$(this).val('');
-	   });   
-     
-      //uploader
-     $('#optinrev_file_upload').live('change', function() {
-       $('.spin').show();  		  
-       $('#optinrev_fuploads').ajaxForm({complete: function(xhr){       
-       if ( xhr.responseText ) {     
-          var ac = $.parseJSON( xhr.responseText );
-          if ( ac.action == 'success' ) {        
-          $('#optinrev_upload_id').val( 'optinrev_uid_' + ac.btn_count );
-          $('.spin').hide();
-          wtfn.msg('Successfully uploaded.');        
-          }
-          $('#load_list_img').load('admin-ajax.php', {action : 'optinrev_action', optinrev_load_uploads : 1});
-          $('#load_list_img2').load('admin-ajax.php', {action : 'optinrev_action', optinrev_action_button_uploads : 1});
-       }
-       }}).submit();     
-	   });
      
      $('#optinrev_list').change(function(){
         if ( $(this).val() === 'reset' ) {

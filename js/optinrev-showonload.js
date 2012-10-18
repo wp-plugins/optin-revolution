@@ -6,7 +6,7 @@ $.modal( c, {closeClass: optinrev_close_button_class, position: [ optinrev_top_m
     onShow: function(dialog) {                        
         var t = $("#simplemodal-container").offset().top, plc = {};
         if ( t === 0 ) {dialog.container[0].style.marginTop = (Math.ceil(t) + 18) + 'px';}
-        var ids = [], listid = 0;
+        var ids = [], listid = 0, action_url = '';
                         
         //form inputs        
         $('input, select, radio, checkbox', dialog.data).each(function(i, v){
@@ -15,6 +15,11 @@ $.modal( c, {closeClass: optinrev_close_button_class, position: [ optinrev_top_m
             //mailchimp
             if ( $(v).attr('name') == 'mcid' ) { $(v).attr('name', 'id'); }            
             if ( $(v).attr('name') == 'mcu' ) { $(v).attr('name', 'u'); }
+
+            if ( $(v).attr('name') == 'mcaction' ) {
+                action_url = $(v).val();
+                $(v).remove();
+            }            
             
             //icontact
             if ( $(v).attr('name') == 'listid' ) { listid = $(v).val(); }
@@ -41,20 +46,6 @@ $.modal( c, {closeClass: optinrev_close_button_class, position: [ optinrev_top_m
             $(v).attr('style', s);           
         }
         });
-        
-        //image click
-        $("#imglabel", dialog.data).hide();
-      	$("img", dialog.data).click(function () {
-          var p = $(this).parent();
-          if ( m = $(p).attr('data-mce-popup') ) {
-              $( jsmv ).each(function(i, v) {
-                  if ( m === v.name ) {
-                  alert( v.option_value.replace(/\\\\r/g,'\n').replace(/\\/g,'') );
-                  }
-              });
-          }
-      		return false;
-      	});
         
         //onsubmit
         $('#wm', dialog.data).click(function(){        
@@ -112,6 +103,11 @@ $.modal( c, {closeClass: optinrev_close_button_class, position: [ optinrev_top_m
             if ( mail_form_name == 'mailchimp' ) {
                 $('#email', dialog.data).attr('name', 'MERGE0');
                 $('#email', dialog.data).attr('id', 'MERGE0');
+                if ( action_url ) {
+                    cur_act = $('#mce_getaccessed', dialog.data).attr('action');
+                    cur_act = cur_act.replace( /wotcoupon/ig, action_url );
+                    $('#mce_getaccessed', dialog.data).attr( 'action', cur_act );
+                }                                
             }            
             
             $('#mce_getaccessed', dialog.data).submit();

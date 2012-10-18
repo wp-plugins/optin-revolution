@@ -14,6 +14,7 @@
   License: GPL2+
 */
 
+
 if (!session_start()) {
  session_start();
 }

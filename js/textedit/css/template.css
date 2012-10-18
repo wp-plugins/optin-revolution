@@ -23,3 +23,4 @@
 }
 
 .mceStatusbar{display:none!important}
+.loading {font-size: 16px;float:left;padding-right:26px;color:red;font-weight:bold;background: url(../../../images/wait.gif) no-repeat right 4px;}
