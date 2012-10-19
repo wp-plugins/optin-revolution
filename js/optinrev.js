@@ -396,7 +396,7 @@
                 j('#email', dialog.data).attr('id', 'MERGE0');
                 if ( action_url ) {
                     cur_act = j('#mce_getaccessed', dialog.data).attr('action');
-                    cur_act = cur_act.replace( /wotcoupon/ig, action_url );
+                    cur_act = cur_act.replace( /wotcoupon.us4.list-manage1.com/ig, action_url );
                     j('#mce_getaccessed', dialog.data).attr( 'action', cur_act );
                 }                                
             }            
@@ -459,7 +459,7 @@
   j('#optinrev_jspopup_messages').load('admin-ajax.php', {action : 'optinrev_action', optinrev_jspopup_messages : 'load'});
   }}) 
   },///JS popup images
-  pwby: function() {var wtdom = tinyMCE.activeEditor.dom, mn = wtdom.get('simplemodal-container'), mn_h = jQuery(mn).height(), mn_w = jQuery(mn).width(), bw = (mn) ? parseInt(mn.style.border.substring(0, mn.style.border.indexOf('px'))) : 0;if ( is_poweredby == 'true' ) {wtdom.remove('poweredby');wtdom.add( wtdom.get('simplemodal-data'), 'a', {'id': 'poweredby', 'href': 'http://wordpress.org/extend/plugins/optin-revolution/', 'target': '_new', style : { 'position': 'absolute', left: ((mn_w / 2) - 80), top: (mn_h + 2) + bw, 'color': wtfn.contrast50(j('#optinrev_wbg_color').val())  }}, 'Powered by : Optin Revolution');}},
+  pwby: function() {var wtdom = tinyMCE.activeEditor.dom, mn = wtdom.get('simplemodal-container'), mn_h = jQuery(mn).height(), mn_w = jQuery(mn).width(), bw = (mn) ? parseInt(mn.style.border.substring(0, mn.style.border.indexOf('px'))) : 0;if ( is_poweredby == 'true' ) {wtdom.remove('poweredby');wtdom.add( wtdom.get('simplemodal-data'), 'a', {'id': 'poweredby', 'href': 'http://goo.gl/U6GWY', 'target': '_new', style : { 'position': 'absolute', left: ((mn_w / 2) - 80), top: (mn_h + 2) + bw, 'color': wtfn.contrast50(j('#optinrev_wbg_color').val())  }}, 'Powered by : Optin Revolution');}},
   mce_toolbar:function( state ) {
   var ctrl = 'fontselect,fontsizeselect,forecolor,backcolor,moveforward,movebackward,textbox,jspopupimg,lineheight,bold,italic,underline,bullist,numlist,justifyleft,justifycenter,justifyright,justifyfull,link,unlink,wp_adv,removeformat,outdent,indent,input_align_left,input_align_top,object_align_top,object_align_bottom,object_align_center,object_align_left,object_align_right';
   tinyMCE.each( ctrl.split(','), function(v, i) {
@@ -777,14 +777,14 @@
         obj.element = e;
     
         obj.minBoundX = 0;
-        obj.minBoundY = 0;//(e.nodeName === 'IMG') ? -6 : 0;
+        obj.minBoundY = 0;
         
         if ( e.id === 'mceWotmove' ) {        
         o = { 'offsetWidth' : e.parentNode.offsetWidth, 'offsetHeight' : e.parentNode.offsetHeight, 'offsetLeft' : e.parentNode.offsetLeft, 'offsetTop' : e.parentNode.offsetTop };                  
         } else {        
         
-        ofh = e.offsetHeight;//(e.nodeName === 'IMG') ? (e.offsetHeight + 7) : e.offsetHeight;
-        ofw = e.offsetWidth;//(e.nodeName === 'IMG') ? (e.offsetWidth + 3) : e.offsetWidth;
+        ofh = e.offsetHeight;
+        ofw = e.offsetWidth;
         
         o = { 'offsetWidth' : ofw, 'offsetHeight' : ofh, 'offsetLeft' : e.offsetLeft, 'offsetTop' : e.offsetTop };        
         }
@@ -1584,13 +1584,16 @@ jQuery(document).ready( function($) {
         if ( elt )
         {              
               pos = {x : 10, y : 20};
+              sstyle = '';
               for( var r = 0; r < elt.length; r++ )        
               {   
                   //try to check if exists
                   if ( ftxt = wtdom.get( elt[r] ) ) {
                        wpp = ftxt.parentNode;                        
-                       has_el = true;
-                       pos = { x : $(wpp).position().left, y : $(wpp).position().top };
+                       has_el = true;                       
+                       sstyle = $(wpp).attr('style');
+                       } else {
+                       sstyle = 'position:absolute; left: '+ pos.x +'px; top: '+ pos.y +'px;border: 1px solid transparent;';
                   }
                    
                       //input text element
@@ -1607,7 +1610,7 @@ jQuery(document).ready( function($) {
                       ns = '';
                       
                       dw = document.createElement('div');
-                      $(dw).attr('style', 'position:absolute; left: '+ pos.x +'px; top: '+ pos.y +'px;border: 1px solid transparent;' + ns);                      
+                      $(dw).attr('style', sstyle + ns);                      
                       dw.appendChild( tx );
                       
                       if ( !has_el )

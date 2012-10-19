@@ -61,7 +61,7 @@ Allows custom variables for popup window. Support for the following custom varia
 * Popup Width
 * Popup Height
 
-Integrates with the WordPress Image Library to allow importing images and button to the optin popup stage.
+Integrates with the WordPress Media Library to allow importing images and button to the WordPress popup stage.
 
 
 == Installation ==
@@ -74,6 +74,13 @@ Integrates with the WordPress Image Library to allow importing images and button
 
 
 == Changelog ==
+
+= 1.0.3 =
+
+* Bug Fix: Fix for MailChimp not updating on upgrade.
+* Bug Fix: Z-index on input fields not allowing to be brought into the foreground.
+* Updated: Power by url.
+* Updated: minor update to the update functions.
 
 = 1.0.2 =
 
@@ -97,5 +104,4 @@ Integrates with the WordPress Image Library to allow importing images and button
 
 1. Optin Revolution main settings.
 2. Optin Revolution popup settings.
-3. Optin Revolution image uploader.
-4. Optin Revolution button uploader.
+3. Optin Revolution intergration with WordPress Media Library.

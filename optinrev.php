@@ -9,7 +9,7 @@
   Plugin URI: http://wordpress.org/extend/plugins/optin-revolution/
   Description: Optin Revolution is a WordPress popup plugin is quite possibly the best way in the world for you to create supercharged unblockable popups to grow your list of subscribers! To get started: 1) Click the "Activate" link to the left of this description, 2) Go to your Optin Revolution settings page, and 3) Watch the video on the settings page which will show you how to get started creating your cool popups.
   Author: Optin Revolution
-  Version: 1.0.2
+  Version: 1.0.3
   Author URI: http://optinrevolution.com/
   License: GPL2+
 */
@@ -30,7 +30,7 @@ $wp_version;
 //init
 $plugin_name = 'optin-revolution/optinrev.php';
 $optinrev_db_version = '1.0';
-$optinrev_installed_version = '1.0.2';
+$optinrev_installed_version = '1.0.3';
 $wp_version = get_bloginfo('version');
 
 function optinrev_admin_actions()
@@ -127,12 +127,12 @@ function optinrev_plugin_admin_init()
         $default_optin = array(
             'action' => 'optinrev_action',
             'save_setup_settings' => 'optin1',
-            'optinrev_data' => '<div style="position: absolute; left: 29px; top: 8px; z-index: 1; text-align: center; width: 90%;border: 1px solid transparent;"><span><span style="font-family: impact, chicago; font-size: 30pt; color: #ff0000;" data-mce-style="font-family: impact, chicago; font-size: 30pt; color: #ff0000;">DISCOVER HOW I INCREASED MY OPTIN RATE BY 500% IN 5 MINS!</span><br></span></div><div style="position: absolute; left: 285px; top: 325px;border: 1px solid transparent;"><img id="wm" src="'.$dir.'assets/get_access2.png" alt="" border="0"></div><div style="position: absolute; left: 1px; top: 104px; z-index: 1; width: 100%; text-align: center;border: 1px solid transparent;"><span style="font-size: 14pt; background-color: #ffff99;" data-mce-style="font-size: 14pt; background-color: #ffff99;"><strong><span style="font-family: tahoma, arial, helvetica, sans-serif;" data-mce-style="font-family: tahoma, arial, helvetica, sans-serif;">Enter your email address to get your <span style="text-decoration: underline;" data-mce-style="text-decoration: underline;">FREE</span> video!</span></strong></span></div><div style="position: absolute; left: 0px; top: 148px;border: 1px solid transparent;"><img id="optinrev_uid_28" src="'.$dir.'assets/optin-box.png" alt="" border="0"></div><div style="position: absolute; left: 317px; top: 142px;border: 1px solid transparent;"><img id="optinrev_uid_33" src="'.$dir.'assets/arrow-animated.gif" alt="" border="0"></div><br><a id="poweredby" data-mce-href="http://wordpress.org/extend/plugins/optin-revolution/" href="http://wordpress.org/extend/plugins/optin-revolution/" target="_new" style="position: absolute; left: 220px; top: 430px; ">Powered by : Optin Revolution</a><form method="post" id="mce_getaccessed" action="http://www.aweber.com/scripts/addlead.pl" target="_blank"><div style="display:none;"><input type="hidden" name="listname" value="optinrev_plug"><input type="hidden" name="meta_web_form_id" value="258192310"><input type="hidden" name="meta_message" value="1"><input type="hidden" name="meta_adtracking" value="wordpress_plugin"><input type="hidden" name="redirect" value="http://www.aweber.com/thankyou-coi.htm?m=audio"></div><div style="position:absolute; left: 0px; top: 0px;border: 1px solid transparent;display:none;"><input type="text" name="name" id="name" value="Enter Your Name..." style="font-size:20px !important;color:#000000 !important;height:50px !important;width:240px !important;background-color:#FFFFCC !important;border:5px solid #666666 !important;"></div><div style="position:absolute; left: 302px; top: 259px;border: 1px solid transparent;"><input type="text" name="email" id="email" value="Enter Your Email..." style="font-size:20px !important;color:#000000 !important;height:50px !important;width:240px !important;background-color:#FFFFCC !important;border:5px solid #666666 !important;"></div><span style="display:none;"><img src="http://forms.aweber.com/form/displays.htm?id=TKwcjJxMzIwM"></span></form>',
+            'optinrev_data' => '<div style="position: absolute; left: 29px; top: 8px; z-index: 1; text-align: center; width: 90%;border: 1px solid transparent;"><span><span style="font-family: impact, chicago; font-size: 30pt; color: #ff0000;" data-mce-style="font-family: impact, chicago; font-size: 30pt; color: #ff0000;">DISCOVER HOW I INCREASED MY OPTIN RATE BY 500% IN 5 MINS!</span><br></span></div><div style="position: absolute; left: 285px; top: 325px;border: 1px solid transparent;"><img id="wm" src="'.$dir.'assets/get_access2.png" alt="" border="0"></div><div style="position: absolute; left: 1px; top: 104px; z-index: 1; width: 100%; text-align: center;border: 1px solid transparent;"><span style="font-size: 14pt; background-color: #ffff99;" data-mce-style="font-size: 14pt; background-color: #ffff99;"><strong><span style="font-family: tahoma, arial, helvetica, sans-serif;" data-mce-style="font-family: tahoma, arial, helvetica, sans-serif;">Enter your email address to get your <span style="text-decoration: underline;" data-mce-style="text-decoration: underline;">FREE</span> video!</span></strong></span></div><div style="position: absolute; left: 0px; top: 148px;border: 1px solid transparent;"><img id="optinrev_uid_28" src="'.$dir.'assets/optin-box.png" alt="" border="0"></div><div style="position: absolute; left: 317px; top: 142px;border: 1px solid transparent;"><img id="optinrev_uid_33" src="'.$dir.'assets/arrow-animated.gif" alt="" border="0"></div><br><a id="poweredby" data-mce-href="http://goo.gl/U6GWY" href="http://goo.gl/U6GWY" target="_new" style="position: absolute; left: 220px; top: 430px; ">Powered by : Optin Revolution</a><form method="post" id="mce_getaccessed" action="http://www.aweber.com/scripts/addlead.pl" target="_blank"><div style="display:none;"><input type="hidden" name="listname" value="optinrev_plug"><input type="hidden" name="meta_web_form_id" value="258192310"><input type="hidden" name="meta_message" value="1"><input type="hidden" name="meta_adtracking" value="wordpress_plugin"><input type="hidden" name="redirect" value="http://www.aweber.com/thankyou-coi.htm?m=audio"></div><div style="position:absolute; left: 0px; top: 0px;border: 1px solid transparent;display:none;"><input type="text" name="name" id="name" value="Enter Your Name..." style="font-size:20px !important;color:#000000 !important;height:50px !important;width:240px !important;background-color:#FFFFCC !important;border:5px solid #666666 !important;"></div><div style="position:absolute; left: 302px; top: 259px;border: 1px solid transparent;"><input type="text" name="email" id="email" value="Enter Your Email..." style="font-size:20px !important;color:#000000 !important;height:50px !important;width:240px !important;background-color:#FFFFCC !important;border:5px solid #666666 !important;"></div><span style="display:none;"><img src="http://forms.aweber.com/form/displays.htm?id=TKwcjJxMzIwM"></span></form>',
             'optinrev_close_button' => 'left:592px;top:37px;',
             'optinrev_close_button_class' => 'close2',
             'optinrev_dragging' => null,
             'optinrev_call_action_button' => 'get_access2',
-            'optinrev_excerpt' => '<div id="simplemodal-container" style="width: 600px; height: 420px; border: 8px solid #000000; background-color: #ffffff; -moz-border-radius: 25px; -webkit-border-radius: 25px; border-radius: 25px;"><div id="close" class="close2" style="left:574px; top:-26px;"> </div><div id="simplemodal-data" class="simplemodal-data"><div style="position: absolute; left: 29px; top: 8px; z-index: 1; text-align: center; width: 90%;"><span><span style="font-family: impact, chicago; font-size: 30pt; color: #ff0000;">DISCOVER HOW I INCREASED MY OPTIN RATE BY 500% IN 5 MINS!</span><br /></span></div><div style="position: absolute; left: 285px; top: 325px;"><img id="wm" src="'.$dir.'assets/get_access2.png" alt="" border="0" /></div><div style="position: absolute; left: 1px; top: 104px; z-index: 1; width: 100%; text-align: center;"><span style="font-size: 14pt; background-color: #ffff99;"><strong><span style="font-family: tahoma, arial, helvetica, sans-serif;">Enter your email address to get your <span style="text-decoration: underline;">FREE</span> video!</span></strong></span></div><div style="position: absolute; left: 0px; top: 148px;"><img id="optinrev_uid_28" src="'.$dir.'assets/optin-box.png" alt="" border="0" /></div><div style="position: absolute; left: 317px; top: 142px;"><img id="optinrev_uid_33" src="'.$dir.'assets/arrow-animated.gif" alt="" border="0" /></div><br /><a id="poweredby" style="position: absolute; left: 220px; top: 430px;" href="http://wordpress.org/extend/plugins/optin-revolution/" target="_new">Powered by : Optin Revolution</a><form id="mce_getaccessed" action="http://www.aweber.com/scripts/addlead.pl" method="post" target="_blank"><div style="display: none;"><input type="hidden" name="listname" value="optinrev_plug" /><input type="hidden" name="meta_web_form_id" value="258192310" /><input type="hidden" name="meta_message" value="1" /><input type="hidden" name="meta_adtracking" value="wordpress_plugin" /><input type="hidden" name="redirect" value="http://www.aweber.com/thankyou-coi.htm?m=audio" /></div><div style="position: absolute; left: 0px; top: 0px; border: 1px solid transparent; display: none;"><input id="name" style="font-size: 20px !important; color: #000000 !important; height: 50px !important; width: 240px !important; background-color: #ffffcc !important; border: 5px solid #666666 !important;" type="text" name="name" value="Enter Your Name..." /></div><div style="position: absolute; left: 302px; top: 259px;"><input id="email" style="font-size: 20px !important; color: #000000 !important; height: 50px !important; width: 240px !important; background-color: #ffffcc !important; border: 5px solid #666666 !important;" type="text" name="email" value="Enter Your Email..." /></div><span style="display: none;"><img src="http://forms.aweber.com/form/displays.htm?id=TKwcjJxMzIwM" alt="" /></span></form></div></div>',
+            'optinrev_excerpt' => '<div id="simplemodal-container" style="width: 600px; height: 420px; border: 8px solid #000000; background-color: #ffffff; -moz-border-radius: 25px; -webkit-border-radius: 25px; border-radius: 25px;"><div id="close" class="close2" style="left:574px; top:-26px;"> </div><div id="simplemodal-data" class="simplemodal-data"><div style="position: absolute; left: 29px; top: 8px; z-index: 1; text-align: center; width: 90%;"><span><span style="font-family: impact, chicago; font-size: 30pt; color: #ff0000;">DISCOVER HOW I INCREASED MY OPTIN RATE BY 500% IN 5 MINS!</span><br /></span></div><div style="position: absolute; left: 285px; top: 325px;"><img id="wm" src="'.$dir.'assets/get_access2.png" alt="" border="0" /></div><div style="position: absolute; left: 1px; top: 104px; z-index: 1; width: 100%; text-align: center;"><span style="font-size: 14pt; background-color: #ffff99;"><strong><span style="font-family: tahoma, arial, helvetica, sans-serif;">Enter your email address to get your <span style="text-decoration: underline;">FREE</span> video!</span></strong></span></div><div style="position: absolute; left: 0px; top: 148px;"><img id="optinrev_uid_28" src="'.$dir.'assets/optin-box.png" alt="" border="0" /></div><div style="position: absolute; left: 317px; top: 142px;"><img id="optinrev_uid_33" src="'.$dir.'assets/arrow-animated.gif" alt="" border="0" /></div><br /><a id="poweredby" style="position: absolute; left: 220px; top: 430px;" href="http://goo.gl/U6GWY" target="_new">Powered by : Optin Revolution</a><form id="mce_getaccessed" action="http://www.aweber.com/scripts/addlead.pl" method="post" target="_blank"><div style="display: none;"><input type="hidden" name="listname" value="optinrev_plug" /><input type="hidden" name="meta_web_form_id" value="258192310" /><input type="hidden" name="meta_message" value="1" /><input type="hidden" name="meta_adtracking" value="wordpress_plugin" /><input type="hidden" name="redirect" value="http://www.aweber.com/thankyou-coi.htm?m=audio" /></div><div style="position: absolute; left: 0px; top: 0px; border: 1px solid transparent; display: none;"><input id="name" style="font-size: 20px !important; color: #000000 !important; height: 50px !important; width: 240px !important; background-color: #ffffcc !important; border: 5px solid #666666 !important;" type="text" name="name" value="Enter Your Name..." /></div><div style="position: absolute; left: 302px; top: 259px;"><input id="email" style="font-size: 20px !important; color: #000000 !important; height: 50px !important; width: 240px !important; background-color: #ffffcc !important; border: 5px solid #666666 !important;" type="text" name="email" value="Enter Your Email..." /></div><span style="display: none;"><img src="http://forms.aweber.com/form/displays.htm?id=TKwcjJxMzIwM" alt="" /></span></form></div></div>',
             'optinrev_email_form_opt' => 'aweber',
             'optinrev_email_form' => array('aweber' => array('name' => 'Enter Your Name...', 'email' => 'Enter Your Email...', 'listname' => 'optinrevolution', 'meta_web_form_id' => '258192310', 'meta_message' => 1,'meta_adtracking' => 'wordpress_plugin', 'redirect' => 'http://www.aweber.com/thankyou-coi.htm?m=audio', 'meta_redirect_onlist' => null, 'pixel_tracking_id' => 'TKwcjJxMzIwM')),
             'optinrev_input_enabled' => array('name' => 0), 'validate' => array('email' => 1), 'optinrev_inputh' => 50, 'optinrev_inputw' => 240, 'optinrev_inputtc' => '#000000', 'optinrev_inputfz' => 20, 'optinrev_inputc' => '#FFFFCC', 'optinrev_inputb' => '#666666', 'optinrev_inputbt' => 5, 'optinrev_wbg_color' => '#000000', 'optinrev_wbg_opacity' => 50, 'optinrev_delay' => 0, 'optinrev_pwbg_color' => '#FFFFFF', 'optinrev_border_color' => '#000000', 'optinrev_border_thickness' => 8, 'optinrev_border_opacity' => 75, 'optinrev_border_radius' => 25, 'optinrev_round_border' => 'on', 'optinrev_top_margin' => 127, 'optinrev_wwidth' => 600, 'optinrev_hheight' => 420, 'optinrev_close_popup_image' => 'close2', 'optinrev_gotowebsite' => 'top'
@@ -140,10 +140,8 @@ function optinrev_plugin_admin_init()
        optinrev_update( 'optinrev_default', serialize( $default_optin ) );
    }
    
-   // mail providers
-   if ( !optinrev_get('optinrev_mail_providers') ) {
-       optinrev_mail_providers();
-   }
+  // mail providers   
+  optinrev_mail_providers();
     
   } else if ( $plugin_page == 'optin-pro-settings' ) {    
     wp_enqueue_style( 'optinrev-style', $dir . 'css/optinrev-style.css' );
@@ -161,15 +159,36 @@ function optinrev_transient_update_plugins($transient)
         if ( $download_url = optinrev_download_url() ) {
             $obj = new stdClass();
             $obj->slug = 'optin';  
-            $obj->new_version = '1.0.2';  
+            $obj->new_version = '1.0.4';  
             $obj->url = 'http://optinrevolution.com';
             $obj->package = $download_url;  
             $transient->response[$plugin_name] = $obj;
         }
-    }      
+        } else {
+        $obj = new stdClass();
+        $obj->slug = 'optin';  
+        $obj->new_version = '1.0.4';  
+        $obj->url = 'http://optinrevolution.com';
+        $obj->package = 'http://downloads.wordpress.org/plugin/optin-revolution.zip';  
+        $transient->response[$plugin_name] = $obj;
+    }
+          
     return $transient;
 }  
 add_filter('pre_set_site_transient_update_plugins', 'optinrev_transient_update_plugins');
+
+function check_info( $false, $action, $arg )  
+{  
+    if ($arg->slug === 'optin' ) {    
+        $request = wp_remote_post('http://api.wordpress.org/plugins/info/1.0/', array( 'timeout' => 15, 'body' => array( 'action' => 'info' )) );          
+        if (!is_wp_error($request) || wp_remote_retrieve_response_code($request) === 200) {            
+            return unserialize($request['body']);  
+        }
+    }
+    return false;  
+}
+
+add_filter('plugins_api', 'check_info', 10, 3);
 
 function optinrev_pro_action_needed( $plugin )
 {

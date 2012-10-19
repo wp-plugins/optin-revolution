@@ -155,7 +155,7 @@
            
            ed.dom.setStyle( le, 'z-index', dx );
                       
-         } else ed.dom.setStyle( le, 'z-index', 1 );
+         } else ed.dom.setStyle( le, 'z-index', 2 );
          
          if ( z = ed.dom.get('zindex') )
          ed.dom.remove( z );

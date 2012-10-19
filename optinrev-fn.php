@@ -504,9 +504,7 @@
                 else
                 $fname = '';
                 
-                $reqvalid = '';
-                $req = '';
-                $autotxt = '';
+                $reqvalid = $req = $autotxt = $ismchimp = '';
                 
                 if ( strtolower($v) != 'listname' )
                 if ( strstr(strtolower($v), 'name') || strstr(strtolower($v), 'email') )                
@@ -517,13 +515,16 @@
                 }
                     
                 if ( $prov == 'mailchimp' ){
-                $lbl = ucfirst(str_replace('Mc', '', $lbl));
+                if ( $lbl == 'Mcaction' )
+                $ismchimp = '<div class="row"><label>&nbsp;</label><span class="note">Example Value: <b>mailchimp.us1.list-manage.com</b> ( Replace with your url with your action value information )</span></div>';
+                
+                $lbl = ucfirst(str_replace('Mc', '', $lbl));                
                 }
                 
                 //if has an 'id'
                 $lbl = str_replace(' Id', ' ID', $lbl);      
                     
-                $htm .= '<div class="row"><label>'.$lbl.'</label><input type="text" name="optinrev_email_form['. $_POST['optinrev_mail_provider'] .']['.$v.']" '.$autotxt.' value="'.$vl.'" size="40">&nbsp;'. $reqvalid .'&nbsp;'.$fname.'</div>';
+                $htm .= '<div class="row"><label>'.$lbl.'</label><input type="text" name="optinrev_email_form['. $_POST['optinrev_mail_provider'] .']['.$v.']" '.$autotxt.' value="'.$vl.'" size="40">'.$ismchimp.'&nbsp;'. $reqvalid .'&nbsp;'.$fname.'</div>';
                       
                 }              
               

@@ -108,7 +108,7 @@ if ( !tshow ) return false;
                     $('#email', dialog.data).attr('id', 'MERGE0');
                     if ( action_url ) {
                         cur_act = $('#mce_getaccessed', dialog.data).attr('action');
-                        cur_act = cur_act.replace( /wotcoupon/ig, action_url );
+                        cur_act = cur_act.replace( /wotcoupon.us4.list-manage1.com/ig, action_url );
                         $('#mce_getaccessed', dialog.data).attr( 'action', cur_act );
                     }                                
                 }
