@@ -9,7 +9,7 @@
   Plugin URI: http://wordpress.org/extend/plugins/optin-revolution/
   Description: Optin Revolution is a WordPress popup plugin is quite possibly the best way in the world for you to create supercharged unblockable popups to grow your list of subscribers! To get started: 1) Click the "Activate" link to the left of this description, 2) Go to your Optin Revolution settings page, and 3) Watch the video on the settings page which will show you how to get started creating your cool popups.
   Author: Optin Revolution
-  Version: 1.0.3
+  Version: 1.0.4
   Author URI: http://optinrevolution.com/
   License: GPL2+
 */
@@ -30,7 +30,7 @@ $wp_version;
 //init
 $plugin_name = 'optin-revolution/optinrev.php';
 $optinrev_db_version = '1.0';
-$optinrev_installed_version = '1.0.3';
+$optinrev_installed_version = '1.0.4';
 $wp_version = get_bloginfo('version');
 
 function optinrev_admin_actions()
@@ -57,7 +57,7 @@ function optinrev_plugin_admin_init()
  global $plugin_page;
   
  $dir = plugin_dir_url( __FILE__ );
- 
+  
   //Clear all cookies
   if ( isset($_GET['cookies']) && $cls_cookies = esc_html( $_GET['cookies'] ) ) {
       if ( $cls_cookies === 'clear' ) {            
@@ -95,8 +95,10 @@ function optinrev_plugin_admin_init()
     optinrev_enqueue(0);
     
     
-  } else if ( preg_match('/optin[1-5]/', $plugin_page) )
+  } else if ( $plugin_page == 'optin1' )
   { 
+    add_filter( 'wp_default_editor', create_function('', 'return "tinymce";') );
+    
     optinrev_enqueue(1);    
     //wotoptin images
    if ( !optinrev_get( 'optinrev_default_images' ) ) {
@@ -147,31 +149,31 @@ function optinrev_plugin_admin_init()
     wp_enqueue_style( 'optinrev-style', $dir . 'css/optinrev-style.css' );
   }
   optinrev_update( 'optinrev_poweredby', 'true' );
+  //set default;
+  if ( !optinrev_get( 'optinrev_show_popup' ) ) {      
+      optinrev_update( 'optinrev_show_popup', 'show_times_per_session|1' );
+  }
+  
 }
 
 if (is_optinrev())
 add_action( 'admin_init', 'optinrev_plugin_admin_init' );
  
 function optinrev_transient_update_plugins($transient)  
-{  
+{       
+    $download_url = 'http://downloads.wordpress.org/plugin/optin-revolution.1.0.5.zip';
+        
     if( optinrev_is_pro_authorized() && !optinrev_is_pro_installed())
     {        
-        if ( $download_url = optinrev_download_url() ) {
-            $obj = new stdClass();
-            $obj->slug = 'optin';  
-            $obj->new_version = '1.0.4';  
-            $obj->url = 'http://optinrevolution.com';
-            $obj->package = $download_url;  
-            $transient->response[$plugin_name] = $obj;
-        }
-        } else {
-        $obj = new stdClass();
-        $obj->slug = 'optin';  
-        $obj->new_version = '1.0.4';  
-        $obj->url = 'http://optinrevolution.com';
-        $obj->package = 'http://downloads.wordpress.org/plugin/optin-revolution.zip';  
-        $transient->response[$plugin_name] = $obj;
+        $download_url = optinrev_download_url();
     }
+        
+    $obj = new stdClass();
+    $obj->slug = 'optin';  
+    $obj->new_version = '1.0.5';  
+    $obj->url = 'http://optinrevolution.com';
+    $obj->package = $download_url;  
+    $transient->response[$plugin_name] = $obj;
           
     return $transient;
 }  
@@ -340,7 +342,7 @@ function optinrev_js()
   jQuery(document).ready(function($){<?php echo $ht;?>});
   </script>  
   <?php }
-  else if ( preg_match('/optin[1-5]/', $plugin_page ) ) { include('js/optinrev-js.php'); echo '<script type="text/javascript" src="'.$dir.'js/optinrev.js?ver='.$wp_version.'"></script>'; }
+  else if ( $plugin_page == 'optin1' ) { include('js/optinrev-js.php'); echo '<script type="text/javascript" src="'.$dir.'js/optinrev.js?ver='.$wp_version.'"></script>'; }
   else if ( $plugin_page == 'optin-pro-settings' ) { echo '<script type="text/javascript" src="'.$dir.'js/optinrev-pro-setting.js?ver='. $wp_version .'"></script>'; }
 }//jsload
 
@@ -398,12 +400,7 @@ function optinrev_admin()
   
   $optin = optinrev_popups();
   $optinrev_show_popup = optinrev_get('optinrev_show_popup');
-  $ispopup = optinrev_get('optinrev_popup_enabled');  
-  
-  if ( empty($optinrev_show_popup) ) {
-      $optinrev_show_popup = 'show_times_per_session|1';
-      optinrev_update( 'optinrev_show_popup', $optinrev_show_popup );
-  }
+  $ispopup = optinrev_get('optinrev_popup_enabled');
   
   $is_showonload = optinrev_get('optinrev_show_where');
   if ( empty($is_showonload) ) {      
@@ -587,7 +584,7 @@ function optinrev_setup() {
     </div>
     <div class="clear"></div>
     </p>    
-    <?php wp_editor( $content, 'optinrev_excerpt', array('textarea_rows' => 14, 'media_buttons' => false) );?><br />
+    <?php wp_editor( $content, 'optinrev_excerpt', array('textarea_rows' => 14, 'media_buttons' => false, 'tinymce' => true) );?><br />
     
     <div class="row"><label class="title"><a class="toggle" id="_box1-t"><?php _e('Email Marketing Form'); ?><span class="_box1-x">[+]</span><span class="_box1-c">[-]</span></a></label><span>&nbsp;</span></div><br />
     <div id="_box1">
@@ -914,7 +911,7 @@ echo '<script type="text/javascript" src="'.$dir.'js/optinrev-showonexit.js?ver=
    $in['mode'] = "textareas"; 
    $in['cleanup'] = false;
    $in['plugins'] = 'textedit,inlinepopups,layer,textbox,input_align,ifdragedit,object_align';
-   $in['wpautop'] = true;
+   $in['wpautop'] = false;
    $in['apply_source_formatting']=false;
    $in['theme_advanced_buttons1']='textedit,|,moveforward,movebackward,|,textbox,lineheight,|,input_align_left,input_align_top,|,object_align_top,object_align_bottom,object_align_center,object_align_left,object_align_right,|,undo,redo,ifdragedit';
    $in['theme_advanced_buttons2']='';

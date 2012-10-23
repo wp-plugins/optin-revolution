@@ -68,6 +68,14 @@ img.wotimg {border: 1px dashed #888 !important;}
 .mceWotlayer {border: 1px dashed #888 !important;z-index:999;padding:0px !important;margin:0px !important;}
 ';
 
+$view_cleaned = '
+#zindex {position:absolute;width:50px;padding:0px;font-size:9px;font-weight:normal;background-color:#f0f0f0;color:#404040;padding:2px}
+#imglabel {position:absolute;left:0px;bottom:0px;padding:0px;font-size:9px;font-weight:normal;background-color:red;color:#ffffff;padding:0px 2px 0px 2px;}
+#mceWotmove {position:absolute;right:-1px;bottom:-1px;width:14px;height:14px; background: url('.$dir.'images/cursor_drag_arrow.png) no-repeat center center;cursor:move;background-color:#fff;z-index:99999;}
+#mceDeleteObj {position:absolute;left:-1px;top:-12px;width:12px;height:12px; background: url('.$dir.'images/delete-ic.png) no-repeat center center;cursor:pointer;background-color:#fff;z-index:99999;}
+';
+
+if ( $is_view ) $view_cleaned = '';
 //is rounded border
 $optin['optinrev_border_radius'] = ( $optin['optinrev_round_border'] == 'on' ) ? $optin['optinrev_border_radius'] : '0';
 
@@ -98,10 +106,7 @@ echo <<<LOAD_CSS
 #simplemodal-container .close8 {background:url({$dir}images/btn2.png) no-repeat; width:263px; height:47px;{$close_btn}display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}
 {$unrem_css}
 {$wm_hand}
-#zindex {position:absolute;width:50px;padding:0px;font-size:9px;font-weight:normal;background-color:#f0f0f0;color:#404040;padding:2px}
-#imglabel {position:absolute;left:0px;bottom:0px;padding:0px;font-size:9px;font-weight:normal;background-color:red;color:#ffffff;padding:0px 2px 0px 2px;}
-#mceWotmove {position:absolute;right:-1px;bottom:-1px;width:14px;height:14px; background: url({$dir}images/cursor_drag_arrow.png) no-repeat center center;cursor:move;background-color:#fff;z-index:99999;}
-#mceDeleteObj {position:absolute;left:-1px;top:-12px;width:12px;height:12px; background: url({$dir}images/delete-ic.png) no-repeat center center;cursor:pointer;background-color:#fff;z-index:99999;}
+{$view_cleaned}
 #no_thanks_btn {cursor:pointer;display:none;position:absolute;width: 263px; height: 47px;background: url({$dir}images/no-thanks.png) no-repeat left top;z-index:999999;}
 #poweredby {cursor:pointer;color: {$pwd_color};text-decoration:none;}
 #poweredby:hover {text-decoration:underline;}

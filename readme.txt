@@ -75,6 +75,14 @@ Integrates with the WordPress Media Library to allow importing images and button
 
 == Changelog ==
 
+= 1.0.4 =
+
+* Bug Fix: Issue in tinymce.
+* Bug Fix: Outline on move images and text boxes showing on front end.
+* Bug Fix: Issue with display frequency of popup.
+* Bug Fix: Toolbar does not appearing.
+* Bug Fix: Preview button not showing the preview.
+
 = 1.0.3 =
 
 * Bug Fix: Fix for MailChimp not updating on upgrade.

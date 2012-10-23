@@ -1,23 +1,6 @@
 <?php
-  require_once( '../../../../../wp-load.php' );  
+  require_once( '../../../../../wp-load.php' );    
   $mce = includes_url() . 'js/tinymce/';
-  
-  //Get dup to theme advanced
-  $tiny_mce_dir = ABSPATH . 'wp-includes/js/tinymce/';
-  if ( !@file_exists( $tiny_mce_dir . 'themes/advanced/langs/en.js' ) ) {
-     @mkdir($tiny_mce_dir . 'themes/advanced/langs/', 0755, true);     
-     if ( $res = @file_get_contents( $tiny_mce_dir . 'langs/wp-langs-en.js' ) ) {
-         //tinymce theme
-         $fp = @fopen($tiny_mce_dir . 'langs/en.js', 'w');
-         @fwrite($fp, $res );
-         @fclose($fp); 
-         //theme advanced
-         $fp2 = @fopen($tiny_mce_dir . 'themes/advanced/langs/en.js', 'w');
-         @fwrite($fp2, $res );
-         @fclose($fp2);
-     }
-  } 
-  
   header('Content-Type: text/html; charset=' . get_bloginfo('charset'));  
 ?>
 <!DOCTYPE html>
@@ -25,10 +8,9 @@
 <head>
 <meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php echo get_option('blog_charset'); ?>" />
 <title>Text Editing and Formatting</title>
-  <link href="css/template.css" rel="stylesheet" type="text/css" />  
+  <link href="css/template.css" rel="stylesheet" type="text/css" />
   <script type="text/javascript" src="<?php echo $mce;?>tiny_mce_popup.js"></script>
-  <script type="text/javascript" src="<?php echo $mce;?>tiny_mce.js"></script>
-  
+  <script type="text/javascript" src="<?php echo $mce;?>wp-tinymce.php"></script>  
   <script type="text/javascript">
     tinyMCE.init({    
         mode : "none",        
@@ -53,9 +35,7 @@
         ed.dom.hide('mceDeleteObj');        
         });
         }    
-    });
-       
-    
+    });    
     function is_numtext_width( id ) {
        var dom = tinyMCE.activeEditor.dom, vl = 0; 
        var n = document.getElementById(id);
@@ -98,7 +78,7 @@
     <p>Textbox Width : <input type="text" name="wlayer" id="wlayer" size="10" onfocus="document.getElementById('statwidth').innerHTML='';" onblur="is_numtext_width(this.id);"/>&nbsp;%&nbsp;<span id="statwidth" style="color:red;"></span></p> 
     <div>    
     <div class="loading" id="loading"><em>Editor Loading</em></div><div id="clearb" style="clear:both;"></div>
-		<textarea id="mce_textedit" name="mce_textedit" cols="118" rows="16" style="display:none;"></textarea>  
+    <textarea id="mce_textedit" name="mce_textedit" cols="118" rows="16" style="display:none;"></textarea>  
     </div>
 		<div class="mceActionPanel">
 			<input type="submit" id="insert" name="apply" value="Update" />
