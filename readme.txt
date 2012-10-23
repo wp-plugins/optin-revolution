@@ -4,7 +4,7 @@ Donate link: http://optinrevolution.com/
 Tags: post, plugin, admin, post, posts, page, pages, email, optin, pop-up, popup, wordpress popup, ,optin popup, administration, stats, statistics, stat, statistic,  affiliate, affiliates, automation, widget, widgets, dashboard, shortcode, sidebar 
 Requires at least: 3.1
 Tested up to: 3.4
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 
 
 Supercharged WordPress Popup. Quite possibly the best way in the world for you to create unique unblockable popups to grow your list of subscribers!
@@ -28,7 +28,7 @@ http://www.youtube.com/watch?v=-SHDzo3bzx4&hd=1
 Full list of features:
 
 * Integration with Aweber, iContact, GetResponse, MailChimp and Constant Contact, select your email marketing program and configure.
-* This plugin allow you to completely change the look and feel of the wordpress popup.
+* This plugin allow you to completely change the look and feel of the WordPress popup.
 * Change images, background, borders, font sizes and types and much, much more.
 * WYSIWYG stage and preview allowing easy customization.
 * Change how often the popup is shown
@@ -112,4 +112,4 @@ Integrates with the WordPress Media Library to allow importing images and button
 
 1. Optin Revolution main settings.
 2. Optin Revolution popup settings.
-3. Optin Revolution intergration with WordPress Media Library.
+3. Optin Revolution iintegration with WordPress Media Library.
