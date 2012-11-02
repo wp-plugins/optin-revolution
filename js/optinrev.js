@@ -472,6 +472,7 @@
   
   tinyMCE.activeEditor.controlManager.setDisabled( 'absolute', true );
   tinyMCE.activeEditor.controlManager.setDisabled( 'textedit', true );
+  tinyMCE.activeEditor.controlManager.setDisabled( 'imgresize', true );
   });
   }, 
   rgb: function(color) {    
@@ -508,6 +509,7 @@
        jQuery( ed.getDoc() ).find('#mceWotmove').remove();        
        jQuery( ed.getDoc() ).find('#mceDeleteObj').remove();       
        jQuery( ed.getDoc() ).find('#zindex').remove();
+       jQuery( ed.getDoc() ).find('.ui-resizable-handle').remove();       
    }
  },
  tinymce_event: function( e ){   
@@ -606,7 +608,7 @@
         }
         }        
         
-        tinymce.dom.Event.add( v, 'mouseover', function(e)
+        tinymce.dom.Event.add( v, 'mousedown', function(e)
         {
           if ( e.target.id == 'zindex' ) return false;
           el = e.target.parentNode;
@@ -620,8 +622,9 @@
           if ( el = ed.dom.getParent( e.target, 'DIV' ) )
           { 
             
-            if ( el.id === 'mceWotmove' ) return false;
-            if ( el.id === 'mceDeleteObj' ) return false;
+            if ( /^(mceWotmove|ui-resizable-handle|mceDeleteObj)$/i.test(el.id) ) return false;
+            
+            wtfn.clear_layer(ed);
             
             elm = el;            
             if ( tinymce.isIE )
@@ -634,23 +637,6 @@
             _drawLayer(el);
           }
         });
-        
-        tinymce.dom.Event.add( v, 'mouseout', function(e)
-        {           
-            if ( !wtfn.is_dragging() ) return false;
-            if ( is_drag ) return false;
-            
-            var reltg = (e.relatedTarget) ? e.relatedTarget : e.toElement;
-            
-            if ( typeof elm != 'undefined' && elm )
-            {  
-               if ( reltg ) 
-               if ( /^(simplemodal-container|wm|curvy1)$/i.test(reltg.id) )
-               {             
-                  _removeLayer(1);                 
-               }          
-            }
-        });        
                      
         }       
        }//display:none;
@@ -660,7 +646,8 @@
       
    ed.onInit.add( function(ed, e)
    {
-     var t = tinymce, dobj, tdobj, tx = ty = x = y = ml = mov = 0, mlp = {}, is_grip = is_drag = false, bwn = ed.dom.get('simplemodal-container'), nodeItem = 'UL,H1,H2,H3,H4,H5,H6', ed_ifr = j('#' + ed.id + '_ifr').height();
+     var t = tinymce, dobj, tdobj, tx = ty = x = y = ml = mov = 0, mlp = {}, is_grip = is_drag = false, bwn = ed.dom.get('simplemodal-container'), nodeItem = 'UL,H1,H2,H3,H4,H5,H6', ed_ifr = j('#' + ed.id + '_ifr').height();     
+     var imgd = {};
      
      if ( ed.getContent().length == 0 ) { wtfn.set_optin_default(0); }
      //init
@@ -730,7 +717,8 @@
     //update action button
     if ( is_actionbtn != 0 ) {
     wtfn.action_add_button_briefcase( is_actionbtn );         
-    }     
+    }
+    
      _drawLayer = function( el )
      {  
         if ( el && el.className != 'mceWotlayer' )
@@ -745,20 +733,7 @@
                     
         }
      }
-     
-     _removeLayer = function( rem )
-     {  
-        wtfn.clear_layer( ed );
-     }     
 
-     _nodeMove = function(dobj, e)
-     {                
-       is_drag = true;
-       tx = parseInt( dobj.style.left + 0 );
-       ty = parseInt( dobj.style.top + 0 );
-       x = e.clientX;
-       y = e.clientY; 
-     }
      //remove a specific style
      _removeAStyle = function( ed, dobj, astyle )
      {
@@ -794,6 +769,8 @@
     
         obj.posX = event.clientX - o.offsetLeft;
         obj.posY = event.clientY - o.offsetTop;
+        obj.imgwidth = jQuery( 'img', e.parentNode ).width();
+        obj.imgheight = jQuery( 'img', e.parentNode ).height();
     
         return obj;
     } 
@@ -817,9 +794,8 @@
             return false;        
         }
         
-        if ( /^(tinymce|simplemodal-container|close|poweredby)$/i.test(el.id) ) return false;        
-        if ( el.parentNode.id === 'simplemodal-container' ) return false;
-        if ( el.parentNode.className === 'simplemodal-data' ) return false;
+        if ( /^(tinymce|simplemodal-container|simplemodal-data|close|poweredby)$/i.test(el.id) ) return false;
+                      
         
         //delete an object
         if ( e.target.id === 'mceDeleteObj' ) {             
@@ -835,16 +811,24 @@
                                   
                  return false;
              }
-        }       
+        }      
+        
+        if ( el.id == 'ui-resizable-handle' ) {
+            tdobj = el;
+            dobj = makeObj(e);
+            return false;
+        }
       
         //if dragging
         if ( wtfn.is_dragging() )
-        {    
+        { 
           //move selection
           if ( el.id == 'mceWotmove' )
           {   
               tdobj = el.parentNode;
               dobj = makeObj(e);
+              return false;
+                            
           }
           
         } else 
@@ -873,9 +857,19 @@
                 ed.dom.setAttrib( el, 'id', 'mceWotlayer' );
                                 
                 if ( el.firstChild.id != 'wm' && el.firstChild.nodeName != 'INPUT' )          
-                ed.dom.add(el, 'div', {id : 'mceDeleteObj'});  
+                ed.dom.add(el, 'div', {id : 'mceDeleteObj'});
                 
               }
+              
+              if ( el.firstChild.nodeName == 'IMG' ) {
+                  if ( jQuery( ed.getDoc() ).find('.ui-resizable-handle').length == 0 ) {               
+                       ed.dom.add( el, 'div', {'class' : 'ui-resizable-handle ui-resizable-e'} );
+                       ed.dom.add( el, 'div', {'class' : 'ui-resizable-handle ui-resizable-s'} );                
+                       ed.dom.add( el, 'div', {'id' : 'ui-resizable-handle', 'class' : 'ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se'} );
+                  }
+                  imgd = {width : parseInt(el.firstChild.offsetWidth), height : parseInt(el.firstChild.offsetHeight)};
+              }              
+              
               
               //action button exclude
               if ( el.id == 'wm' ) {
@@ -885,7 +879,7 @@
             
             //textedit
             if ( el.id == 'mceWotlayer' ) {
-            ed.controlManager.setDisabled( 'textedit', e.target.nodeName != 'SPAN' );            
+            ed.controlManager.setDisabled( 'textedit', e.target.nodeName != 'SPAN' );                        
             }
                                       
           }
@@ -903,36 +897,55 @@
       
       //move inside the modal
       tinymce.dom.Event.add(ed.getDoc(), 'mousemove', function(e)
-      {
-        if ( is_grip && dobj )
-        {
-          is_drag = false;
-          
-          _x = tx + e.clientX - x;
-          _y = ty + e.clientY - y;
-          
-          //close button drag
-          if ( dobj.id == 'close' )
-          {
-              ed.dom.setStyle( dobj, 'left', _x );
-              ed.dom.setStyle( dobj, 'top', _y );              
-          }        
-        }
-            
+      {     
         if ( is_drag && dobj )
         {            
+            
             l = Math.max(dobj.minBoundX, Math.min(e.clientX - dobj.posX, dobj.maxBoundX));
             t = Math.max(dobj.minBoundY, Math.min(e.clientY - dobj.posY, dobj.maxBoundY));
             
-            ed.dom.setStyle( tdobj, 'left', l );
-            ed.dom.setStyle( tdobj, 'top', t );
+            if ( tdobj.id === 'ui-resizable-handle' )
+            {
+                hdlse = 10;
+            
+                //resize the image
+                if ( e.shiftKey )
+                {                  
+                  thisX = e.pageX - jQuery(tdobj.parentNode).offset().left,
+                  thisY = e.pageY - jQuery(tdobj.parentNode).offset().top,
+                  ratio = ((thisX + thisY) / 2) / ((imgd.height + imgd.width) / 2),
+                  height_new = imgd.height * ratio,
+                  width_new = imgd.width * ratio;
+                
+                  ed.dom.setStyles( tdobj.parentNode, { 'width': width_new, 'height': height_new  } );                             
+                  ed.dom.setStyles( jQuery('img', tdobj.parentNode), { 'width': width_new, 'height': height_new } );
+                  ed.dom.setStyles( tdobj, {'left': jQuery(tdobj.parentNode).width() - hdlse, 'top': jQuery(tdobj.parentNode).height() - hdlse} );                  
+                                    
+                } else 
+                {
+                  ed.dom.setStyles( tdobj, {'left': l, 'top': t} );    
+                  ed.dom.setStyles( tdobj.parentNode, { 'width': (l + hdlse), 'height': (t + hdlse) } );                              
+                  ed.dom.setStyles( jQuery('img', tdobj.parentNode), {'width': (l + hdlse), 'height': (t + hdlse)} );                  
+                }
+                
+                } else
+                {
+            
+                ed.dom.setStyle( tdobj, 'left', l );
+                ed.dom.setStyle( tdobj, 'top', t );
+            
+            }
         }     
       });
       
       tinymce.dom.Event.add(ed.getDoc(), 'mouseup', function(e)
       { 
         if ( wtfn.is_dragging() )
-        wtfn.prevent_default(e);
+        wtfn.prevent_default(e);        
+        
+        if ( e.target.id === 'ui-resizable-handle' ) {
+            imgd = {width : parseInt(e.target.parentNode.style.width), height : parseInt(e.target.parentNode.style.height)};            
+        }
         
         is_drag = false;
         is_grip = false;        
@@ -942,15 +955,21 @@
       
       tinymce.dom.Event.add(ed.getDoc(), 'blur', function(e)
       {                 
-        ed.dom.remove('zindex');        
+        ed.dom.remove('zindex');                        
+      });
+      
+      tinymce.dom.Event.add(ed.getWin(), 'mouseout', function(e)
+      {      
+        if ( !wtfn.is_dragging() ) return false;
+        var reltg = (e.relatedTarget) ? e.relatedTarget : e.toElement;
+        if ( jQuery(reltg).attr('id') )
+        if ( reltg.id == 'tinymce' ) wtfn.clear_layer(ed);
       });
             
       tinymce.dom.Event.add(ed.getWin(), "mouseover", function(e){
           if ( is_editing )
-          {              
-             ed.dom.remove( 'mceDeleteObj' );
-             _removeLayer(1);
-             ed.dom.remove('zindex');
+          {
+             wtfn.clear_layer(ed)
              wtfn.redraw();
              _ccdom(ed, ed.dom.get('simplemodal-container'), null);
              is_editing = false; 
@@ -966,32 +985,15 @@
             
    });
   
- ed.onLoadContent.add(function(ed, o) {
-    wl = ed.dom.get('mceWotlayer');
-    j(wl).removeAttr('id', null);
-    j(wl).removeAttr('class', null);
-    ed.dom.remove('mceDeleteObj');    
-    ed.dom.remove('zindex');
-    ed.dom.remove('mceWotmove');
+ ed.onLoadContent.add(function(ed, o) {    
+    wtfn.clear_layer(ed);
     wtfn.redraw();
-    
  });
    
   ed.onPreProcess.add(function(ed, o) {                        
       if (o.get)
       { 
-        //data tag
-        if ( sd = ed.dom.get('simplemodal-data') )
-        sd.removeAttribute('id', 0);
-        
-        jQuery( ed.getDoc() ).find('.mceWotlayer').removeAttr('class');
-        jQuery( ed.getDoc() ).find('.mceWotlayer').removeAttr('id');
-        jQuery( ed.getDoc() ).find('#mceDeleteObj').remove();
-        
-        ed.dom.remove( 'mceDeleteObj' );
-        ed.dom.remove( 'mceWotmove' );        
-        ed.dom.remove('zindex');
-        
+        wtfn.clear_layer(ed);        
         _ccdom(ed, ed.dom.get('simplemodal-container'), 1);
         
       }
@@ -1000,20 +1002,8 @@
   ed.onPostProcess.add(function(ed, o) {                        
       if (o.get)
       { 
-        //data tag
-        if ( sd = ed.dom.get('simplemodal-data') )
-        sd.removeAttribute('id', 0);        
-        
-        jQuery( ed.getDoc() ).find('.mceWotlayer').removeAttr('class');
-        jQuery( ed.getDoc() ).find('.mceWotlayer').removeAttr('id');
-        jQuery( ed.getDoc() ).find('#mceDeleteObj').remove();        
-        
-        ed.dom.remove( 'mceDeleteObj' );
-        ed.dom.remove( 'mceWotmove' );        
-        ed.dom.remove('zindex');        
-        
-        wtfn.redraw();
-        
+        wtfn.clear_layer(ed);
+        wtfn.redraw();        
         _ccdom(ed, ed.dom.get('simplemodal-container'), 1);
         
       }
@@ -1075,7 +1065,7 @@
   //auto add images from briefcase
   action_add_image_briefcase: function( bfcase ) { 
      if ( tinyMCE.activeEditor != null ) { 
-         var wtdom = tinyMCE.activeEditor.dom;
+         var wtdom = tinyMCE.activeEditor.dom, mn = wtdom.get('simplemodal-container'), mn_w = jQuery(mn).width(), mn_h = jQuery(mn).height();
          jQuery.each( jQuery.parseJSON(bfcase), function(i,v) {
             var img = v;
             jQuery.post('admin-ajax.php', {action : 'optinrev_action', optinrev_add_image : img, optinrev_curr_page : wtpage}, function(res){              
@@ -1085,6 +1075,32 @@
                 wtdom.add( wtdom.get('simplemodal-data'), 'div', {
                 style : { 'position': 'absolute', left: 10, top: 10, 'border': '1px solid transparent' }
                 }, wtdom.create('img', {id : img, 'src' : ac.image, 'border' : 0}, null));
+                
+                //get image size
+                jQuery.post('admin-ajax.php', {action : 'optinrev_action', optinrev_getimagesize : ac.image}, function(res){
+                
+                //resize the image
+                if ( dm = jQuery.parseJSON(res) )
+                {
+                    cr_img = wtdom.get(img);
+                    if ( dm.width > mn_w ) {
+                    tp = ( mn_w / parseInt( dm.width ) ) * parseInt( dm.height );		    
+                    wtdom.setStyles( cr_img, {'width': mn_w, 'height': tp } );    
+                    }
+                    
+                    if ( dm.height > mn_h ) {
+                    tp = ( mn_h / parseInt( dm.height ) ) * parseInt( dm.width );		    
+                    wtdom.setStyles( cr_img, {'width': tp, 'height': mn_h } );    
+                    }
+                                        
+                    if ( pcr_img = cr_img.parentNode ) {                    
+                        wtdom.setStyle( pcr_img, 'left', 1 );
+                        wtdom.setStyle( pcr_img, 'top', 1 );                        
+                    }
+                    
+                }
+                
+                });
                 
                 //TODO       
                 tinyMCE.activeEditor.isNotDirty = 0;
@@ -1444,6 +1460,33 @@ jQuery(document).ready( function($) {
     }    
     }    
     });
+    
+    $("#optinrev_round_border").iButton({
+    change: function ($input){    
+    if ($input.is(":checked")) {
+    $('#optinrev_border_radius').val(optinrev_border_radius).keyup(); $('#_nbr').show();
+    } else {
+    $('#optinrev_border_radius').val(0).keyup();$('#_nbr').hide();
+    }    
+    }    
+    });
+    
+    $("#optinrev_link_color").change(function(){
+      if ( typeof tinyMCE != 'undefined' ) {
+          var wtdom = tinyMCE.activeEditor.dom, mn = wtdom.get('simplemodal-container');          
+          deco = ( typeof $('#optinrev_link_underline').attr('checked') != 'undefined' ) ? 'underline !important' : 'none !important';          
+          $('a', mn).each(function(i,v){
+              if ( v.id != 'poweredby' ) {                            
+              $( v, mn ).attr('style', 'color : '+ $('#optinrev_link_color').val() + ';text-decoration : '+ deco );              
+              }
+          });
+          tinyMCE.activeEditor.isNotDirty = 0;
+      }
+    });
+    
+    $("#optinrev_link_underline").iButton({change: function(){
+      $("#optinrev_link_color").change();
+    }});
      
      $('#optinrev_list').change(function(){
         if ( $(this).val() === 'reset' ) {

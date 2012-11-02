@@ -16,7 +16,7 @@ var LinkDialog = {
 		if (isVisible('hrefbrowser'))
 			document.getElementById('href').style.width = '180px';
 
-		this.fillClassList('class_list');
+		//this.fillClassList('class_list');
 		this.fillFileList('link_list', 'tinyMCELinkList');
 		this.fillTargetList('target_list');
 
@@ -112,6 +112,7 @@ var LinkDialog = {
 	fillClassList : function(id) {
 		var dom = tinyMCEPopup.dom, lst = dom.get(id), v, cl;
 
+    return false;
 		if (v = tinyMCEPopup.getParam('theme_advanced_styles')) {
 			cl = [];
 

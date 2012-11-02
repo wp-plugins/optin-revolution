@@ -23,4 +23,5 @@
 }
 
 .mceStatusbar{display:none!important}
-.loading {font-size: 16px;float:left;padding-right:26px;color:red;font-weight:bold;background: url(../../../images/wait.gif) no-repeat right 4px;}
+.loading {font-size: 16px;position:absolute;z-index:999;top: 40%;left:40%;width:140px;margin: 0 auto;padding-right:26px;color:red;font-weight:bold;background: url(../../../images/wait.gif) no-repeat right 4px;}
+.scn {position:absolute;top:4px;left:0px;background-color:inherit;z-index:98;}

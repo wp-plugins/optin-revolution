@@ -12,8 +12,7 @@
 			t.editor = ed;
 
 			// Register commands
-			ed.addCommand('mceTextEdit', function(ui) {
-        popedit = true;        
+			ed.addCommand('mceTextEdit', function(ui) {                
 				ed.windowManager.open({
 					file : url + '/edit.php',
 					width : '900',

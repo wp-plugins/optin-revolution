@@ -1311,7 +1311,7 @@
 			var ed = this.editor;
 
 			ed.windowManager.open({
-				url : this.url + '/link.htm',
+				url : this.url + '/link.php',
 				width : 310 + parseInt(ed.getLang('advanced.link_delta_width', 0)),
 				height : 200 + parseInt(ed.getLang('advanced.link_delta_height', 0)),
 				inline : true

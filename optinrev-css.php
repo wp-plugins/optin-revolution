@@ -1,6 +1,6 @@
 <?php
 /** Make sure that the WordPress bootstrap has run before continuing. */      
-require_once( '../../../wp-load.php' );
+require_once( '../../../wp-load.php' );  
 require_once( 'optinrev-fn.php' );
 
 $get_optin = (isset( $_GET['popup'] )) ? htmlentities($_GET['popup']) : 'optin1';
@@ -14,7 +14,7 @@ if ( $optin ) {
   } else {
   //load default
   $optin = array(
-    'optinrev_round_border' => '',
+    'optinrev_round_border' => '',    
     'optinrev_wbg_color' => '#FFFFFF',
     'optinrev_wbg_opacity' => 0,
     'optinrev_border_opacity' => 0,
@@ -27,24 +27,26 @@ if ( $optin ) {
     'optinrev_hheight' => 400,
     'optinrev_delay' => 0,
     'optinrev_close_popup_image' => 'close1',
-    'optinrev_close_button' => 'top:230px;right:230px;'    
+    'optinrev_close_button' => 'top:230px;right:230px;',
+    'optinrev_link_color' => '#1122CC',
+    'optinrev_link_underline' => ''    
    ); 
 }
 
 //dynamic close button
 $ww = $optin['optinrev_wwidth'];
 $wh = $optin['optinrev_hheight'];
-$bw = $optin['optinrev_border_thickness'];
+$bw = $optin['optinrev_border_thickness'] - 1;
 //goto website button
 $loc = ( $optin['optinrev_gotowebsite'] == 'bottom' ) ? ( $wh - 56 ) : 20;
 
 $close_btn = array(
-  'close1' => array( ($ww - ( 30 / 2 ) ) + ($bw - 1 ), -( 30/2 ) - ( $bw - 1 ) ),
-  'close2' => array( ($ww - ( 45 / 2 ) ) + ($bw - 1 ), -( 45/2 ) - ( $bw - 1 ) ),
-  'close3' => array( ($ww - ( 60 / 2 ) ) + ($bw - 1 ), -( 60/2 ) - ( $bw - 1 ) ),
-  'close4' => array( ($ww - ( 30 / 2 ) ) + ($bw - 1 ), -( 30/2 ) - ( $bw - 1 ) ),
-  'close5' => array( ($ww - ( 45 / 2 ) ) + ($bw - 1 ), -( 45/2 ) - ( $bw - 1 ) ),
-  'close6' => array( ($ww - ( 60 / 2 ) ) + ($bw - 1 ), -( 60/2 ) - ( $bw - 1 ) ),
+  'close1' => array( ($ww - ( 30 / 2 ) ) + $bw, -( 30/2 ) - $bw ),
+  'close2' => array( ($ww - ( 45 / 2 ) ) + $bw, -( 45/2 ) - $bw ),
+  'close3' => array( ($ww - ( 60 / 2 ) ) + $bw, -( 60/2 ) - $bw ),
+  'close4' => array( ($ww - ( 30 / 2 ) ) + $bw, -( 30/2 ) - $bw ),
+  'close5' => array( ($ww - ( 45 / 2 ) ) + $bw, -( 45/2 ) - $bw ),
+  'close6' => array( ($ww - ( 60 / 2 ) ) + $bw, -( 60/2 ) - $bw ),
   'close7' => array( $ww - 272, $loc ),
   'close8' => array( $ww - 272, $loc ),
   );  
@@ -79,18 +81,41 @@ if ( $is_view ) $view_cleaned = '';
 //is rounded border
 $optin['optinrev_border_radius'] = ( $optin['optinrev_round_border'] == 'on' ) ? $optin['optinrev_border_radius'] : '0';
 
-$form_css = ( $is_view ) ? stripcslashes($optin['optinrev_email_form_css']) : '';
+
+$form_css = ( $is_view ) ? ( ( isset($optin['optinrev_email_form_css']) ) ? stripcslashes($optin['optinrev_email_form_css']) : '') : '';
+
 $wm_hand = ( $is_view ) ? '#simplemodal-container #wm {cursor:pointer;}' : '';
 
 $pwd_color = ( !$is_view ) ? 'black' : getContrast50( $optin['optinrev_wbg_color'] );
+
+//resizable
+$resizable = '
+.ui-icon { width: 18px; height: 18px; background-image: url('.$dir.'images/hgrip.png); }
+.ui-icon-gripsmall-diagonal-se { background-repeat: no-repeat; background-position: left top; }
+.ui-icon-gripsmall-diagonal-se:hover { background-repeat: no-repeat; background-position: left -18px; }
+.ui-resizable-handle { position: absolute;font-size: 0.1px; z-index: 99999; display: block; cursor: se-resize; }
+.ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle { display: none; }
+.ui-resizable-se { cursor: se-resize; width: 18px; height: 18px; right: -8px;bottom: -8px;}
+';
+
+if ( $is_view ) $resizable = '';
+
+$lnk_under = 'none';
+if ( isset( $optin['optinrev_link_underline'] ) )
+$lnk_under = ( $optin['optinrev_link_underline'] == 'on' ) ? 'underline' : 'none';
+
+$lnk_color = ( isset($optin['optinrev_link_color']) ) ? $optin['optinrev_link_color'] : '';
+
+$mcebody = ( !$is_view ) ? '.mceContentBody a:link, a:visited, a:hover, a:active {color:'.$lnk_color.';text-decoration:'.$lnk_under.' !important;' : '';
 
 header('Content-Type: text/css; charset=utf-8');
 echo <<<LOAD_CSS
 #tinymce {overflow:hidden !important;}
 #basic-modal-content {display:none;}
-#simplemodal-overlay {background-color:{$optin['optinrev_wbg_color']};z-index: 99999 !important;}
-#simplemodal-container {position:absolute;{$top_margin}height:{$optin['optinrev_hheight']}px;width:{$optin['optinrev_wwidth']}px;background-color:{$optin['optinrev_pwbg_color']};border:{$optin['optinrev_border_thickness']}px solid {$border_color};-moz-border-radius: {$optin['optinrev_border_radius']}px;-webkit-border-radius: {$optin['optinrev_border_radius']}px;border-radius: {$optin['optinrev_border_radius']}px;-khtml-border-radius:{$optin['optinrev_border_radius']}px;{$htc}z-index: 999999 !important;}
+#simplemodal-overlay {background-color:{$optin['optinrev_wbg_color']};z-index: 9999 !important;}
+#simplemodal-container {position:absolute;{$top_margin}height:{$optin['optinrev_hheight']}px;width:{$optin['optinrev_wwidth']}px;background-color:{$optin['optinrev_pwbg_color']};border:{$optin['optinrev_border_thickness']}px solid {$border_color};-moz-border-radius: {$optin['optinrev_border_radius']}px;-webkit-border-radius: {$optin['optinrev_border_radius']}px;border-radius: {$optin['optinrev_border_radius']}px;-khtml-border-radius:{$optin['optinrev_border_radius']}px;{$htc}z-index: 9999 !important;}
 #simplemodal-container img {padding:0px;border:none;-webkit-appearance: none;-webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}
+#simplemodal-container .simplemodal-data a:link, a:visited, a:hover a:active {color:{$lnk_color};text-decoration:{$lnk_under};}  
 #simplemodal-container .simplemodal-data span {line-height:110% !important;margin:0px !important;padding:0px !important;}
 #simplemodal-container .simplemodal-data ul {padding:0px;margin:0px;}
 #simplemodal-container .simplemodal-data ul li {list-style: disc inside !important;{$li_padding}}
@@ -107,6 +132,8 @@ echo <<<LOAD_CSS
 {$unrem_css}
 {$wm_hand}
 {$view_cleaned}
+{$resizable}
+{$mcebody}
 #no_thanks_btn {cursor:pointer;display:none;position:absolute;width: 263px; height: 47px;background: url({$dir}images/no-thanks.png) no-repeat left top;z-index:999999;}
 #poweredby {cursor:pointer;color: {$pwd_color};text-decoration:none;}
 #poweredby:hover {text-decoration:underline;}

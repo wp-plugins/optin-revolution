@@ -4,25 +4,35 @@
   define( 'OPTINREV_DIR_PATH', plugin_dir_path( __FILE__ ) );
   define( 'OPTINREV_XMLRPC_URL', 'http://lic.optinrevolution.com/xmlrpc.php' );
   define( 'OPTINREV_SUPPORT', 'http://wordpress.org/support/plugin/optin-revolution/' );
-  define( 'SOCIAL_URL', 'http://goo.gl/U6GWY' );
-  define( 'SOCIAL_TITLE', 'Check out this KILLER FREE Wordpress plugin that allows you to create unique UNBLOCKABLE Wordpress popups!' );
-  define( 'TWEET', 'https://twitter.com/share' );
+  define( 'OPTINREV_SOCIAL_URL', 'http://goo.gl/U6GWY' );
+  define( 'OPTINREV_SOCIAL_TITLE', 'Check out this KILLER FREE Wordpress plugin that allows you to create unique UNBLOCKABLE Wordpress popups!' );
+  define( 'OPTINREV_TWEET', 'https://twitter.com/share' );
+  
+  //patch for w3totalcache  
+  if ( defined('W3TC') ) {
+      if ( !get_option('optinrev_w3tc_patch_request') )
+      {
+          $w3file_req = W3TC_LIB_W3_DIR . '/Request.php';
+          if ( is_writable( $w3file_req ) )
+          {   
+              if ( $w3req = @file_get_contents( $w3file_req ) ) {         
+                  $w3req = preg_replace('/array_merge\(*.*\)/', 'array_merge( (array)$_GET, (array)$_POST )', $w3req);
+                  if ( $hd = @fopen( W3TC_LIB_W3_DIR . '/Request.php', 'c+' ) ) {
+                      fwrite( $hd, $w3req );
+                      update_option( 'optinrev_w3tc_patch_request', time() );   
+                  }
+                  fclose( $hd );
+              }
+          }          
+      }
+  }
 
-  if ( !function_exists('post') ) {   
-      function post( $p, $ret = false ) {
+  if ( !function_exists('optinrev_post') ) {   
+      function optinrev_post( $p, $ret = false ) {
         if ( !$ret )
         echo (isset($_POST[ $p ])) ? stripcslashes($_POST[ $p ]) : '';
         else
         return (isset($_POST[ $p ])) ? stripcslashes($_POST[ $p ]) : '';
-      }
-  }
-  
-  if ( !function_exists('optinrev_callaction_btn_count') ) {
-      function optinrev_callaction_btn_count() {
-        global $wpdb;
-        $tb_options = $wpdb->prefix . 'optinrev';
-        $res = $wpdb->get_row( "select max(id) as ccnt from $tb_options" );
-        return ( $wpdb->num_rows > 0 ) ? $res->ccnt + 1 : 0;
       }
   }
   
@@ -35,58 +45,13 @@
       }
   }
   
-  if ( !function_exists('optinrev_callaction_btns') ) {
-      function optinrev_callaction_btns() {
-        global $wpdb;
-        $tb_options = $wpdb->prefix . 'optinrev';
-        $res = $wpdb->get_results( $wpdb->prepare("select name, content from $tb_options where name like %s", 'optinrev_callaction_btn%' ));
-        return ( $wpdb->num_rows > 0 ) ? $res : false;    
-      }
-  }
-  
-  if ( !function_exists('optinrev_uploads') ) {
-      function optinrev_uploads() {
-        global $wpdb;
-        $tb_options = $wpdb->prefix . 'optinrev';
-        $res = $wpdb->get_results( $wpdb->prepare("select name, content from $tb_options where name like %s", 'optinrev_uid_%' ));
-        return ( $wpdb->num_rows > 0 ) ? $res : false;    
-      }
-  }
-  
-  if ( !function_exists('optinrev_added_images') ) {
-      function optinrev_added_images() {
-        global $wpdb;
-        $tb_options = $wpdb->prefix . 'optinrev';
-        $res = $wpdb->get_results( $wpdb->prepare("select name, content from $tb_options where name like %s", '%_img_uid_%' ));
-        return ( $wpdb->num_rows > 0 ) ? $res : false;    
-      }
-  }
-  
-  if ( !function_exists('optinrev_action_button_uploads') ) {
-      function optinrev_action_button_uploads() {
-        global $wpdb;
-        $tb_options = $wpdb->prefix . 'optinrev';
-        $res = $wpdb->get_results( $wpdb->prepare("select name, content from $tb_options where name like %s", 'optinrev_cuid_%' ));
-        return ( $wpdb->num_rows > 0 ) ? $res : false;    
-      }
-  }
-  
   if ( !function_exists('optinrev_popups') ) {
       function optinrev_popups() {  
         $optin = array( 'optin1' => 'Optin Popup 1' );
         optinrev_update( 'optinrev_popups', serialize($optin) );
         return $optin;
       }
-  }
-  
-  if ( !function_exists('optinrev_images') ) {
-      function optinrev_images( $optin ) {
-        global $wpdb;
-        $tb_options = $wpdb->prefix . 'optinrev';
-        $res = $wpdb->get_results( $wpdb->prepare("select name, content from $tb_options where name like %s", $optin . '_img_uid_%' ));
-        return ( $wpdb->num_rows > 0 ) ? $res : 0;    
-      }
-  }
+  }  
   
   if ( !function_exists('optinrev_update') ) {
       function optinrev_update( $name, $value ) {
@@ -161,7 +126,7 @@
          
          switch( $option ) {
          case 0:          
-          wp_enqueue_style( 'optinrev-style', $dir . 'css/optinrev-style.css' );
+          wp_enqueue_style( 'optinrev_style', $dir . 'css/optinrev-style.css' );
               
           wp_enqueue_script( 'jibtn', $dir . 'js/jquery.ibutton.js' );
           wp_enqueue_script( 'jsadmin', $dir . 'js/optinrev-admin.js' );          
@@ -177,15 +142,35 @@
           wp_enqueue_script( 'jquery-ui-slider' );
           wp_enqueue_script( 'jquery-form' );
               
-          wp_enqueue_script( 'jquery_jscolor', $dir . 'jscolor/jscolor.js' ); 
-          wp_enqueue_script( 'jibtn', $dir . 'js/jquery.ibutton.js' );
-          wp_enqueue_script( 'jquery_metadata', $dir . 'js/jquery.metadata.js' );    
+              
+          wp_deregister_script( 'jquery_jscolor' );
+          wp_register_script( 'jquery_jscolor', $dir . 'jscolor/jscolor.js' );              
+          wp_enqueue_script( 'jquery_jscolor' );
+           
+          wp_deregister_script( 'jibtn' );
+          wp_register_script( 'jibtn', $dir . 'js/jquery.ibutton.js' );
+          wp_enqueue_script( 'jibtn' );
+          
+          
+          wp_deregister_script( 'jquery_metadata' );
+          wp_register_script( 'jquery_metadata', $dir . 'js/jquery.metadata.js' );
+          wp_enqueue_script( 'jquery_metadata' );
+          
+          wp_deregister_script( 'jquery_easing' );
+          wp_register_script( 'jquery_easing', $dir . 'js/easing.js' );    
           wp_enqueue_script( 'jquery_easing', $dir . 'js/easing.js' );          
             
           //Modal    
-          wp_enqueue_script( 'jquery_modaljs', $dir . 'js/jquery.simplemodal.js' );
+          wp_deregister_script( 'jquery_modaljs' );
+          wp_register_script( 'jquery_modaljs', $dir . 'js/jquery.simplemodal.js' );
+          wp_enqueue_script( 'jquery_modaljs' );
           //IE curvy corner
-          wp_enqueue_script( 'curvyc', $dir . 'js/curvycorners.js' );
+          wp_deregister_script( 'curyvc' );
+          wp_register_script( 'curvyc', $dir . 'js/curvycorners.js' );
+          wp_enqueue_script( 'curvyc' );
+         break;
+         case 2:
+         wp_enqueue_style( 'optinrev_style', $dir . 'css/optinrev-style.css' );         
          break;
          }         
       }
@@ -234,42 +219,38 @@
   }
 
   if ( !function_exists('optinrev_setcookie') ) {
-    function optinrev_setcookie( $cookie ) {
-        setcookie('visited_ip', $cookie, time() + 3600*24, COOKIEPATH, COOKIE_DOMAIN, false);
-    }
+    function optinrev_setcookie( $cookie_name, $cookie_value ) {
+        setcookie( $cookie_name, $cookie_value, time() + 3600*24, COOKIEPATH, COOKIE_DOMAIN, false );
+    }    
   }
   
-  if ( !function_exists('visited_ip') ) {
-    function visited_ip() {
-      if (!isset($_COOKIE['visited_ip'])) {
-      optinrev_setcookie($_SERVER['REMOTE_ADDR']);
+  if ( !function_exists('optinrev_visited_ip') ) {
+    function optinrev_visited_ip() {
+      if (!isset($_COOKIE['optinrev_visited_ip'])) {                       
+      optinrev_setcookie( 'optinrev_visited_ip', $_SERVER['REMOTE_ADDR'] );
       }
     }
+    add_action( 'init', 'optinrev_visited_ip');
   }
 
-  if ( !function_exists('visited_once') ) {
-    function visited_once() {
-      if (!isset($_COOKIE['visited_once'])) {
-      optinrev_setcookie($_SERVER['REMOTE_ADDR']);
+  if ( !function_exists('optinrev_visited_once') ) {
+    function optinrev_visited_once() {
+      if (!isset($_COOKIE['optinrev_visited_once'])) { 
+      optinrev_setcookie( 'optinrev_visited_once', $_SERVER['REMOTE_ADDR'] );
       }
     }
+    add_action( 'init', 'optinrev_visited_once' );
   }
 
-  if ( !function_exists('visited_show_ip') ) {
-    function visited_show_ip() {
-      if (!isset($_COOKIE['visited_show_ip'])) {
-      optinrev_setcookie($_SERVER['REMOTE_ADDR']);
+  if ( !function_exists('optinrev_session_browser') ) {
+    function optinrev_session_browser() {
+      if (!isset($_COOKIE['optinrev_session_browser'])) {
+      setcookie( 'optinrev_session_browser', $_SERVER['REMOTE_ADDR'] , 0, COOKIEPATH, COOKIE_DOMAIN, false );      
       }
     }
+    add_action( 'init', 'optinrev_session_browser' );
   }
-
-  if ( !function_exists('visited_show_ip_count') ) {
-    function visited_show_ip_count() {
-      if (!isset($_COOKIE['visited_show_ip_count'])) {
-      optinrev_setcookie(0);
-      }
-    }
-  }
+  
 
   if ( !function_exists('optinrev_check_update') ) {
       function optinrev_check_update() {
@@ -362,6 +343,36 @@
       }
   }
   
+  if ( !function_exists( 'optinrev_socials' ) ) {
+      function optinrev_socials() {
+      echo '
+          <ul>
+              <li><a href="http://www.facebook.com/share.php?u='.OPTINREV_SOCIAL_URL.'&title='.OPTINREV_SOCIAL_TITLE.'" title="'.OPTINREV_SOCIAL_TITLE.'" onclick="javascript:window.open(this.href,\'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600\');return false;" class="flike"></a></li>
+              <li><a href="https://twitter.com/share?url='.OPTINREV_SOCIAL_URL.'&text='.OPTINREV_SOCIAL_TITLE.'" title="'.OPTINREV_SOCIAL_TITLE.'" target="_new" class="tweet"></a></li>
+              <li><a href="https://plus.google.com/share?url='.OPTINREV_SOCIAL_URL.'" title="'.OPTINREV_SOCIAL_TITLE.'" onclick="javascript:window.open(this.href,\'\', \'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600\');return false;" class="googleplus"></a></li>
+              <li><a href="http://del.icio.us/post?url='.OPTINREV_SOCIAL_URL.'&title='.OPTINREV_SOCIAL_TITLE.'" title="'.OPTINREV_SOCIAL_TITLE.'" target="_new" class="delicious"></a></li>
+              <li><a href="http://www.stumbleupon.com/submit?url='.OPTINREV_SOCIAL_URL.'" title="'.OPTINREV_SOCIAL_TITLE.'" target="_new" class="stumbleupon"></a></li>
+              <li><a href="http://digg.com/submit?url='.urlencode(OPTINREV_SOCIAL_URL).'&title='.OPTINREV_SOCIAL_TITLE.'" title="'.OPTINREV_SOCIAL_TITLE.'" target="_new" class="digg"></a></li>
+              <li><a href="http://www.linkedin.com/shareArticle?mini=true&url='.urlencode(OPTINREV_SOCIAL_URL).'&title='.OPTINREV_SOCIAL_TITLE.'&summary='.OPTINREV_SOCIAL_TITLE.'" title="'.OPTINREV_SOCIAL_TITLE.'" target="_new" class="inshare"></a></li>
+              <li><a href="http://pinterest.com/pin/create/button/?url='.urlencode(OPTINREV_SOCIAL_URL).'&media=http://optinrevolution.com/img/pin.png&description='.OPTINREV_SOCIAL_TITLE.'" title="'.OPTINREV_SOCIAL_TITLE.'" target="_new" class="pinit"></a></li>
+          </ul>      
+      ';
+      }
+  }
+  
+  if ( !function_exists( 'optinrev_paypal_donate' ) ) {
+      function optinrev_paypal_donate() {
+      echo '
+      <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+      <input type="hidden" name="cmd" value="_s-xclick">
+      <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----">
+      <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+      <img alt="" border="0" src="https://www.paypalobjects.com/en_AU/i/scr/pixel.gif" width="1" height="1">
+      </form>      
+      ';
+      }
+  }
+  
         
 
 /**
@@ -399,13 +410,15 @@
       }
       //optinrev_show_where
       if (isset( $_POST['optinrev_show_where'] ) && $show_on = esc_html( $_POST['optinrev_show_where'] ))
-      {
-          optinrev_update( 'optinrev_show_where', $show_on );        
+      {   
+          optinrev_update( 'optinrev_show_where', $show_on );
           exit();
       }
       
       //showing popup
       if (isset( $_POST['optinrev_show_popup'] ) && $setp = esc_html($_POST['optinrev_show_popup'])) {
+          global $blog_cache_dir;
+          
           $setp_ar = explode('|',  $setp );
           $setv = $setp;
           if ( count($setp_ar) > 0 ) {
@@ -415,7 +428,19 @@
                   $setv = $setv. '|' . time() .'|'. $et;
                }
           }
-          optinrev_update( 'optinrev_show_popup', $setv );        
+          optinrev_update( 'optinrev_show_popup', $setv );
+          
+          setcookie( 'optinrev_visited_ip', null, time() - 3600, COOKIEPATH, COOKIE_DOMAIN, false );
+          setcookie( 'optinrev_visited_once', null, time() - 3600, COOKIEPATH, COOKIE_DOMAIN, false );
+          setcookie( 'optinrev_session_browser', null, time() - 3600, COOKIEPATH, COOKIE_DOMAIN, false );
+          
+          unset($_COOKIE['optinrev_session_browser'], $_COOKIE['optinrev_visited_once'], $_COOKIE['optinrev_visited_ip'] );
+          unset($_SESSION['optinrev_session_browser'], $_SESSION['optinrev_visited_once'], $_SESSION['optinrev_visited_ip'] );
+          
+          if ( function_exists('wp_cache_clear_cache') ) {
+              wp_cache_clear_cache();
+          }          
+                  
           exit();
       }
       //optinrev_pixel_tracking                                                   
@@ -601,6 +626,17 @@
       //remove an image to the stage
       if ( isset( $_POST['optinrev_remove_object'] ) && $img_id = esc_html( $_POST['optinrev_remove_object'] ) ) {          
           optinrev_delete( $img_id );
+          exit();
+      }
+      
+      //getimage size
+      if ( isset( $_POST['optinrev_getimagesize'] ) && $img = esc_html( $_POST['optinrev_getimagesize'] ) ) {
+          if ( list( $width, $height ) = @getimagesize( $_SERVER['DOCUMENT_ROOT'] . $img ) ) {
+              $imgd = array( 'width' => $width, 'height' => $height );
+              echo json_encode($imgd);
+              } else {
+              echo '0';
+          }                    
           exit();
       }      
     }}//end action callback

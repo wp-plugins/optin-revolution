@@ -31,7 +31,7 @@ Full list of features:
 * This plugin allow you to completely change the look and feel of the WordPress popup.
 * Change images, background, borders, font sizes and types and much, much more.
 * WYSIWYG stage and preview allowing easy customization.
-* Change how often the popup is shown
+* Change how often the popup is shown.
 * Auto save feature. 
 
 Change the look of your input fields. Support for the following custom variables:
@@ -60,8 +60,10 @@ Allows custom variables for popup window. Support for the following custom varia
 * Popup Top Margin
 * Popup Width
 * Popup Height
+* Change colour of text hyperlinks
+* Enable/disable underline on text hyperlinks
 
-Integrates with the WordPress Media Library to allow importing images and button to the WordPress popup stage.
+Integrates with the WordPress Media Library to allow importing images and button to the WordPress popup stage, images and button can be resized on the optin popup stage.
 
 
 == Installation ==
@@ -74,6 +76,16 @@ Integrates with the WordPress Media Library to allow importing images and button
 
 
 == Changelog ==
+
+= 1.0.5 =
+
+* Bug Fix: Optin popup not showing, issue with Javascript loading sequence.
+* Bug Fix: Blog with W3 Total Cache installed fix error being displayed.
+* Bug Fix: Blog with WP Super Cache installed fix for display frequency of popup not being honored.
+* Bug Fix: Hyperlink in wysiwyg text editor not working.
+* Feature: Added image resizing on the stage.
+* Feature: Auto resizing image imported to stage from media library
+* Updated: Image moving on the stage.
 
 = 1.0.4 =
 
@@ -96,8 +108,8 @@ Integrates with the WordPress Media Library to allow importing images and button
 * Bug Fix: Fix for MailChimp not submitting.
 * Feature: Add collapsable menus on optin popup setting page.
 * Feature: Add visibility of the background on the stage.
-* Feature: Add loading icon when loading stage and text box
-* Updated: Replace email provider logos
+* Feature: Add loading icon when loading stage and text box.
+* Updated: Replace email provider logos.
 
 = 1.0.1 =
 
