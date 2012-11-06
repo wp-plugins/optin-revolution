@@ -315,7 +315,7 @@
         if ( j(v).attr('name') == 'mcid' ) { j(v).attr('name', 'id'); }            
         if ( j(v).attr('name') == 'mcu' ) { j(v).attr('name','u'); }
         if ( j(v).attr('name') == 'mcaction' ) {
-            action_url = j(v).val();
+            action_url = j(v).val().replace( /(http:\/\/)/ig, '' );
             j(v).remove();
         }
         
@@ -396,7 +396,7 @@
                 j('#email', dialog.data).attr('id', 'MERGE0');
                 if ( action_url ) {
                     cur_act = j('#mce_getaccessed', dialog.data).attr('action');
-                    cur_act = cur_act.replace( /wotcoupon.us4.list-manage1.com/ig, action_url );
+                    cur_act = cur_act.replace( /mailchimp.us1.list-manage.com/ig, action_url );
                     j('#mce_getaccessed', dialog.data).attr( 'action', cur_act );
                 }                                
             }            

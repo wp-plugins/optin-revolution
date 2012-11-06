@@ -49,7 +49,7 @@ $close_btn = array(
   'close6' => array( ($ww - ( 60 / 2 ) ) + $bw, -( 60/2 ) - $bw ),
   'close7' => array( $ww - 272, $loc ),
   'close8' => array( $ww - 272, $loc ),
-  );  
+  );
   
 $lpos = $close_btn[ $optin['optinrev_close_popup_image'] ];
 $close_btn = 'left:'. $lpos[0] .'px;top:'. $lpos[1] .'px;';
@@ -65,10 +65,10 @@ $unrem_css = '
 img.wotimg {border: 1px dashed #888 !important;}
 .mceImageDrag {padding:0px !important;position:absolute;z-index:9999;}
 #close {position:absolute;z-index:1001;text-decoration:none;border: 1px solid transparent;}
-.closeh {border: 1px dashed #888 !important;}
 .mceImageSelect {position:relative;padding:0px !important;border: 1px dashed #888 !important;}
 .mceWotlayer {border: 1px dashed #888 !important;z-index:999;padding:0px !important;margin:0px !important;}
 ';
+if ( $is_view ) $unrem_css = ''; 
 
 $view_cleaned = '
 #zindex {position:absolute;width:50px;padding:0px;font-size:9px;font-weight:normal;background-color:#f0f0f0;color:#404040;padding:2px}
@@ -76,11 +76,9 @@ $view_cleaned = '
 #mceWotmove {position:absolute;right:-1px;bottom:-1px;width:14px;height:14px; background: url('.$dir.'images/cursor_drag_arrow.png) no-repeat center center;cursor:move;background-color:#fff;z-index:99999;}
 #mceDeleteObj {position:absolute;left:-1px;top:-12px;width:12px;height:12px; background: url('.$dir.'images/delete-ic.png) no-repeat center center;cursor:pointer;background-color:#fff;z-index:99999;}
 ';
-
 if ( $is_view ) $view_cleaned = '';
 //is rounded border
 $optin['optinrev_border_radius'] = ( $optin['optinrev_round_border'] == 'on' ) ? $optin['optinrev_border_radius'] : '0';
-
 
 $form_css = ( $is_view ) ? ( ( isset($optin['optinrev_email_form_css']) ) ? stripcslashes($optin['optinrev_email_form_css']) : '') : '';
 
@@ -106,12 +104,47 @@ $lnk_under = ( $optin['optinrev_link_underline'] == 'on' ) ? 'underline' : 'none
 
 $lnk_color = ( isset($optin['optinrev_link_color']) ) ? $optin['optinrev_link_color'] : '';
 
-$mcebody = ( !$is_view ) ? '.mceContentBody a:link, a:visited, a:hover, a:active {color:'.$lnk_color.';text-decoration:'.$lnk_under.' !important;' : '';
+$mcebody = ( !$is_view ) ? '#tinymce {overflow:hidden !important;} .mceContentBody a:link, a:visited, a:hover, a:active {color:'.$lnk_color.';text-decoration:'.$lnk_under.' !important;' : '';
 
+//Close button
+$active_close_button = '#simplemodal-container .close1 {background:url('.$dir.'images/close1b.png) no-repeat; width:39px; height:39px;'.$close_btn.'display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}';
+if ( isset( $optin['optinrev_close_popup_image'] ) && $sbtn = $optin['optinrev_close_popup_image'] ) {
+    switch( $sbtn ) {
+    case 'close1':
+    $active_close_button = $active_close_button;     
+    break;
+    case 'close2':
+    $active_close_button = '#simplemodal-container .close2 {background:url('.$dir.'images/close2b.png) no-repeat; width:52px; height:52px;'.$close_btn.'display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}';    
+    break;
+    case 'close3':
+    $active_close_button = '#simplemodal-container .close3 {background:url('.$dir.'images/close3b.png) no-repeat; width:62px; height:62px;'.$close_btn.'display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}';    
+    break;
+    case 'close4':
+    $active_close_button = '#simplemodal-container .close4 {background:url('.$dir.'images/close1r.png) no-repeat; width:39px; height:39px;'.$close_btn.'display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}';    
+    break;
+    case 'close5':
+    $active_close_button = '#simplemodal-container .close5 {background:url('.$dir.'images/close2r.png) no-repeat; width:52px; height:52px;'.$close_btn.'display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}';    
+    break;
+    case 'close6':
+    $active_close_button = '#simplemodal-container .close6 {background:url('.$dir.'images/close3r.png) no-repeat; width:62px; height:62px;'.$close_btn.'display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}';    
+    break;
+    case 'close7':
+    $active_close_button = '#simplemodal-container .close7 {background:url('.$dir.'images/btn1.png) no-repeat; width:263px; height:47px;'.$close_btn.'display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}';    
+    break;        
+    case 'close8':
+    $active_close_button = '#simplemodal-container .close8 {background:url('.$dir.'images/btn2.png) no-repeat; width:263px; height:47px;'.$close_btn.'display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}';    
+    break;            
+    }   
+}
+
+ob_start();
 header('Content-Type: text/css; charset=utf-8');
-echo <<<LOAD_CSS
-#tinymce {overflow:hidden !important;}
-#basic-modal-content {display:none;}
+header("cache-control: must-revalidate");
+$offset = 60 * 7200;
+$expire = "expires: " . gmdate ("D, d M Y H:i:s", time() + $offset) . " GMT";
+header($expire);
+
+$modal = <<<LOAD_CSS
 #simplemodal-overlay {background-color:{$optin['optinrev_wbg_color']};z-index: 9999 !important;}
 #simplemodal-container {position:absolute;{$top_margin}height:{$optin['optinrev_hheight']}px;width:{$optin['optinrev_wwidth']}px;background-color:{$optin['optinrev_pwbg_color']};border:{$optin['optinrev_border_thickness']}px solid {$border_color};-moz-border-radius: {$optin['optinrev_border_radius']}px;-webkit-border-radius: {$optin['optinrev_border_radius']}px;border-radius: {$optin['optinrev_border_radius']}px;-khtml-border-radius:{$optin['optinrev_border_radius']}px;{$htc}z-index: 9999 !important;}
 #simplemodal-container img {padding:0px;border:none;-webkit-appearance: none;-webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}
@@ -120,15 +153,7 @@ echo <<<LOAD_CSS
 #simplemodal-container .simplemodal-data ul {padding:0px;margin:0px;}
 #simplemodal-container .simplemodal-data ul li {list-style: disc inside !important;{$li_padding}}
 #simplemodal-container .simplemodal-data {font-family: arial;font-size: 12px;}
-#simplemodal-container .modalCloseImg {background:url({$dir}images/close1b.png) no-repeat; width:39px; height:39px;{$close_btn}display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}
-#simplemodal-container .close1 {background:url({$dir}images/close1b.png) no-repeat; width:39px; height:39px;{$close_btn}display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}
-#simplemodal-container .close2 {background:url({$dir}images/close2b.png) no-repeat; width:52px; height:52px;{$close_btn}display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}
-#simplemodal-container .close3 {background:url({$dir}images/close3b.png) no-repeat; width:62px; height:62px;{$close_btn}display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}
-#simplemodal-container .close4 {background:url({$dir}images/close1r.png) no-repeat; width:39px; height:39px;{$close_btn}display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}
-#simplemodal-container .close5 {background:url({$dir}images/close2r.png) no-repeat; width:52px; height:52px;{$close_btn}display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}
-#simplemodal-container .close6 {background:url({$dir}images/close3r.png) no-repeat; width:62px; height:62px;{$close_btn}display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}
-#simplemodal-container .close7 {background:url({$dir}images/btn1.png) no-repeat; width:263px; height:47px;{$close_btn}display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}
-#simplemodal-container .close8 {background:url({$dir}images/btn2.png) no-repeat; width:263px; height:47px;{$close_btn}display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}
+{$active_close_button}
 {$unrem_css}
 {$wm_hand}
 {$view_cleaned}
@@ -138,7 +163,6 @@ echo <<<LOAD_CSS
 #poweredby {cursor:pointer;color: {$pwd_color};text-decoration:none;}
 #poweredby:hover {text-decoration:underline;}
 LOAD_CSS;
-function hex2dec( $hex ) {$color = str_replace('#', '', $hex);$ret = ARRAY('r' => hexdec(substr($color, 0, 2)),'g' => hexdec(substr($color, 2, 2)),'b' => hexdec(substr($color, 4, 2)));return $ret;}
-function is_ie(){if (isset($_SERVER['HTTP_USER_AGENT']) && (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)) {return true;} else {return false;}}
-function getContrast50($hexcolor){return (hexdec($hexcolor) > 0xffffff/2) ? 'black':'white';}
+echo optinrev_cssminify($modal);
+ob_end_flush();
 ?>

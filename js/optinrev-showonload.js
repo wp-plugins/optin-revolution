@@ -17,7 +17,7 @@ $.modal( c, {closeClass: optinrev_close_button_class, position: [ optinrev_top_m
             if ( $(v).attr('name') == 'mcu' ) { $(v).attr('name', 'u'); }
 
             if ( $(v).attr('name') == 'mcaction' ) {
-                action_url = $(v).val();
+                action_url = $(v).val().replace( /(http:\/\/)/ig, '' );                
                 $(v).remove();
             }            
             
@@ -105,7 +105,7 @@ $.modal( c, {closeClass: optinrev_close_button_class, position: [ optinrev_top_m
                 $('#email', dialog.data).attr('id', 'MERGE0');
                 if ( action_url ) {
                     cur_act = $('#mce_getaccessed', dialog.data).attr('action');
-                    cur_act = cur_act.replace( /wotcoupon.us4.list-manage1.com/ig, action_url );
+                    cur_act = cur_act.replace( /mailchimp.us1.list-manage.com/ig, action_url );
                     $('#mce_getaccessed', dialog.data).attr( 'action', cur_act );
                 }                                
             }            

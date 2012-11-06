@@ -201,7 +201,7 @@
                                  'input' => 'name,email,webform_id'
                                 ),                                
                     'mailchimp' => array (
-                                 'action' => 'http://wotcoupon.us4.list-manage1.com/subscribe/post',  
+                                 'action' => 'http://mailchimp.us1.list-manage.com/subscribe/post',  
                                  'hidden' => 'mcu,mcid,mcaction',
                                  'text' => 'email',
                                  'input' => 'email,mcu,mcid,mcaction' 
@@ -245,7 +245,7 @@
   if ( !function_exists('optinrev_session_browser') ) {
     function optinrev_session_browser() {
       if (!isset($_COOKIE['optinrev_session_browser'])) {
-      setcookie( 'optinrev_session_browser', $_SERVER['REMOTE_ADDR'] , 0, COOKIEPATH, COOKIE_DOMAIN, false );      
+      @setcookie( 'optinrev_session_browser', $_SERVER['REMOTE_ADDR'] , 0, COOKIEPATH, COOKIE_DOMAIN, false );      
       }
     }
     add_action( 'init', 'optinrev_session_browser' );
@@ -371,6 +371,44 @@
       </form>      
       ';
       }
+  }
+  
+  if ( !function_exists( 'optinrev_cssminify' ) ) {
+      function optinrev_cssminify($data)
+      {
+        $data = preg_replace( '#/\*.*?\*/#s', '', $data );
+        // remove single line comments, like this, from // to \\n
+        //$data = preg_replace('/(\/\/.*\n)/', '', $data);
+        // remove new lines \\n, tabs and \\r
+        $data = preg_replace('/(\t|\r|\n)/', '', $data);
+        // replace multi spaces with singles
+        $data = preg_replace('/(\s+)/', ' ', $data);
+        //Remove empty rules
+        $data = preg_replace('/[^}{]+{\s?}/', '', $data);
+        // Remove whitespace around selectors and braces
+        $data = preg_replace('/\s*{\s*/', '{', $data);
+        // Remove whitespace at end of rule
+        $data = preg_replace('/\s*}\s*/', '}', $data);
+        // Just for clarity, make every rules 1 line tall
+        //$data = preg_replace('/}/', "}\n", $data);
+        $data = str_replace( ';}', '}', $data );
+        $data = str_replace( ', ', ',', $data );
+        $data = str_replace( '; ', ';', $data );
+        $data = str_replace( ': ', ':', $data );
+        $data = preg_replace( '#\s+#', ' ', $data );
+        return $data;
+      }
+  }
+  
+  //utils
+  if ( !function_exists('hex2dec') ) {
+  function hex2dec( $hex ) {$color = str_replace('#', '', $hex);$ret = ARRAY('r' => hexdec(substr($color, 0, 2)),'g' => hexdec(substr($color, 2, 2)),'b' => hexdec(substr($color, 4, 2)));return $ret;}
+  }
+  if ( !function_exists('is_ie') ) {
+  function is_ie(){if (isset($_SERVER['HTTP_USER_AGENT']) && (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)) {return true;} else {return false;}}
+  }
+  if ( !function_exists('getContrast50') ) {
+  function getContrast50($hexcolor){return (hexdec($hexcolor) > 0xffffff/2) ? 'black':'white';}
   }
   
         
@@ -543,6 +581,7 @@
                 if ( $lbl == 'Mcaction' )
                 $ismchimp = '<div class="row"><label>&nbsp;</label><span class="note">Example Value: <b>mailchimp.us1.list-manage.com</b> ( Replace with your url with your action value information )</span></div>';
                 
+                $vl = str_replace( 'http://', '', $vl );                
                 $lbl = ucfirst(str_replace('Mc', '', $lbl));                
                 }
                 

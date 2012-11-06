@@ -9,7 +9,7 @@
   Plugin URI: http://wordpress.org/extend/plugins/optin-revolution/
   Description: Optin Revolution is a WordPress popup plugin is quite possibly the best way in the world for you to create supercharged unblockable popups to grow your list of subscribers! To get started: 1) Click the "Activate" link to the left of this description, 2) Go to your Optin Revolution settings page, and 3) Watch the video on the settings page which will show you how to get started creating your cool popups.
   Author: Optin Revolution
-  Version: 1.0.5
+  Version: 1.0.6
   Author URI: http://optinrevolution.com/
   License: GPL2+
 */
@@ -17,7 +17,6 @@
 if (!session_start())
 session_start();
 
-define( 'WP_CACHE', false ); 
 define( 'DONOTCACHEPAGE', true);
 define( 'DONOTCACHEDB', true);
 define( 'DONOTMINIFY', true);
@@ -35,10 +34,7 @@ $wp_version;
 //init
 $plugin_name = 'optin-revolution/optinrev.php';
 $optinrev_db_version = '1.0';
-$optinrev_installed_version = '1.0.5';
-$wp_version = get_bloginfo('version');
-
-
+$optinrev_installed_version = '1.0.6';
 
 function optinrev_admin_actions()
 {
@@ -169,7 +165,7 @@ function optinrev_transient_update_plugins($transient)
         
     $obj = new stdClass();
     $obj->slug = 'optin';  
-    $obj->new_version = '1.0.6';  
+    $obj->new_version = '1.0.7';  
     $obj->url = 'http://optinrevolution.com';
     $obj->package = $download_url;  
     $transient->response[$plugin_name] = $obj;
@@ -207,19 +203,26 @@ add_action('after_plugin_row', 'optinrev_pro_action_needed');
 
 function optinrev_pro_get_started_headline()
 { 
-  global $plugin_name, $plugin_page;
+  global $plugin_name, $plugin_page, $wp_version;
   
   $this_uri = preg_replace('#&.*?$#', '', str_replace( '%7E', '~', $_SERVER['REQUEST_URI']));
   
   if(isset($_GET['action']) && $_GET['action'] == 'upgrade-plugin')
   return;
   
-  if ( preg_match( '/optin|optin1|optin-pro-settings/', $plugin_page ) ) {          
-      if ( !optinrev_get('optinrev_popup_enabled') || optinrev_get('optinrev_popup_enabled') == 'false' ) {
-      ?>
+  
+  if ( preg_match( '/optin|optin1|optin-pro-settings/', $plugin_page ) ) {
+    if (version_compare($wp_version, '3.3', '<')) {
+    ?>
+    <div class="error" style="padding:8px;"><?php echo __('Please update your wordpress in order to use the editor. <a href="update-core.php">Update now.</a>'); ?></div>  
+    <?php
+    }
+                
+    if ( !optinrev_get('optinrev_popup_enabled') || optinrev_get('optinrev_popup_enabled') == 'false' ) {
+    ?>
       <div class="error" id="_disopt" style="padding:8px;"><?php printf(__('Optin Revolution Popup is disabled.<br/>%1$sEnable it now.%2$s', 'optin'), '<a href="'. $this_uri .'&enable=1">','</a>'); ?></div>  
-      <?php
-      }  
+    <?php
+    }  
   }
 
   if ( optinrev_is_pro_authorized() && !optinrev_is_pro_installed() )
@@ -257,18 +260,8 @@ function optinrev_activate()
 register_activation_hook( __FILE__, 'optinrev_activate' );
 
 function optinrev_deactivate()
-{
-  global $wpdb;
-  
+{  
   delete_site_transient( $plugin_name );
-	$t1 = $wpdb->prefix . 'optinrev';
-  $t2 = $wpdb->prefix . 'optinrev_analytics';
-
-	$sql = "DROP TABLE IF EXISTS ". $t1;
-	$wpdb->query($sql);
-  
-  $sql = "DROP TABLE IF EXISTS ". $t2;
-	$wpdb->query($sql);
 }
 register_deactivation_hook( __FILE__, 'optinrev_deactivate' );
 
@@ -552,8 +545,11 @@ function optinrev_setup() {
     </div>
     <div class="clear"></div>
     </p>    
-    <?php wp_editor( $content, 'optinrev_excerpt', array('textarea_rows' => 14, 'media_buttons' => false, 'tinymce' => true) );?><br />
-    
+    <?php 
+    if ( function_exists('wp_editor') ) {
+        wp_editor( $content, 'optinrev_excerpt', array('textarea_rows' => 14, 'media_buttons' => false, 'tinymce' => true) );
+    }
+    ?><br />    
     <div class="row"><label class="title"><a class="toggle" id="_box1-t"><?php _e('Email Marketing Form'); ?><span class="_box1-x">[+]</span><span class="_box1-c">[-]</span></a></label><span>&nbsp;</span></div><br />
     <div id="_box1">
     <?php foreach( $mail_form as $k => $v ) { $sel = ($email_form_opt === $k)? 'checked' : ''; ?>
