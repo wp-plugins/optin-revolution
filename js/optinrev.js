@@ -115,37 +115,6 @@
    wtfn.pwby();  
       
   },//redraw
-  remove_img: function( img, img2 )
-  {
-    var wtdom = tinyMCE.activeEditor.dom;
-    if (!img) return false;
-    
-    if (confirm('Do you want to delete?'))
-    {
-        j('.spin').show();
-        j.post('admin-ajax.php', {action : "optinrev_action", optinrev_remove_img : img}, function( res ){        
-        if ( res.length > 0 )
-        {           
-          var ac = j.parseJSON( res );
-          if ( ac.action == 'success' ) {         
-          
-          j('.spin').hide();          
-          p = wtdom.get(img2);
-          wtdom.remove( p.parentNode );          
-          
-          wtfn.save(0);
-          
-          j('#optinrev_added_images').load('admin-ajax.php', {action : 'optinrev_action', optinrev_added_images : wtpage});
-          j('#optinrev_jspopup_images').load('admin-ajax.php', {action : 'optinrev_action', optinrev_jspopup_images : wtpage});          
-          wtfn.msg('Successfully removed.');          
-          is_editing = true;
-                    
-          }         
-          
-        }
-        });
-    }
-  },//remove_img
   inputs_setup: function()
   {
     var wtdom = tinyMCE.activeEditor;
@@ -159,27 +128,7 @@
           }
         });
     }    
-  },//inputs setup
-  delete_image: function( img ) {
-          
-    if (confirm('Do you want to delete?\nIf Ok, This image will deleted all in Optin Popup.'))
-    {           
-        j('.spin').show();
-        j.post('admin-ajax.php', {action : "optinrev_action", optinrev_del_upload : img}, function( res ){        
-        if ( res.length > 0 )
-        {
-          var ac = j.parseJSON( res );
-          if ( ac.action == 'success' ) {
-          j('#optinrev_upload_id').val( 'optinrev_uid_' + ac.btn_count );
-          j('.spin').hide();      
-          j.post('admin-ajax.php', {action : 'optinrev_action', optinrev_del_image_briefcase : img});                    
-          wtfn.msg('Successfully deleted.');
-          }          
-          j('#load_list_img').load('admin-ajax.php', {action : 'optinrev_action', optinrev_load_uploads : 1});
-        }
-        });
-    }
-  },//del upload image
+  },
   input_setenabled: function( id, state ) {
     if (tinyMCE.activeEditor != null) {
         var wtdom = tinyMCE.activeEditor.dom;
@@ -194,75 +143,7 @@
           }
         });
     }
-  },//input set enabled
-  delete_button: function( img ) {      
-    if (confirm('Do you want to delete?\nIf Ok, This button will deleted all in Optin Popup and will set a default button.'))
-    {
-        j('.spin').show();
-        j.post('admin-ajax.php', {action : "optinrev_action", optinrev_del_cupload : img}, function( res ){        
-        if ( res.length > 0 ) {        
-          var ac = j.parseJSON( res );
-          if ( ac.action == 'success' ) {
-          j('#optinrev_upload_id').val( 'optinrev_cuid_' + ac.btn_count );
-          j('.spin').hide();                
-          wtfn.msg('Successfully deleted.');
-          }          
-          j('#load_list_img2').load('admin-ajax.php', {action : 'optinrev_action', optinrev_action_button_uploads : 1}, function(){
-          //set default;
-          j('input[name="action_button_update[]"]').each(function(i,v){ if ( i == 0 ) { j(v).attr('checked', true); }});
-          });
-        }
-        });
-    }
-  },//delete button
-  action_image_view : function(id) {
-    vl = j('#' + id).val().split('|');        
-    j('#action_btn_default').html('<img src="'+ vl[1] +'" border="0">');
-  },
-  action_image_view_hover : function( vl ) {
-  j('#action_btn_view').html('<img src="'+ vl +'" border="0">');
-  },
-  add_image_view : function(id) {
-  vl = j('#'+id).val().split('|');
-  j('#add_image_view').html('<img src="'+ vl[1] +'" border="0">');
-  },
-  add_image_view_hover : function( vl ) {
-  vl = vl.split('|');
-  j('#add_image_view').html('<img src="'+ vl[1] +'" border="0">');
-  },    
-  add_action_image : function(id) {
-    var wtdom = tinyMCE.activeEditor.dom, mn = wtdom.get('simplemodal-container'), mn_w = jQuery(mn).width();
-    if ( j('#' + id).val().length > 0 ) {        
-    if ( img = wtdom.get('wm') ) {
-    
-        vl = j('#' + id).val().split('|');
-        
-        j('#action_btn_default').html('<img src="'+ vl[1] +'" border="0">');
-    
-        j('#optinrev_call_action_button').val( j('#' + id + ' option:selected').text() );
-        wtdom.replace( wtdom.create('img', {id : 'wm', 'src' : vl[1], 'border' : 0}, null), img );
-        
-        //prev gap        
-        crnb = wtdom.get('wm');
-        pcrnb = crnb.parentNode;
-        bgp = mn_w - jQuery(crnb).width();
-        
-        wtdom.setStyle( pcrnb, 'left', (bgp - 20) );
-        
-        wtfn.msg('Done updated action button.');        
-    }
-    }      
-  },//action button
-  jspopup: function( n, s )
-  {
-    j.post('admin-ajax.php', {action : 'optinrev_action', optinrev_jspopup : n, show : s }, function( res ){
-    if ( res === 'success' ) {
-    j('#optinrev_jspopup_images').load('admin-ajax.php', {action : 'optinrev_action', optinrev_jspopup_images : 'show'});
-    wtfn.msg( 'JS Popup ' + (( s == 'enabled' ) ? 'enabled' : 'disabled')  );
-    }
-    });  
-  }, //js popup
-   
+  },//input set enabled   
   mail_provider_save: function( provider ) {    
     if ( provider )
     {       
@@ -1477,7 +1358,7 @@ jQuery(document).ready( function($) {
           deco = ( typeof $('#optinrev_link_underline').attr('checked') != 'undefined' ) ? 'underline !important' : 'none !important';          
           $('a', mn).each(function(i,v){
               if ( v.id != 'poweredby' ) {                            
-              $( v, mn ).attr('style', 'color : '+ $('#optinrev_link_color').val() + ';text-decoration : '+ deco );              
+              $( v, mn ).attr('style', 'color : '+ $('#optinrev_link_color').val() + ';text-decoration : '+ deco );                            
               }
           });
           tinyMCE.activeEditor.isNotDirty = 0;

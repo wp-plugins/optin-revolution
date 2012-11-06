@@ -76,6 +76,10 @@ Integrates with the WordPress Media Library to allow importing images and button
 
 == Changelog ==
 
+= 1.0.6.1 =
+
+* Bug Fix: Popup css anchor.
+
 = 1.0.6 =
 
 * Bug Fix: Deactivating and re-activating the plugin settings will not removed.

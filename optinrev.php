@@ -1,7 +1,7 @@
 <?php
 /**
  * @package Optin Revolution
- * @version 1.0
+ * @version 1.0.6
  */
 
 /*
@@ -9,7 +9,7 @@
   Plugin URI: http://wordpress.org/extend/plugins/optin-revolution/
   Description: Optin Revolution is a WordPress popup plugin is quite possibly the best way in the world for you to create supercharged unblockable popups to grow your list of subscribers! To get started: 1) Click the "Activate" link to the left of this description, 2) Go to your Optin Revolution settings page, and 3) Watch the video on the settings page which will show you how to get started creating your cool popups.
   Author: Optin Revolution
-  Version: 1.0.6
+  Version: 1.0.6.1
   Author URI: http://optinrevolution.com/
   License: GPL2+
 */
@@ -34,7 +34,7 @@ $wp_version;
 //init
 $plugin_name = 'optin-revolution/optinrev.php';
 $optinrev_db_version = '1.0';
-$optinrev_installed_version = '1.0.6';
+$optinrev_installed_version = '1.0.6.1';
 
 function optinrev_admin_actions()
 {

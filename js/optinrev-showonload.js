@@ -15,7 +15,6 @@ $.modal( c, {closeClass: optinrev_close_button_class, position: [ optinrev_top_m
             //mailchimp
             if ( $(v).attr('name') == 'mcid' ) { $(v).attr('name', 'id'); }            
             if ( $(v).attr('name') == 'mcu' ) { $(v).attr('name', 'u'); }
-
             if ( $(v).attr('name') == 'mcaction' ) {
                 action_url = $(v).val().replace( /(http:\/\/)/ig, '' );                
                 $(v).remove();

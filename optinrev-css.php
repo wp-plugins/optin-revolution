@@ -104,10 +104,11 @@ $lnk_under = ( $optin['optinrev_link_underline'] == 'on' ) ? 'underline' : 'none
 
 $lnk_color = ( isset($optin['optinrev_link_color']) ) ? $optin['optinrev_link_color'] : '';
 
-$mcebody = ( !$is_view ) ? '#tinymce {overflow:hidden !important;} .mceContentBody a:link, a:visited, a:hover, a:active {color:'.$lnk_color.';text-decoration:'.$lnk_under.' !important;' : '';
+$mcebody = ( !$is_view ) ? '#tinymce {overflow:hidden !important;} #tinymce a:link, #tinymce a:visited, #tinymce a:hover, #tinymce a:active {color:'.$lnk_color.';text-decoration:'.$lnk_under.';}' : '';
 
 //Close button
 $active_close_button = '#simplemodal-container .close1 {background:url('.$dir.'images/close1b.png) no-repeat; width:39px; height:39px;'.$close_btn.'display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}';
+if ( $is_view ) {
 if ( isset( $optin['optinrev_close_popup_image'] ) && $sbtn = $optin['optinrev_close_popup_image'] ) {
     switch( $sbtn ) {
     case 'close1':
@@ -135,6 +136,15 @@ if ( isset( $optin['optinrev_close_popup_image'] ) && $sbtn = $optin['optinrev_c
     $active_close_button = '#simplemodal-container .close8 {background:url('.$dir.'images/btn2.png) no-repeat; width:263px; height:47px;'.$close_btn.'display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}';    
     break;            
     }   
+}} else {
+$active_close_button = <<<CLOSE_BTN
+#simplemodal-container .close1 {background:url({$dir}images/close1b.png) no-repeat; width:39px; height:39px;{$close_btn}display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}
+#simplemodal-container .close2 {background:url({$dir}images/close2b.png) no-repeat; width:52px; height:52px;{$close_btn}display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}
+#simplemodal-container .close3 {background:url({$dir}images/close3b.png) no-repeat; width:62px; height:62px;{$close_btn}display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}
+#simplemodal-container .close4 {background:url({$dir}images/close1r.png) no-repeat; width:39px; height:39px;{$close_btn}display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}
+#simplemodal-container .close5 {background:url({$dir}images/close2r.png) no-repeat; width:52px; height:52px;{$close_btn}display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}
+#simplemodal-container .close6 {background:url({$dir}images/close3r.png) no-repeat; width:62px; height:62px;{$close_btn}display:inline; z-index:3200; position:absolute;cursor:pointer;text-decoration:none;}
+CLOSE_BTN;
 }
 
 ob_start();
@@ -148,7 +158,10 @@ $modal = <<<LOAD_CSS
 #simplemodal-overlay {background-color:{$optin['optinrev_wbg_color']};z-index: 9999 !important;}
 #simplemodal-container {position:absolute;{$top_margin}height:{$optin['optinrev_hheight']}px;width:{$optin['optinrev_wwidth']}px;background-color:{$optin['optinrev_pwbg_color']};border:{$optin['optinrev_border_thickness']}px solid {$border_color};-moz-border-radius: {$optin['optinrev_border_radius']}px;-webkit-border-radius: {$optin['optinrev_border_radius']}px;border-radius: {$optin['optinrev_border_radius']}px;-khtml-border-radius:{$optin['optinrev_border_radius']}px;{$htc}z-index: 9999 !important;}
 #simplemodal-container img {padding:0px;border:none;-webkit-appearance: none;-webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}
-#simplemodal-container .simplemodal-data a:link, a:visited, a:hover a:active {color:{$lnk_color};text-decoration:{$lnk_under};}  
+#simplemodal-container .simplemodal-data a:link, 
+#simplemodal-container .simplemodal-data a:visited, 
+#simplemodal-container .simplemodal-data a:hover 
+#simplemodal-container .simplemodal-data a:active {color:{$lnk_color};text-decoration:{$lnk_under};}  
 #simplemodal-container .simplemodal-data span {line-height:110% !important;margin:0px !important;padding:0px !important;}
 #simplemodal-container .simplemodal-data ul {padding:0px;margin:0px;}
 #simplemodal-container .simplemodal-data ul li {list-style: disc inside !important;{$li_padding}}
