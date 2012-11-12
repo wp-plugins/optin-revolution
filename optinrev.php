@@ -1,7 +1,7 @@
 <?php
 /**
  * @package Optin Revolution
- * @version 1.0.6
+ * @version 1.0.7
  */
 
 /*
@@ -9,7 +9,7 @@
   Plugin URI: http://wordpress.org/extend/plugins/optin-revolution/
   Description: Optin Revolution is a WordPress popup plugin is quite possibly the best way in the world for you to create supercharged unblockable popups to grow your list of subscribers! To get started: 1) Click the "Activate" link to the left of this description, 2) Go to your Optin Revolution settings page, and 3) Watch the video on the settings page which will show you how to get started creating your cool popups.
   Author: Optin Revolution
-  Version: 1.0.6.1
+  Version: 1.0.7
   Author URI: http://optinrevolution.com/
   License: GPL2+
 */
@@ -34,7 +34,7 @@ $wp_version;
 //init
 $plugin_name = 'optin-revolution/optinrev.php';
 $optinrev_db_version = '1.0';
-$optinrev_installed_version = '1.0.6.1';
+$optinrev_installed_version = '1.0.7';
 
 function optinrev_admin_actions()
 {
@@ -59,7 +59,7 @@ function optinrev_plugin_admin_init()
   if ( isset($_GET['cookies']) && $cls_cookies = esc_html( $_GET['cookies'] ) ) {
       if ( $cls_cookies === 'clear' ) {            
           foreach ( $_COOKIE as $key => $value ) {
-              setcookie( $key, $value, time() - 3600, COOKIEPATH, COOKIE_DOMAIN, false );
+              @setcookie( $key, $value, time() - 3600, COOKIEPATH, COOKIE_DOMAIN, false );
           }
           update_option('optinrev_cookies', 'cleaned');
           wp_redirect( 'admin.php?page=optin' ); exit;
@@ -79,6 +79,11 @@ function optinrev_plugin_admin_init()
   //enabled
   if (isset( $_GET['enable'] )) {
   optinrev_update('optinrev_popup_enabled', 'true');
+  wp_redirect( 'admin.php?page='. $plugin_page ); exit;
+  }
+  
+  if (isset( $_GET['media_notice'] )) {
+  optinrev_update('optinrev_media_notice', 'true');
   wp_redirect( 'admin.php?page='. $plugin_page ); exit;
   }
   
@@ -156,7 +161,7 @@ add_action( 'admin_init', 'optinrev_plugin_admin_init' );
  
 function optinrev_transient_update_plugins($transient)  
 {       
-    $download_url = 'http://downloads.wordpress.org/plugin/optin-revolution.1.0.5.zip';
+    $download_url = 'http://downloads.wordpress.org/plugin/optin-revolution.1.0.8.zip';
         
     if( optinrev_is_pro_authorized() && !optinrev_is_pro_installed())
     {        
@@ -165,7 +170,7 @@ function optinrev_transient_update_plugins($transient)
         
     $obj = new stdClass();
     $obj->slug = 'optin';  
-    $obj->new_version = '1.0.7';  
+    $obj->new_version = '1.0.8';  
     $obj->url = 'http://optinrevolution.com';
     $obj->package = $download_url;  
     $transient->response[$plugin_name] = $obj;
@@ -212,6 +217,13 @@ function optinrev_pro_get_started_headline()
   
   
   if ( preg_match( '/optin|optin1|optin-pro-settings/', $plugin_page ) ) {
+    
+    if ( !optinrev_get('optinrev_media_notice') ) {
+    ?>
+    <div class="error" style="padding:8px;"><?php echo __('Notice: The image and button uploader has been removed due to problems with folder permissions. You may need to re-add your images and buttons back to the stage. To upload or attach an image/button to the stage use the Wordpress Media Library. <a href="http://www.youtube.com/watch?v=3LMZqiRV-JE&autoplay=1&rel=0" target="_blank">Click here for a video tutorial on adding images and buttons to the stage.</a> <span class="submit"><input type="button" name="hide_media_notice" value="Hide this message" onclick="window.location=\''.$this_uri.'&media_notice=1\'"></span>'); ?></div>
+    <?php
+    }  
+  
     if (version_compare($wp_version, '3.3', '<')) {
     ?>
     <div class="error" style="padding:8px;"><?php echo __('Please update your wordpress in order to use the editor. <a href="update-core.php">Update now.</a>'); ?></div>  
@@ -955,4 +967,6 @@ function optinrev_wphead() {
   }    
   
   function is_optinrev() {if ( isset($_GET['page']) && $page = esc_html($_GET['page']) ){if ( preg_match('/optin/', $page ) ) {return true;}}return false;}
+?>
+age']) ){if ( preg_match('/optin/', $page ) ) {return true;}}return false;}
 ?>

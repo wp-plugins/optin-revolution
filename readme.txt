@@ -76,6 +76,11 @@ Integrates with the WordPress Media Library to allow importing images and button
 
 == Changelog ==
 
+= 1.0.7 =
+
+* Bug Fix: Function wp_editor
+* Bug Fix: Cannot modify header information.
+
 = 1.0.6.1 =
 
 * Bug Fix: Popup css anchor.

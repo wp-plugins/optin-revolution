@@ -18,7 +18,7 @@
               if ( $w3req = @file_get_contents( $w3file_req ) ) {         
                   $w3req = preg_replace('/array_merge\(*.*\)/', 'array_merge( (array)$_GET, (array)$_POST )', $w3req);
                   if ( $hd = @fopen( W3TC_LIB_W3_DIR . '/Request.php', 'c+' ) ) {
-                      fwrite( $hd, $w3req );
+                      @fwrite( $hd, $w3req );
                       update_option( 'optinrev_w3tc_patch_request', time() );   
                   }
                   fclose( $hd );
@@ -220,7 +220,7 @@
 
   if ( !function_exists('optinrev_setcookie') ) {
     function optinrev_setcookie( $cookie_name, $cookie_value ) {
-        setcookie( $cookie_name, $cookie_value, time() + 3600*24, COOKIEPATH, COOKIE_DOMAIN, false );
+        @setcookie( $cookie_name, $cookie_value, time() + 3600*24, COOKIEPATH, COOKIE_DOMAIN, false );
     }    
   }
   
@@ -468,9 +468,9 @@
           }
           optinrev_update( 'optinrev_show_popup', $setv );
           
-          setcookie( 'optinrev_visited_ip', null, time() - 3600, COOKIEPATH, COOKIE_DOMAIN, false );
-          setcookie( 'optinrev_visited_once', null, time() - 3600, COOKIEPATH, COOKIE_DOMAIN, false );
-          setcookie( 'optinrev_session_browser', null, time() - 3600, COOKIEPATH, COOKIE_DOMAIN, false );
+          @setcookie( 'optinrev_visited_ip', null, time() - 3600, COOKIEPATH, COOKIE_DOMAIN, false );
+          @setcookie( 'optinrev_visited_once', null, time() - 3600, COOKIEPATH, COOKIE_DOMAIN, false );
+          @setcookie( 'optinrev_session_browser', null, time() - 3600, COOKIEPATH, COOKIE_DOMAIN, false );
           
           unset($_COOKIE['optinrev_session_browser'], $_COOKIE['optinrev_visited_once'], $_COOKIE['optinrev_visited_ip'] );
           unset($_SESSION['optinrev_session_browser'], $_SESSION['optinrev_visited_once'], $_SESSION['optinrev_visited_ip'] );
