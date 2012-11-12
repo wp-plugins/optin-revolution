@@ -220,7 +220,7 @@ function optinrev_pro_get_started_headline()
     
     if ( !optinrev_get('optinrev_media_notice') ) {
     ?>
-    <div class="error" style="padding:8px;"><?php echo __('Notice: The image and button uploader has been removed due to problems with folder permissions. You may need to re-add your images and buttons back to the stage. To upload or attach an image/button to the stage use the Wordpress Media Library. <a href="http://www.youtube.com/watch?v=3LMZqiRV-JE&autoplay=1&rel=0" target="_blank">Click here for a video tutorial on adding images and buttons to the stage.</a> <span class="submit"><input type="button" name="hide_media_notice" value="Hide this message" onclick="window.location=\''.$this_uri.'&media_notice=1\'"></span>'); ?></div>
+    <div class="error" style="padding:8px;"><?php echo __('Notice: To upload or attach an image/button to the stage use the Wordpress Media Library. <a href="http://www.youtube.com/watch?v=3LMZqiRV-JE&autoplay=1&rel=0" target="_blank">Click here for a video tutorial on adding images and buttons to the stage.</a> <span class="submit"><input type="button" name="hide_media_notice" value="Hide this message" onclick="window.location=\''.$this_uri.'&media_notice=1\'"></span>'); ?></div>
     <?php
     }  
   
