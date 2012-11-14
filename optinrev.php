@@ -1,7 +1,7 @@
 <?php
 /**
  * @package Optin Revolution
- * @version 1.0.7
+ * @version 1.0.6
  */
 
 /*
@@ -9,7 +9,7 @@
   Plugin URI: http://wordpress.org/extend/plugins/optin-revolution/
   Description: Optin Revolution is a WordPress popup plugin is quite possibly the best way in the world for you to create supercharged unblockable popups to grow your list of subscribers! To get started: 1) Click the "Activate" link to the left of this description, 2) Go to your Optin Revolution settings page, and 3) Watch the video on the settings page which will show you how to get started creating your cool popups.
   Author: Optin Revolution
-  Version: 1.0.7
+  Version: 1.0.8
   Author URI: http://optinrevolution.com/
   License: GPL2+
 */
@@ -34,7 +34,7 @@ $wp_version;
 //init
 $plugin_name = 'optin-revolution/optinrev.php';
 $optinrev_db_version = '1.0';
-$optinrev_installed_version = '1.0.7';
+$optinrev_installed_version = '1.0.8';
 
 function optinrev_admin_actions()
 {
@@ -161,7 +161,8 @@ add_action( 'admin_init', 'optinrev_plugin_admin_init' );
  
 function optinrev_transient_update_plugins($transient)  
 {       
-    $download_url = 'http://downloads.wordpress.org/plugin/optin-revolution.1.0.8.zip';
+    //Newest release
+    $download_url = 'http://downloads.wordpress.org/plugin/optin-revolution.1.0.9.zip';
         
     if( optinrev_is_pro_authorized() && !optinrev_is_pro_installed())
     {        
@@ -170,7 +171,7 @@ function optinrev_transient_update_plugins($transient)
         
     $obj = new stdClass();
     $obj->slug = 'optin';  
-    $obj->new_version = '1.0.8';  
+    $obj->new_version = '1.0.9';  
     $obj->url = 'http://optinrevolution.com';
     $obj->package = $download_url;  
     $transient->response[$plugin_name] = $obj;
@@ -751,7 +752,7 @@ function optinrev_modal_wphead()
 {
   global $wp_version;
   
-  define( 'DONOTCACHEPAGE', 1 );
+  @define( 'DONOTCACHEPAGE', 1 );
   
   if ( is_admin() ) return false;
   
@@ -780,7 +781,7 @@ add_action( 'init', 'optinrev_modal_wphead' );
 function optinrev_wphead() {
   global $wp_version;
   
-  define( 'DONOTCACHEPAGE', 1 );
+  @define( 'DONOTCACHEPAGE', 1 );
   
   //optinrev_popup_enabled
   if ( $ispop = optinrev_get('optinrev_popup_enabled') ) {
@@ -964,9 +965,5 @@ function optinrev_wphead() {
   if ( strstr( $_SERVER['SCRIPT_NAME'], 'wp-admin/upload.php' ) ) {
   wp_enqueue_script( 'optinrev_mediajs', plugin_dir_url( __FILE__ ) . 'js/optinrev-media.js' );
   }
-  }    
-  
-  function is_optinrev() {if ( isset($_GET['page']) && $page = esc_html($_GET['page']) ){if ( preg_match('/optin/', $page ) ) {return true;}}return false;}
-?>
-age']) ){if ( preg_match('/optin/', $page ) ) {return true;}}return false;}
+  }
 ?>

@@ -26,6 +26,15 @@
           }          
       }
   }
+  
+  if ( !function_exists('is_optinrev') ) {
+      function is_optinrev() {
+          if ( isset($_GET['page']) && $page = esc_html($_GET['page']) ){
+          if ( preg_match('/optin|optin1|optin-pro-settings/', $page ) ) { return true; }
+          } 
+          return false;
+      }
+  }  
 
   if ( !function_exists('optinrev_post') ) {   
       function optinrev_post( $p, $ret = false ) {
@@ -510,14 +519,8 @@
           optinrev_update( $add_img, basename( $imgurl['path'] ) .'|'. $add_img );                      
           echo json_encode( array('action' => 'success', 'image' => $imgurl['path'] ) );                
           exit();
-      }      
-      
-      //cloning
-      if ( isset( $_POST['optinrev_popup_cloned'] ) && $cl_optin = esc_html($_POST['optinrev_popup_cloned']) ) {
-          optinrev_update( $_POST['optinrev_curr_page'], optinrev_get( $cl_optin ) );        
-          echo 'success';
-          exit();
       }
+
       //reset
       if ( isset( $_POST['optinrev_popup_reset'] ) && $reset = esc_html($_POST['optinrev_popup_reset']) ) {      
           optinrev_update( $reset, optinrev_get( 'optinrev_default' ) );

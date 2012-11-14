@@ -1374,35 +1374,7 @@ jQuery(document).ready( function($) {
         $('#action_reset').click();
         return false;
         }
-     });
-     
-     //clone
-     $('#action_clone').click(function(){
-        var wl = $('#optinrev_list').val(), pg = $('#page').val();
-        
-        if ( wl === 'reset' ) return false;
-        
-        if (wl.length == 0)
-        {
-          wtfn.msg('No optin to clone. Please select.');
-          return false;
-        }
-        
-        if ( wl === pg )
-        {
-          wtfn.msg('You cannot clone by itself. Please select other one.');
-          return false;
-        }
-        
-        if (confirm('Are you sure, you want it cloned?')) {
-        $.post('admin-ajax.php', {action : 'optinrev_action', optinrev_popup_cloned : wl, optinrev_curr_page : pg}, function(res){
-          if (res == 'success') {
-          wtfn.msg( wl + ' has been cloned. Please wait. It will reload the page.');
-          setTimeout(function(){ window.location.reload(); }, 1000);    
-          }  
-        });
-        }
-     });
+     });     
      
      //reset
      $('#action_reset').click(function(){        

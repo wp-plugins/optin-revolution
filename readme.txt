@@ -76,6 +76,10 @@ Integrates with the WordPress Media Library to allow importing images and button
 
 == Changelog ==
 
+= 1.0.8 =
+
+* Bug Fix: Warning: Cannot modify header information
+
 = 1.0.7 =
 
 * Bug Fix: Function wp_editor
