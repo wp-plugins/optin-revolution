@@ -175,7 +175,7 @@ $modal = <<<LOAD_CSS
 {$resizable}
 {$mcebody}
 #no_thanks_btn {cursor:pointer;display:none;position:absolute;width: 263px; height: 47px;background: url({$dir}images/no-thanks.png) no-repeat left top;z-index:999999;}
-#poweredby {cursor:pointer;color: {$pwd_color};text-decoration:none;}
+#poweredby {cursor:pointer;color: {$pwd_color} !important;text-decoration:none !important;}
 #poweredby:hover {text-decoration:underline;}
 LOAD_CSS;
 echo optinrev_cssminify($modal);

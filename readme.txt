@@ -1,7 +1,7 @@
 === Optin Revolution: WordPress Popup ===
 Contributors: optinrevolution
 Donate link: http://optinrevolution.com/
-Tags: post, plugin, admin, post, posts, page, pages, email, optin, pop-up, popup, wordpress popup, ,optin popup, administration, stats, statistics, stat, statistic,  affiliate, affiliates, automation, widget, widgets, dashboard, shortcode, sidebar 
+Tags: wordpress popup, optin, pop-up, popup, optin popup, post, plugin, admin, post, posts, page, pages, email, administration, stats, statistics, stat, statistic,  affiliate, affiliates, automation, widget, widgets, dashboard, shortcode, sidebar 
 Requires at least: 3.3
 Tested up to: 3.4
 Stable tag: 1.0.8
@@ -16,9 +16,9 @@ Optin Revolution is a WordPress popup plugin is quite possibly the best way in t
 
 = Optin Revolution Pro =
 
-[Upgrade to Optin Revolution Pro](http://optinrevolution.com "Upgrade to Optin Revolution Pro")
+[Upgrade to Optin Revolution Pro](http://www.optinrevolution.com/?utm_source=wordpress.org&utm_medium=link&utm_campaign=plugin "Upgrade to Optin Revolution Pro")
 
-*Optin Revolution Pro* is a **significant upgrade** to *Optin Revolution* that adds many tools including A/B/C/D/E split testing, analytics that will allows you to track conversion and view statistics on your optin popups plus in-post forms that can be split tested. You can learn more about *Optin Revolution Pro* here: [Optin Revolution Pro](http://optinrevolution.com/ "Optin Revolution Pro")
+*Optin Revolution Pro* is a **significant upgrade** to *Optin Revolution* that adds many tools including A/B/C/D/E WordPress optin popup split testing, A/B/C inline optin split testing, analytics with a conversation pixel that will allows you to track conversion and view statistics on your optin popups plus in-post forms. You can add video to your WordPress optin popups and much, much more cool stuff. You can learn more about *Optin Revolution Pro* here: [Optin Revolution Pro](http://www.optinrevolution.com/?utm_source=wordpress.org&utm_medium=link&utm_campaign=plugin "Optin Revolution Pro")
 
 Check Out the [Optin Revolution for WordPress Video](http://www.youtube.com/watch?v=-SHDzo3bzx4&autoplay=1):
 
@@ -31,6 +31,7 @@ Full list of features:
 * Change images, background, borders, font sizes and types and much, much more.
 * WYSIWYG stage and preview allowing easy customization.
 * Change how often the popup is shown.
+* Enable/Disable the WordPress popup being shown on mobiles.
 * Auto save feature. 
 
 Change the look of your input fields. Support for the following custom variables:
@@ -76,68 +77,74 @@ Integrates with the WordPress Media Library to allow importing images and button
 
 == Changelog ==
 
+= 1.0.9 =
+
+* Feature: Enable / disable to show popup in mobile
+* Bug Fix: Cookie expiry not being set for display frequency
+* Updated: Delete plugin wan't removing database properly
+
 = 1.0.8 =
 
-* Bug Fix: Warning: Cannot modify header information
+* Bug Fix: Warning: Cannot modify header information.
 
 = 1.0.7 =
 
 * Bug Fix: Function wp_editor
-* Bug Fix: Cannot modify header information.
+* Bug Fix: Cannot modify header information
 
 = 1.0.6.1 =
 
-* Bug Fix: Popup css anchor.
+* Bug Fix: Popup css anchor
 
 = 1.0.6 =
 
-* Bug Fix: Deactivating and re-activating the plugin settings will not removed.
-* Bug Fix: Mailchimp, entering the http:// for the action and will removed. 
+* Bug Fix: Deactivating and re-activating the plugin settings will not removed
+* Bug Fix: Mailchimp, entering the http:// for the action and will removed
 * Updated: wp_editor function if not available, the plugin will display a notice to update the wordpress core
 * Updated: Optimizing popup css for loading
 
 = 1.0.5 =
 
-* Bug Fix: Optin popup not showing, issue with Javascript loading sequence.
-* Bug Fix: Blog with W3 Total Cache installed fix error being displayed.
-* Bug Fix: Blog with WP Super Cache installed fix for display frequency of popup not being honored.
-* Bug Fix: Hyperlink in wysiwyg text editor not working.
-* Feature: Added image resizing on the stage.
+* Bug Fix: Optin popup not showing, issue with Javascript loading sequence
+* Bug Fix: Blog with W3 Total Cache installed fix error being displayed
+* Bug Fix: Blog with WP Super Cache installed fix for display frequency of popup not being honored
+* Bug Fix: Hyperlink in wysiwyg text editor not working
+* Feature: Added image resizing on the stage
 * Feature: Auto resizing image imported to stage from media library
-* Updated: Image moving on the stage.
+* Updated: Image moving on the stage
 
 = 1.0.4 =
 
-* Bug Fix: Issue in tinymce.
-* Bug Fix: Outline on move images and text boxes showing on front end.
-* Bug Fix: Issue with display frequency of popup.
-* Bug Fix: Toolbar does not appearing.
-* Bug Fix: Preview button not showing the preview.
+* Bug Fix: Issue in tinymce
+* Bug Fix: Outline on move images and text boxes showing on front end
+* Bug Fix: Issue with display frequency of popup
+* Bug Fix: Toolbar does not appearing
+* Bug Fix: Preview button not showing the preview
 
 = 1.0.3 =
 
-* Bug Fix: Fix for MailChimp not updating on upgrade.
-* Bug Fix: Z-index on input fields not allowing to be brought into the foreground.
-* Updated: Power by url.
-* Updated: minor update to the update functions.
+* Bug Fix: Fix for MailChimp not updating on upgrade
+* Bug Fix: Z-index on input fields not allowing to be brought into the foreground
+* Updated: Power by url
+* Updated: minor update to the update functions
 
 = 1.0.2 =
 
 * Bug Fix: Issue with permission on the optin-revolution/uploads directory, remove image/button uploader integrate with WordPress Image Library to allow importing images and buttons to stage from the WordPress Image Library. [Video tutorial can be Viewed Here](http://www.youtube.com/watch?v=3LMZqiRV-JE&autoplay=1)
-* Bug Fix: Fix for MailChimp not submitting.
-* Feature: Add collapsable menus on optin popup setting page.
-* Feature: Add visibility of the background on the stage.
-* Feature: Add loading icon when loading stage and text box.
-* Updated: Replace email provider logos.
+* Bug Fix: Fix for MailChimp not submitting
+* Feature: Add collapsable menus on optin popup setting page
+* Feature: Add visibility of the background on the stage
+* Feature: Add loading icon when loading stage and text box
+* Updated: Replace email provider logos
 
 = 1.0.1 =
 
-* Bug Fix: Off/On slider enabling and disabling optin popup not functioning properly.
-* Bug Fix: Issue with permission on the optin-revolution/uploads directory on some installs.
+* Bug Fix: Off/On slider enabling and disabling optin popup not functioning properly
+* Bug Fix: Issue with permission on the optin-revolution/uploads directory on some installs
 
 = 1.0 =
 
-* Initial release.
+* Initial release
 
 == Screenshots ==
 

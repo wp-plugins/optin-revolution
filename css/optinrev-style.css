@@ -45,3 +45,9 @@ margin-top: 8px;
 .social-box h2 {font-weight:normal;padding:0px;}
 
 .fform .row label .toggle span {font-weight:normal;padding-left:10px;}
+#is-mobile-tip {float:left;margin: 4px 0 0 10px;font-size: 12px;}
+#optinrev-nag {font-size: 18px; font-weight: bold;margin-bottom: 15px;padding: 10px 0 10px 0;}
+.update-nag .red-text {color:red;}
+.update-nag a {color:#0016ff;}
+
+.popup-option div.rw {padding: 4px 0 4px 0;}
