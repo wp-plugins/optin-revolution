@@ -3,8 +3,8 @@ Contributors: optinrevolution
 Donate link: http://optinrevolution.com/
 Tags: wordpress popup, optin, pop-up, popup, optin popup, post, plugin, admin, post, posts, page, pages, email, administration, stats, statistics, stat, statistic,  affiliate, affiliates, automation, widget, widgets, dashboard, shortcode, sidebar 
 Requires at least: 3.3
-Tested up to: 3.4
-Stable tag: 1.0.9
+Tested up to: 3.5
+Stable tag: 1.1.0
 
 Supercharged WordPress Popup. Quite possibly the best way in the world for you to create unique unblockable popups to grow your list of subscribers!
 
@@ -18,7 +18,6 @@ Optin Revolution is a WordPress popup plugin is quite possibly the best way in t
 [Step-by-step video tutorials](http://optinrevolution.com/tutorials/?utm_source=wordpress.org&utm_medium=link&utm_campaign=plugin "Optin Revolution Lite Tutorial Videos")
 
 Optin Revolution Lite step-by-step video tutorials that can help you on your Optin Revolution Lite journey. Configuring up your main settings, setting up your email software and customizing your cool Optin Revolution Lite popup. Watch the videos by [clicking here](http://optinrevolution.com/tutorials/?utm_source=wordpress.org&utm_medium=link&utm_campaign=plugin "Optin Revolution Lite Tutorial Videos")
-
 
 = Optin Revolution Pro =
 
