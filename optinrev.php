@@ -1,7 +1,7 @@
 <?php
 /**
  * @package Optin Revolution
- * @version 1.0.9
+ * @version 1.1.0
  */
 
 /*
@@ -9,7 +9,7 @@
   Plugin URI: http://wordpress.org/extend/plugins/optin-revolution/
   Description: Optin Revolution is a WordPress popup plugin is quite possibly the best way in the world for you to create supercharged unblockable popups to grow your list of subscribers! To get started: 1) Click the "Activate" link to the left of this description, 2) Go to your Optin Revolution settings page, and 3) Watch the video on the settings page which will show you how to get started creating your cool popups.
   Author: Optin Revolution
-  Version: 1.0.9
+  Version: 1.1.0
   Author URI: http://optinrevolution.com/
   License: GPL2+
 */
@@ -35,18 +35,22 @@ $wp_version;
 //init
 $plugin_name = 'optin-revolution/optinrev.php';
 $optinrev_db_version = '1.0';
-$optinrev_installed_version = '1.0.9';
-$optinrev_newest_version = '1.1.0';
+$optinrev_installed_version = '1.1.0';
+$optinrev_newest_version = '1.1.1';
 
 function optinrev_admin_actions()
 {
   global $submenu;      
-  add_utility_page( _('Optin Revolution'), _('Optin Revolution'), 0, 'optin', 'optinrev_admin' );  
-  add_submenu_page( 'optin', __( 'Optin Popup 1' ), __( 'Optin Popup 1' ), 0, 'optin1', 'optinrev_setup' );  
-  add_submenu_page( 'optin', 'Optin Revolution <code>Pro</code>', 'Optin Revolution <code>Pro</code>', 0, 'optin-pro-settings', 'optinrev_pro' );
-  add_submenu_page( '', __(''), __(''), 0, 'browser-issue', 'optinrev_browser_alert' );
-  //changed name    
-  $submenu['optin'][0][0] = __('Settings');
+  
+  if ( function_exists('current_user_can') && current_user_can('administrator') )
+  {
+    add_utility_page( _('Optin Revolution'), _('Optin Revolution'), 'administrator', 'optinrevolution', 'optinrev_admin' );  
+    add_submenu_page( 'optinrevolution', __( 'Optin Popup 1' ), __( 'Optin Popup 1' ), 'administrator', 'optinrevolution/optin1', 'optinrev_setup' );  
+    add_submenu_page( 'optinrevolution', 'Optin Revolution <code>Pro</code>', 'Optin Revolution <code>Pro</code>', 'administrator', 'optinrevolution/optin-pro-settings', 'optinrev_pro' );
+    add_submenu_page( '', __(''), __(''), 'administrator', 'browser-issue', 'optinrev_browser_alert' );
+    //changed name    
+    $submenu['optin'][0][0] = __('Settings');
+  }
 }
 
 add_action( 'admin_menu', 'optinrev_admin_actions' );
@@ -64,12 +68,12 @@ function optinrev_plugin_admin_init()
               @setcookie( $key, $value, time() - 3600, COOKIEPATH, COOKIE_DOMAIN, false );
           }
           update_option('optinrev_cookies', 'cleaned');
-          wp_redirect( 'admin.php?page=optin' ); exit;
+          wp_redirect( 'admin.php?page=optinrevolution' ); exit;
       }
   }
  
   // Browser Issue Alert
-  if ( $plugin_page !== 'browser-issue' )
+  if ( $plugin_page !== 'optinrevolution/browser-issue' )
   {
       //check ie version
       if ( preg_match( '/(?i)msie [1-7]/',$_SERVER['HTTP_USER_AGENT'] ) )
@@ -90,7 +94,7 @@ function optinrev_plugin_admin_init()
   }
   
   //optin
-  if ( $plugin_page == 'optin' )
+  if ( $plugin_page == 'optinrevolution' )
   {
     //enabled
     if (isset( $_GET['enable'] )) {
@@ -98,7 +102,7 @@ function optinrev_plugin_admin_init()
     }
     optinrev_enqueue(0);
     
-  } else if ( $plugin_page == 'optin1' )
+  } else if ( $plugin_page == 'optinrevolution/optin1' )
   { 
     add_filter( 'wp_default_editor', create_function('', 'return "tinymce";') );
     
@@ -131,7 +135,7 @@ function optinrev_plugin_admin_init()
    if ( !optinrev_get( 'optinrev_default' ) ) {
         $default_optin = array(
             'action' => 'optinrev_action',
-            'save_setup_settings' => 'optin1',
+            'save_setup_settings' => 'optinrevolution/optin1',
             'optinrev_data' => '<div style="position: absolute; left: 29px; top: 8px; z-index: 1; text-align: center; width: 90%;border: 1px solid transparent;"><span><span style="font-family: impact, chicago; font-size: 30pt; color: #ff0000;" data-mce-style="font-family: impact, chicago; font-size: 30pt; color: #ff0000;">DISCOVER HOW I INCREASED MY OPTIN RATE BY 500% IN 5 MINS!</span><br></span></div><div style="position: absolute; left: 285px; top: 325px;border: 1px solid transparent;"><img id="wm" src="'.$dir.'assets/get_access2.png" alt="" border="0"></div><div style="position: absolute; left: 1px; top: 104px; z-index: 1; width: 100%; text-align: center;border: 1px solid transparent;"><span style="font-size: 14pt; background-color: #ffff99;" data-mce-style="font-size: 14pt; background-color: #ffff99;"><strong><span style="font-family: tahoma, arial, helvetica, sans-serif;" data-mce-style="font-family: tahoma, arial, helvetica, sans-serif;">Enter your email address to get your <span style="text-decoration: underline;" data-mce-style="text-decoration: underline;">FREE</span> video!</span></strong></span></div><div style="position: absolute; left: 0px; top: 148px;border: 1px solid transparent;"><img id="optinrev_uid_28" src="'.$dir.'assets/optin-box.png" alt="" border="0"></div><div style="position: absolute; left: 317px; top: 142px;border: 1px solid transparent;"><img id="optinrev_uid_33" src="'.$dir.'assets/arrow-animated.gif" alt="" border="0"></div><br><a id="poweredby" data-mce-href="http://goo.gl/U6GWY" href="http://goo.gl/U6GWY" target="_new" style="position: absolute; left: 220px; top: 430px; ">Powered by : Optin Revolution</a><form method="post" id="mce_getaccessed" action="http://www.aweber.com/scripts/addlead.pl" target="_blank"><div style="display:none;"><input type="hidden" name="listname" value="optinrev_plug"><input type="hidden" name="meta_web_form_id" value="258192310"><input type="hidden" name="meta_message" value="1"><input type="hidden" name="meta_adtracking" value="wordpress_plugin"><input type="hidden" name="redirect" value="http://www.aweber.com/thankyou-coi.htm?m=audio"></div><div style="position:absolute; left: 0px; top: 0px;border: 1px solid transparent;display:none;"><input type="text" name="name" id="name" value="Enter Your Name..." style="font-size:20px !important;color:#000000 !important;height:50px !important;width:240px !important;background-color:#FFFFCC !important;border:5px solid #666666 !important;"></div><div style="position:absolute; left: 302px; top: 259px;border: 1px solid transparent;"><input type="text" name="email" id="email" value="Enter Your Email..." style="font-size:20px !important;color:#000000 !important;height:50px !important;width:240px !important;background-color:#FFFFCC !important;border:5px solid #666666 !important;"></div><span style="display:none;"><img src="http://forms.aweber.com/form/displays.htm?id=TKwcjJxMzIwM"></span></form>',
             'optinrev_close_button' => 'left:592px;top:37px;',
             'optinrev_close_button_class' => 'close2',
@@ -148,7 +152,7 @@ function optinrev_plugin_admin_init()
   // mail providers   
   optinrev_mail_providers();
     
-  } else if ( $plugin_page == 'optin-pro-settings' ) {
+  } else if ( $plugin_page == 'optinrevolution/optin-pro-settings' ) {
   optinrev_enqueue(2);
   }
   optinrev_update( 'optinrev_poweredby', 'true' );
@@ -184,7 +188,7 @@ add_filter('pre_set_site_transient_update_plugins', 'optinrev_transient_update_p
 
 function check_info( $false, $action, $arg )  
 {  
-    if ($arg->slug === 'optin' ) {    
+    if ($arg->slug === 'optinrevolution' ) {    
         $request = wp_remote_post('http://api.wordpress.org/plugins/info/1.0/', array( 'timeout' => 15, 'body' => array( 'action' => 'info' )) );          
         if (!is_wp_error($request) || wp_remote_retrieve_response_code($request) === 200) {            
             return unserialize($request['body']);  
@@ -219,15 +223,13 @@ function optinrev_pro_get_started_headline()
   if(isset($_GET['action']) && $_GET['action'] == 'upgrade-plugin')
   return;  
   
-  if ( preg_match( '/optin|optin1|optin-pro-settings/', $plugin_page ) ) {
-  
-    if ( preg_match( '/optin|optin1|optin-pro-settings/', $plugin_page ) ) {
-    echo __('<div class="update-nag" id="optinrev-nag"><span class="red-text">Help Keep Me Free.</span> <a href="http://wordpress.org/support/view/plugin-reviews/optin-revolution?filter=5" target="_new">Hey Guys Click Here and Rate Optin Revolution Lite!</a></div>');
-    }
+  if (  in_array( $plugin_page, array('optinrevolution', 'optinrevolution/optin1', 'optinrevolution/optin-pro-settings') ) ) {
+          
+    echo __('<div class="update-nag" id="optinrev-nag"><span class="red-text">Help Keep Me Free.</span> <a href="http://wordpress.org/support/view/plugin-reviews/optin-revolution?filter=5" target="_new">Hey Guys Click Here and Rate Optin Revolution Lite!</a></div>');    
   
     if ( !optinrev_get('optinrev_media_notice') ) {
     ?>
-    <div class="error" style="padding:8px;"><?php echo __('Notice: The image and button uploader has been removed due to problems with folder permissions. You may need to re-add your images and buttons back to the stage. To upload or attach an image/button to the stage use the Wordpress Media Library. <a href="http://www.youtube.com/watch?v=3LMZqiRV-JE&autoplay=1&rel=0" target="_blank">Click here for a video tutorial on adding images and buttons to the stage.</a> <span class="submit"><input type="button" name="hide_media_notice" value="Hide this message" onclick="window.location=\''.$this_uri.'&media_notice=1\'"></span>'); ?></div>
+    <div class="error" style="padding:8px;"><?php echo __('LIVE: Optin Revolution Lite <a href="http://optinrevolution.com/tutorials/?utm_source=plugin&utm_medium=link&utm_campaign=message" target="_blank">step-by-step video tutorials</a> that can help you on your Optin Revolution Lite journey. Configuring up your main settings, setting up your email software and customizing your cool Optin Revolution Lite popup. <a href="http://optinrevolution.com/tutorials/?utm_source=plugin&utm_medium=link&utm_campaign=message" target="_blank">Click here for your video tutorials.</a> <span class="submit"><input type="button" name="hide_media_notice" value="Hide this message" onclick="window.location=\''.$this_uri.'&media_notice=1\'"></span>'); ?></div>
     <?php
     }  
   
@@ -349,7 +351,7 @@ function optinrev_js()
     
   $ht = '';
   //setting page
-  if ( $plugin_page == 'optin' )
+  if ( $plugin_page == 'optinrevolution' )
   {           
   $ht .= '$("#optinrev_popup_enabled").iButton({change: function($input){$(\'#_disopt\').hide();$.post("admin-ajax.php", {action : "optinrev_action", "optinrev_popup_enabled" : $input.is(":checked")}, function(res){wtfn.msg(\'Successfully Updated.\');});}});';
   ?>
@@ -358,8 +360,8 @@ function optinrev_js()
   jQuery(document).ready(function($){<?php echo $ht;?>});
   </script>  
   <?php }
-  else if ( $plugin_page == 'optin1' ) { include_once(  plugin_dir_path( __FILE__ ) . 'js/optinrev-js.php'); echo '<script type="text/javascript" src="'.$dir.'js/optinrev.js?ver='.$wp_version.'"></script>'; }
-  else if ( $plugin_page == 'optin-pro-settings' ) { echo '<script type="text/javascript" src="'.$dir.'js/optinrev-pro-setting.js?ver='. $wp_version .'"></script>'; }
+  else if ( $plugin_page == 'optinrevolution/optin1' ) { include_once(  plugin_dir_path( __FILE__ ) . 'js/optinrev-js.php'); echo '<script type="text/javascript" src="'.$dir.'js/optinrev.js?ver='.$wp_version.'"></script>'; }
+  else if ( $plugin_page == 'optinrevolution/optin-pro-settings' ) { echo '<script type="text/javascript" src="'.$dir.'js/optinrev-pro-setting.js?ver='. $wp_version .'"></script>'; }
 }//jsload
 
 if (is_optinrev())
@@ -445,7 +447,8 @@ function optinrev_admin()
   $is_poweredby = optinrev_get('optinrev_poweredby');
     
   //if show
-  $wshow = explode( '|', $optinrev_show_popup );
+  $wshow = explode( '|', $optinrev_show_popup );  
+  $ispop = optinrev_get('optinrev_optinrevolution/optin1_enabled');
   
   $r = 1;
 ?>
@@ -485,12 +488,9 @@ function optinrev_admin()
         <div class="clear"></div>
     </div>    
     <div class="row" id="save_showset"><label>&nbsp;</label><span class="submit"><input type="button" name="optinrev_save_showset" id="optinrev_save_showset" value="Save"/></span></div>
-    <br />
-        <?php foreach( $optin as $ok => $ov ) {
-        $ispop = ( optinrev_get('optinrev_'. $ok .'_enabled') == 'true' ) ? true : false;
-        ?>
-        <div><label class="lbladmin"><?php _e('Optin Revolution Popup '. $r); ?></label><div class="fbox"><input type="checkbox" name="optinrev_<?php echo $ok;?>_enabled" id="optinrev_<?php echo $ok;?>_enabled" <?php echo ($ispop) ? 'checked="checked"': '';?>/></div><div class="clear"></div></div><br />    
-        <?php $r++;}?>
+    <br />        
+    <div><label class="lbladmin"><?php _e('Optin Revolution Popup 1'); ?></label><div class="fbox"><input type="checkbox" name="optinrev_optin1_enabled" id="optinrev_optin1_enabled" <?php echo ( $ispop ) ? 'checked="checked"': '';?>/></div><div class="clear"></div></div><br />  
+        
     <div class="row"><label><?php _e('Cookies'); ?></label><span class="submit"><input type="button" name="optinrev_clean_cookies" value="Clear Cookies" onclick="admin.cookies();"/></span></div>                 
   </form>
   <script type="text/javascript" src="<?php echo $dir;?>js/optinrev-admin-setting.js?ver=<?php echo $wp_version;?>"></script>
@@ -507,14 +507,6 @@ function optinrev_admin()
   <h2>Be Social, Share Me!</h2>  
   <?php optinrev_socials();?>
   <div class="clear"></div>
-  </div>
-  
-  <div class="spread-the-word-box">
-  <h2>Spread the Word!</h2>
-  <p>Want to help make this plugin even better? All donations are used to improve this plugin, so donate $5, $10 or $20 now!</p>
-  <p>
-  <?php optinrev_paypal_donate(); ?>
-  </p>
   </div>
 </div>
 <div class='clear'></div>
@@ -736,11 +728,6 @@ function optinrev_setup() {
   <h2>Be Social, Share Me!</h2>  
   <?php optinrev_socials();?>
   <div class="clear"></div>
-  </div>  
-  <div class="spread-the-word-box">
-  <h2>Spread the Word!</h2>
-  <p>Want to help make this plugin even better? All donations are used to improve this plugin, so donate $5, $10 or $20 now!</p>
-  <p><?php optinrev_paypal_donate(); ?></p>
   </div>
 </div>
 <div class='clear'></div>
@@ -787,9 +774,9 @@ function optinrev_modal_wphead()
   return false;
   
   if ( !optinrev_getbool( 'optinrev_popup_enabled' ) ) return false;
-  if ( !optinrev_getbool( 'optinrev_optin1_enabled' ) ) return false;
+  if ( !optinrev_getbool( 'optinrev_optinrevolution/optin1_enabled' ) ) return false;
     
-  $optin = optinrev_get( 'optin1' );  
+  $optin = optinrev_get( 'optinrevolution/optin1' );  
   if ( empty($optin) ) return;  
   
   wp_enqueue_style( 'optinrev-mcss-' . time(), plugin_dir_url( __FILE__ ) . 'optinrev-css.php?view='. md5(time()) );      
@@ -872,10 +859,10 @@ function optinrev_wphead() {
   $optin_id = 1;
   
   //is popup enabled
-  if ( !optinrev_getbool( 'optinrev_optin1_enabled' ) ) return false;
+  if ( !optinrev_getbool( 'optinrev_optinrevolution/optin1_enabled' ) ) return false;
   
   //optin popup
-  $optin = optinrev_get( 'optin' . $optin_id );
+  $optin = optinrev_get( 'optinrevolution/optin' . $optin_id );
   
   if ( empty($optin) ) return;
   
@@ -885,7 +872,7 @@ function optinrev_wphead() {
   $content = str_replace("'", "", stripcslashes( $optin['optinrev_data'] ));
   $modal_delay = $optin['optinrev_delay'];
   
-  $tshow = $optinrev_play;  
+  $tshow = $optinrev_play;
     
   echo '<script type="text/javascript">var ms = "", el = document.createElement(\'div\'), ch = jQuery(window).height(), exh = 30, c = jQuery(el).html(\''. preg_replace('/\s+/', ' ', $content ). '\'), tshow = '.$tshow.', isvalid = '.((isset($optin['validate']))?json_encode($optin['validate']):'{}').', mail_form_name = \''.$optin['optinrev_email_form_opt'].'\',optinrev_close_button_class = \''. $optin['optinrev_close_button_class'].'\', optinrev_top_margin = '.$optin['optinrev_top_margin'].',optinrev_wbg_opacity = '.$optin['optinrev_wbg_opacity'].', modal_delay = '.$modal_delay.',box_delay = box_started = 0;</script>';  
 }
@@ -903,18 +890,19 @@ function optinrev_wphead() {
   	  return $wp;
   	}
   }
-  
-  if (is_optinrev())
+    
+  if ( is_optinrev() )
   add_filter( 'mce_css', 'tdav_css' );
   
   //TINYMCE
   function optinrev_mce_before_init( $in )
   {
    $in['theme']= "advanced";
-   $in['mode'] = "textareas"; 
-   $in['cleanup'] = false;
+   $in['elements'] = "optinrev_excerpt";
+   $in['mode'] = "exact"; 
+   $in['cleanup'] = true;
    $in['plugins'] = 'textedit,inlinepopups,layer,textbox,input_align,ifdragedit,object_align';
-   $in['wpautop'] = false;
+   $in['wpautop'] = true;
    $in['apply_source_formatting']=false;
    $in['theme_advanced_buttons1']='textedit,|,moveforward,movebackward,|,textbox,lineheight,|,input_align_left,input_align_top,|,object_align_top,object_align_bottom,object_align_center,object_align_left,object_align_right,|,undo,redo,ifdragedit';
    $in['theme_advanced_buttons2']='';
@@ -980,6 +968,20 @@ function optinrev_wphead() {
     $is_stage_image = (optinrev_has_optinmedia( $id, 'stage_img')) ? 'checked="true"' : '';
     
     echo '<div style="padding:8px;"><div style="padding-bottom:6px;"><input type="checkbox" name="'.$ac_id.'" id="'.$ac_id.'" '.$is_action_button.' onchange="wtfnm.action_update_button(\''.$ac_id.'\',\''.$imgurl['path'].'\');"/>&nbsp;<a href="javascript:;" title="Changed action button in the stage." onclick="jQuery(\'#'.$ac_id.'\').prop(\'checked\', !(jQuery(\'#'.$ac_id.'\').is(\':checked\')));wtfnm.action_update_button(\''.$ac_id.'\',\''.$imgurl['path'].'\');">Action Button</a>&nbsp;<span id="'.$ac_id.'_msg" class="optrmsg"></span></div>
+          <div><input type="checkbox" name="'.$stg_id.'" id="'.$stg_id.'" '.$is_stage_image.' onchange="wtfnm.action_add_image(\''.$stg_id.'\');"/>&nbsp;<a href="javascript:;" title="Attach this image in the stage." onclick="jQuery(\'#'.$stg_id.'\').prop(\'checked\', !(jQuery(\'#'.$stg_id.'\').is(\':checked\')));wtfnm.action_add_image(\''.$stg_id.'\');">Attach to Stage&nbsp;<span id="'.$stg_id.'_msg" class="optrmsg"></span></div></div>';  
+  	break;
+  	default:
+  	break;
+  	}   
+  }
+	add_action('manage_media_custom_column', 'optinrev_manage_attachment_media_column', 10, 2);
+  
+  if ( is_admin() ) {  
+  if ( strstr( $_SERVER['SCRIPT_NAME'], 'wp-admin/upload.php' ) ) {
+  wp_enqueue_script( 'optinrev_mediajs', plugin_dir_url( __FILE__ ) . 'js/optinrev-media.js' );
+  }
+  }
+?>button in the stage." onclick="jQuery(\'#'.$ac_id.'\').prop(\'checked\', !(jQuery(\'#'.$ac_id.'\').is(\':checked\')));wtfnm.action_update_button(\''.$ac_id.'\',\''.$imgurl['path'].'\');">Action Button</a>&nbsp;<span id="'.$ac_id.'_msg" class="optrmsg"></span></div>
           <div><input type="checkbox" name="'.$stg_id.'" id="'.$stg_id.'" '.$is_stage_image.' onchange="wtfnm.action_add_image(\''.$stg_id.'\');"/>&nbsp;<a href="javascript:;" title="Attach this image in the stage." onclick="jQuery(\'#'.$stg_id.'\').prop(\'checked\', !(jQuery(\'#'.$stg_id.'\').is(\':checked\')));wtfnm.action_add_image(\''.$stg_id.'\');">Attach to Stage&nbsp;<span id="'.$stg_id.'_msg" class="optrmsg"></span></div></div>';  
   	break;
   	default:

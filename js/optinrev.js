@@ -99,7 +99,7 @@
    
    border_radius = '-moz-border-radius: '+ j('#optinrev_border_radius').val() +'px;-webkit-border-radius: '+ j('#optinrev_border_radius').val() +'px;border-radius: '+ j('#optinrev_border_radius').val() +'px;';      
    border_opacity = (parseFloat(j('#optinrev_border_opacity').val()) / 100);
-   modstyle = 'width:'+ j('#optinrev_vwidth').val() + 'px;height:' + j('#optinrev_vheight').val() + 'px;border:' + j('#optinrev_vborder_thickness').val() + 'px solid rgba(' + wtfn.rgb(j('input[name="optinrev_border_color"]').val()) + ','+ border_opacity +');background-color:' + j('input[name="optinrev_pwbg_color"]').val() + ';' + border_radius + 'border:' + j('#optinrev_vborder_thickness').val() + 'px solid rgb(' + wtfn.rgb(j('input[name="optinrev_border_color"]').val()) +')';
+   modstyle = 'width:'+ j('#optinrev_vwidth').val() + 'px;height:' + j('#optinrev_vheight').val() + 'px;border:' + j('#optinrev_vborder_thickness').val() + 'px solid rgba(' + wtfn.rgb(j('input[name="optinrev_border_color"]').val()) + ','+ border_opacity +');background-color:' + j('input[name="optinrev_pwbg_color"]').val() + ';' + border_radius;
    //heigh onresize
    j('#' + tinyMCE.activeEditor.id + '_ifr').height( parseInt(j('#optinrev_vheight').val()) + 100 );      
    wtdom.setAttrib(wtdom.get('simplemodal-container'),'style', modstyle);
@@ -532,7 +532,8 @@
      
      if ( ed.getContent().length == 0 ) { wtfn.set_optin_default(0); }
      //init
-     wtfn.mce_toolbar( wtfn.is_dragging() );     
+     wtfn.mce_toolbar( wtfn.is_dragging() );         
+          
      //main marker
      if ( typeof bwn === 'undefined' || bwn === null ) return false;
      if ( tinymce.isIE )
@@ -999,14 +1000,14 @@
   //add image to the canvas
   action_add_image: function( img ) {  
    if ( confirm('Are you sure, you want to insert this image in Optin Popup 1 ?') ) {   
-   jQuery.post('admin-ajax.php', {action : 'optinrev_action', optinrev_add_image_briefcase : img, optinrev_curr_page : 'optin1'}, function(){wtfn.msg( 'Successfully added.' );});
+   jQuery.post('admin-ajax.php', {action : 'optinrev_action', optinrev_add_image_briefcase : img, optinrev_curr_page : 'optinrevolution/optin1'}, function(){wtfn.msg( 'Successfully added.' );});
    }
    return false; 
   },
   //delete image to the canvas
   action_del_image: function( img ) {     
    if ( confirm('Are you sure, you want to delete this image ?') ) {
-   jQuery.post('admin-ajax.php', {action : 'optinrev_action', optinrev_del_image_briefcase : img, optinrev_curr_page : 'optin1'}, function(){wtfn.msg( 'Successfully deleted.' );});   
+   jQuery.post('admin-ajax.php', {action : 'optinrev_action', optinrev_del_image_briefcase : img, optinrev_curr_page : 'optinrevolution/optin1'}, function(){wtfn.msg( 'Successfully deleted.' );});   
    }
    return false; 
   },
@@ -1078,7 +1079,7 @@
   //add action button to the canvas
   action_add_button: function( img ) {   
    if ( confirm('Are you sure, you want to update the action button of Optin Popup 1') ) {
-   jQuery.post('admin-ajax.php', {action : 'optinrev_action', optinrev_add_button_briefcase : img, optinrev_curr_page : 'optin1'}, function(){wtfn.msg( 'Successfully updated.' );});   
+   jQuery.post('admin-ajax.php', {action : 'optinrev_action', optinrev_add_button_briefcase : img, optinrev_curr_page : 'optinrevolution/optin1'}, function(){wtfn.msg( 'Successfully updated.' );});   
    }
    return false; 
   }
@@ -1279,7 +1280,7 @@ jQuery(document).ready( function($) {
        range : 'min',
        value : optinrev_inputh,
        min : 10,
-       max : 50,
+       max : 100,
        slide: function(even, ui){
        $('#optinrev_inputh').val( ui.value );
        wtfn.inputs_setup();          
@@ -1290,7 +1291,7 @@ jQuery(document).ready( function($) {
        range : 'min',
        value : optinrev_inputw,
        min : 10,
-       max : 160,
+       max : 350,
        slide: function(even, ui){
        $('#optinrev_inputw').val( ui.value );
        wtfn.inputs_setup();          
@@ -1328,7 +1329,7 @@ jQuery(document).ready( function($) {
       return false;
     });
     
-    $('input=[name="optinrev_show_where"]').change(function(){
+    $('input[name="optinrev_show_where"]').change(function(){
     $.post('admin-ajax.php', {action : "optinrev_action", optinrev_show_where : $(this).val()});
     });
     

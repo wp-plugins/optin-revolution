@@ -30,7 +30,7 @@
   if ( !function_exists('is_optinrev') ) {
       function is_optinrev() {
           if ( isset($_GET['page']) && $page = esc_html($_GET['page']) ){
-          if ( preg_match('/optin|optin1|optin-pro-settings/', $page ) ) { return true; }
+          if (  in_array( $page, array('optinrevolution', 'optinrevolution/optin1', 'optinrevolution/optin-pro-settings') ) ) return true;          
           } 
           return false;
       }
@@ -56,7 +56,7 @@
   
   if ( !function_exists('optinrev_popups') ) {
       function optinrev_popups() {  
-        $optin = array( 'optin1' => 'Optin Popup 1' );
+        $optin = array( 'optinrevolution/optin1' => 'Optin Popup 1' );
         optinrev_update( 'optinrev_popups', serialize($optin) );
         return $optin;
       }

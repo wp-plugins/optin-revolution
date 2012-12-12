@@ -3,10 +3,9 @@
 require_once( '../../../wp-load.php' );  
 require_once( 'optinrev-fn.php' );
 
-$get_optin = (isset( $_GET['popup'] )) ? htmlentities($_GET['popup']) : 'optin1';
 $is_view = (isset( $_GET['view'] )) ? htmlentities($_GET['view']) : '';
 
-$optin = optinrev_get( $get_optin );
+$optin = optinrev_get( 'optinrevolution/optin1' );
 $dir = plugin_dir_url( __FILE__ );
 
 if ( $optin ) {
@@ -157,7 +156,7 @@ $expire = "expires: " . gmdate ("D, d M Y H:i:s", time() + $offset) . " GMT";
 header($expire);
 
 $modal = <<<LOAD_CSS
-#simplemodal-overlay {background-color:{$optin['optinrev_wbg_color']};z-index: 9999 !important;}
+#simplemodal-overlay {background-color:{$optin['optinrev_wbg_color']} !important;z-index: 9999 !important;}
 #simplemodal-container {position:absolute;{$top_margin}height:{$optin['optinrev_hheight']}px;width:{$optin['optinrev_wwidth']}px;background-color:{$optin['optinrev_pwbg_color']};border:{$optin['optinrev_border_thickness']}px solid {$border_color};-moz-border-radius: {$optin['optinrev_border_radius']}px;-webkit-border-radius: {$optin['optinrev_border_radius']}px;border-radius: {$optin['optinrev_border_radius']}px;-khtml-border-radius:{$optin['optinrev_border_radius']}px;{$htc}z-index: 9999 !important;}
 #simplemodal-container img {padding:0px;border:none;-webkit-appearance: none;-webkit-touch-callout: none;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;}
 #simplemodal-container .simplemodal-data a:link, 
@@ -174,6 +173,7 @@ $modal = <<<LOAD_CSS
 {$view_cleaned}
 {$resizable}
 {$mcebody}
+.wp_themeSkin .mceButtonDisabled .mceIcon {opacity:0.5 !important; filter:alpha(opacity=50) !important;}    
 #no_thanks_btn {cursor:pointer;display:none;position:absolute;width: 263px; height: 47px;background: url({$dir}images/no-thanks.png) no-repeat left top;z-index:999999;}
 #poweredby {cursor:pointer;color: {$pwd_color} !important;text-decoration:none !important;}
 #poweredby:hover {text-decoration:underline;}

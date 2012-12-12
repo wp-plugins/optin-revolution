@@ -14,6 +14,12 @@ Supercharged WordPress Popup. Quite possibly the best way in the world for you t
 
 Optin Revolution is a WordPress popup plugin is quite possibly the best way in the world for you to create supercharged unblockable popups to grow your list of subscribers! Optin Revolution is a killer free popup plugin for people who want to have unlimited customization on their optin popups, with the ability to be highly creative without having to know how to code.
 
+= Optin Revolution Lite Tutorial Videos =
+[Step-by-step video tutorials](http://optinrevolution.com/tutorials/?utm_source=wordpress.org&utm_medium=link&utm_campaign=plugin "Optin Revolution Lite Tutorial Videos")
+
+Optin Revolution Lite step-by-step video tutorials that can help you on your Optin Revolution Lite journey. Configuring up your main settings, setting up your email software and customizing your cool Optin Revolution Lite popup. Watch the videos by [clicking here](http://optinrevolution.com/tutorials/?utm_source=wordpress.org&utm_medium=link&utm_campaign=plugin "Optin Revolution Lite Tutorial Videos")
+
+
 = Optin Revolution Pro =
 
 [Upgrade to Optin Revolution Pro](http://www.optinrevolution.com/?utm_source=wordpress.org&utm_medium=link&utm_campaign=plugin "Upgrade to Optin Revolution Pro")
@@ -77,6 +83,12 @@ Integrates with the WordPress Media Library to allow importing images and button
 
 == Changelog ==
 
+= 1.1.0 =
+
+* Bug Fix: Fix url which conflicts with another plugin
+* Bug Fix: User permission fix
+* Bug Fix: Toolbar fix for WordPress 3.5 editor disabled toolbar opacity
+
 = 1.0.9 =
 
 * Feature: Enable / disable to show popup in mobile
@@ -85,7 +97,7 @@ Integrates with the WordPress Media Library to allow importing images and button
 
 = 1.0.8 =
 
-* Bug Fix: Warning: Cannot modify header information.
+* Bug Fix: Warning: Cannot modify header information
 
 = 1.0.7 =
 
