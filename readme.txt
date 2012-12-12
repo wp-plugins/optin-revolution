@@ -82,6 +82,10 @@ Integrates with the WordPress Media Library to allow importing images and button
 
 == Changelog ==
 
+= 1.1.1 =
+
+* Bug Fix: Fix error button in the stage displayed
+
 = 1.1.0 =
 
 * Bug Fix: Fix url which conflicts with another plugin
