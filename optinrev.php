@@ -969,8 +969,4 @@ function optinrev_wphead() {
   wp_enqueue_script( 'optinrev_mediajs', plugin_dir_url( __FILE__ ) . 'js/optinrev-media.js' );
   }
   }
-?>'], 'wp-admin/upload.php' ) ) {
-  wp_enqueue_script( 'optinrev_mediajs', plugin_dir_url( __FILE__ ) . 'js/optinrev-media.js' );
-  }
-  }
 ?>
