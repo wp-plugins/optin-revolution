@@ -4,7 +4,7 @@ Donate link: http://optinrevolution.com/
 Tags: wordpress popup, optin, pop-up, popup, optin popup, post, plugin, admin, post, posts, page, pages, email, administration, stats, statistics, stat, statistic,  affiliate, affiliates, automation, widget, widgets, dashboard, shortcode, sidebar 
 Requires at least: 3.3
 Tested up to: 3.5
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 
 Supercharged WordPress Popup. Quite possibly the best way in the world for you to create unique unblockable popups to grow your list of subscribers!
 
