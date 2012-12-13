@@ -1,7 +1,7 @@
 <?php
 /**
  * @package Optin Revolution
- * @version 1.1.1
+ * @version 1.1.2
  */
 
 /*
@@ -9,7 +9,7 @@
   Plugin URI: http://wordpress.org/extend/plugins/optin-revolution/
   Description: Optin Revolution is a WordPress popup plugin is quite possibly the best way in the world for you to create supercharged unblockable popups to grow your list of subscribers! To get started: 1) Click the "Activate" link to the left of this description, 2) Go to your Optin Revolution settings page, and 3) Watch the video on the settings page which will show you how to get started creating your cool popups.
   Author: Optin Revolution
-  Version: 1.1.1
+  Version: 1.1.2
   Author URI: http://optinrevolution.com/
   License: GPL2+
 */
@@ -35,8 +35,8 @@ $wp_version;
 //init
 $plugin_name = 'optin-revolution/optinrev.php';
 $optinrev_db_version = '1.0';
-$optinrev_installed_version = '1.1.1';
-$optinrev_newest_version = '1.1.2';
+$optinrev_installed_version = '1.1.2';
+$optinrev_newest_version = '1.1.3';
 
 function optinrev_admin_actions()
 {
@@ -47,9 +47,9 @@ function optinrev_admin_actions()
     add_utility_page( _('Optin Revolution'), _('Optin Revolution'), 'administrator', 'optinrevolution', 'optinrev_admin' );  
     add_submenu_page( 'optinrevolution', __( 'Optin Popup 1' ), __( 'Optin Popup 1' ), 'administrator', 'optinrevolution/optin1', 'optinrev_setup' );  
     add_submenu_page( 'optinrevolution', 'Optin Revolution <code>Pro</code>', 'Optin Revolution <code>Pro</code>', 'administrator', 'optinrevolution/optin-pro-settings', 'optinrev_pro' );
-    add_submenu_page( '', __(''), __(''), 'administrator', 'browser-issue', 'optinrev_browser_alert' );
+    add_submenu_page( '', __(''), __(''), 'administrator', 'optinrevolution/browser-issue', 'optinrev_browser_alert' );
     //changed name    
-    $submenu['optin'][0][0] = __('Settings');
+    $submenu['optinrevolution'][0][0] = __('Settings');
   }
 }
 
@@ -176,7 +176,7 @@ function optinrev_transient_update_plugins($transient)
     }
         
     $obj = new stdClass();
-    $obj->slug = 'optin';  
+    $obj->slug = 'optinrevolution';  
     $obj->new_version = $optinrev_newest_version;  
     $obj->url = 'http://optinrevolution.com';
     $obj->package = $download_url;  
@@ -225,11 +225,11 @@ function optinrev_pro_get_started_headline()
   
   if (  in_array( $plugin_page, array('optinrevolution', 'optinrevolution/optin1', 'optinrevolution/optin-pro-settings') ) ) {
           
-    echo __('<div class="update-nag" id="optinrev-nag"><span class="red-text">Help Keep Me Free.</span> <a href="http://wordpress.org/support/view/plugin-reviews/optin-revolution?filter=5" target="_new">Hey Guys Click Here and Rate Optin Revolution Lite!</a></div>');    
+    echo __('<div class="update-nag" id="optinrev-nag">Help Keep Me Free. <a href="http://wordpress.org/support/view/plugin-reviews/optin-revolution?filter=5" target="_new">Click Here and Rate and Review Optin Revolution Lite!</a></div>');    
   
     if ( !optinrev_get('optinrev_media_notice') ) {
     ?>
-    <div class="error" style="padding:8px;"><?php echo __('LIVE: Optin Revolution Lite <a href="http://optinrevolution.com/tutorials/?utm_source=plugin&utm_medium=link&utm_campaign=message" target="_blank">step-by-step video tutorials</a> that can help you on your Optin Revolution Lite journey. Configuring up your main settings, setting up your email software and customizing your cool Optin Revolution Lite popup. <a href="http://optinrevolution.com/tutorials/?utm_source=plugin&utm_medium=link&utm_campaign=message" target="_blank">Click here for your video tutorials.</a> <span class="submit"><input type="button" name="hide_media_notice" value="Hide this message" onclick="window.location=\''.$this_uri.'&media_notice=1\'"></span>'); ?></div>
+   <div class="error" style="padding:8px;"><?php echo __('LIVE: Optin Revolution Lite <a href="http://optinrevolution.com/tutorials/?utm_source=plugin&utm_medium=link&utm_campaign=message" target="_blank">step-by-step video tutorials</a> that can help you on your Optin Revolution Lite journey. Configuring up your main settings, setting up your email software and customizing your cool Optin Revolution Lite popup. <a href="http://optinrevolution.com/tutorials/?utm_source=plugin&utm_medium=link&utm_campaign=message" target="_blank">Click here for your video tutorials.</a>'); ?></div>
     <?php
     }  
   
@@ -276,9 +276,7 @@ function optinrev_activate()
   optinrev_update( 'optinrev_db_version', $optinrev_db_version );  
   optinrev_update( 'optinrev_installed_version', $optinrev_installed_version );  
   optinrev_delete( 'optinrev_pro_installed' );
-  optinrev_check_update(); 
-  
-  register_uninstall_hook( __FILE__, 'optinrev_uninstall' );  
+  optinrev_check_update();
 }
 register_activation_hook( __FILE__, 'optinrev_activate' );
 
@@ -287,16 +285,6 @@ function optinrev_deactivate()
   delete_site_transient( $plugin_name );  
 }
 register_deactivation_hook( __FILE__, 'optinrev_deactivate' );
-
-function optinrev_uninstall() {
-  global $wpdb;
-  
-  if ( __FILE__ != WP_UNINSTALL_PLUGIN )
-  return;
-	
-	$wpdb->query( 'DROP TABLE IF EXISTS '. $wpdb->prefix . 'optinrev' );
-}
-add_action( 'admin_init', 'optinrev_uninstall' );
 
 function optinrev_js()
 {
@@ -356,7 +344,7 @@ function optinrev_js()
   $ht .= '$("#optinrev_popup_enabled").iButton({change: function($input){$(\'#_disopt\').hide();$.post("admin-ajax.php", {action : "optinrev_action", "optinrev_popup_enabled" : $input.is(":checked")}, function(res){wtfn.msg(\'Successfully Updated.\');});}});';
   ?>
   <script type="text/javascript">  
-  var admin = {cookies : function() {if ( confirm('Are you sure you want to clear all cookies ?') ) {window.location.href = 'admin.php?page=optin&cookies=clear';}}};
+  var admin = {cookies : function() {if ( confirm('Are you sure you want to clear all cookies ?') ) {window.location.href = 'admin.php?page=optinrevolution&cookies=clear';}}};
   jQuery(document).ready(function($){<?php echo $ht;?>});
   </script>  
   <?php }
@@ -395,7 +383,7 @@ function optinrev_pro()
   
 ?>
 <div class="wrap fform">
-  <div class="get-help">Get Help : <a href="http://optinrevolution.com/tutorials/" target="_new">Tutorials</a> | <a href="http://optinrevolution.com" target="_new">Upgrade to Pro</a></div>
+  <div class="get-help">Get Help : <a href="http://optinrevolution.com/tutorials/?utm_source=plugin&utm_medium=link&utm_campaign=link" target="_new">Tutorials</a> | <a href="http://optinrevolution.com" target="_new">Upgrade to Pro</a></div>
   <div class="icon32" id="icon-options-general"><br /></div><?php echo "<h2>" . __( 'Optin Revolution Pro Settings', 'optinrev_trdom' ) . "</h2>"; ?> <br />  
   <h3>Optin Revolution Pro Account Information</h3>
   <form id="cred_form" name="cred_form" method="post" action="<?php echo $this_uri;?>">
@@ -978,6 +966,10 @@ function optinrev_wphead() {
   
   if ( is_admin() ) {  
   if ( strstr( $_SERVER['SCRIPT_NAME'], 'wp-admin/upload.php' ) ) {
+  wp_enqueue_script( 'optinrev_mediajs', plugin_dir_url( __FILE__ ) . 'js/optinrev-media.js' );
+  }
+  }
+?>'], 'wp-admin/upload.php' ) ) {
   wp_enqueue_script( 'optinrev_mediajs', plugin_dir_url( __FILE__ ) . 'js/optinrev-media.js' );
   }
   }

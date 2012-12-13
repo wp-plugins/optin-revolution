@@ -82,6 +82,11 @@ Integrates with the WordPress Media Library to allow importing images and button
 
 == Changelog ==
 
+= 1.1.2 =
+
+* Bug Fix: Fix issue clearing cookies
+* Bug Fix: Fix issue adding images to popup stage
+
 = 1.1.1 =
 
 * Bug Fix: Fix error button in the stage displayed
