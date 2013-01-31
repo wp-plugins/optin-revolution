@@ -6,24 +6,24 @@ jQuery(document).ready(function($){
         load: function( msg ) {$('.status').remove();pro.msg( msg );setTimeout(function(){$('.status').fadeOut();}, 2000) },
         error: function( msg ) {$('.status').remove();$('.submit').append( $(sp).css('color','red').html( 'Error : ' + msg ) );setTimeout(function(){$('.status').remove();}, 2000)},        
         verify: function() {        
-        pro.msg('Verifying member account and clickbank order number...');        
+        pro.msg('Verifying member account and the domain...');        
         setTimeout(function(){
         $.post('admin-ajax.php', {action : "optinrev_action", authenticate : $('#cred_form').serialize()}, function( res ){          
                         
           if ( res == 'invalid_user' ) {
-          pro.error('Invalid Member Account.');
+          pro.error('Invalid Email.');
           return false;
-          }
-                            
-          if ( res == 'invalid_order' ) {
-          pro.error('Invalid Clickbank Order Number.');
-          return false;
-          }
+          }                            
           
-          if ( res == 'invalid' ) {
-          pro.error('Invalid Clickbank Order Number / Member Account.');
+          if ( res == 'invalid_domain' ) {
+          pro.error('Invalid Domain');
           return false;
           }
+
+          if ( res == 'invalid_member' ) {
+          pro.error('Invalid Member Account');
+          return false;
+          }          
           
           if ( res == 'refund' ) {
           pro.error('Product has been refund.');

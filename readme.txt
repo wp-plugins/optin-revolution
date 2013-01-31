@@ -82,6 +82,19 @@ Integrates with the WordPress Media Library to allow importing images and button
 
 == Changelog ==
 
+= 1.1.3 =
+
+* Bug Fix: Fix issue popup not showing IE8/9
+* Bug Fix: Fix issue popup not showing some themes
+* Bug Fix: Fix issue text alignment
+* Bug Fix: Fix issue line height
+* Bug Fix: Fix issue 404 error when pressing enter on MailChimp
+* Bug Fix: Fix issue with stage css
+* Bug Fix: Fix issue with w3tc
+* Bug Fix: Fix issue cross domain cookies
+* Bug Fix: Fix conflict with Ultimate TinyMCE plugin
+* Bug Fix: A number of other minor fixes
+
 = 1.1.2 =
 
 * Bug Fix: Fix issue clearing cookies

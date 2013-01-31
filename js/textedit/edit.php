@@ -1,11 +1,10 @@
 <?php
-  require_once( '../../../../../wp-load.php' );    
-  define( 'WP_CACHE', false ); 
-  define('DONOTCACHEPAGE', true);
-  define('DONOTCACHEDB', true);
-  define('DONOTMINIFY', true);
-  define('DONOTCDN', true);
-  define('DONOTCACHCEOBJECT', true);
+  require_once( '../../../../../wp-load.php' );
+  @define('DONOTCACHEPAGE', true);
+  @define('DONOTCACHEDB', true);
+  @define('DONOTMINIFY', true);
+  @define('DONOTCDN', true);
+  @define('DONOTCACHCEOBJECT', true);
   
   $mce = includes_url() . 'js/tinymce/';
   $jqy = includes_url() . 'js/jquery/';
@@ -22,7 +21,7 @@
   <script type="text/javascript" src="<?php echo $jqy;?>jquery.js"></script>  
   <script type="text/javascript" src="js/textedit.js"></script>      
   <script type="text/javascript">
-    tinyMCE.init({mode : "none",theme : "advanced",theme_advanced_buttons1 : "fontselect,fontsizeselect,forecolor,backcolor,|,bold,italic,underline,separator,strikethrough,justifyleft,justifycenter,justifyright,justifyfull,bullist,numlist,undo,redo,link,unlink",theme_advanced_buttons2 : "",theme_advanced_buttons3 : "",theme_advanced_toolbar_location : "top",theme_advanced_toolbar_align : "left",theme_advanced_path : false,invalid_elements : 'p',cleanup : true,force_br_newlines : true,force_p_newlines : false,forced_root_block : '',remove_redundant_brs : false,remove_linebreaks : true,theme_advanced_font_sizes : "8pt,10pt,12pt,14pt,18pt,24pt,30pt,36pt,48pt,60pt,72pt",content_css : "../../optinrev-css.php",setup : function( ed ) {ed.onInit.add( function(ed, e) {ed.dom.hide('mceDeleteObj');});}});
+    tinyMCE.init({mode : "none", plugins: 'paste,lineheight', theme : "advanced", theme_advanced_buttons1 : "fontselect,fontsizeselect,forecolor,backcolor,|,lineheight,|,bold,italic,underline,separator,strikethrough,bullist,numlist,undo,redo,link,unlink",theme_advanced_buttons2 : "",theme_advanced_buttons3 : "",theme_advanced_toolbar_location : "top",theme_advanced_toolbar_align : "left",theme_advanced_path : false,invalid_elements : 'p',cleanup : true,force_br_newlines : true,force_p_newlines : false,forced_root_block : '',remove_redundant_brs : false,remove_linebreaks : true,theme_advanced_font_sizes : "8pt,10pt,12pt,14pt,18pt,24pt,30pt,36pt,48pt,60pt,72pt",content_css : "../../optinrev-css.php", paste_text_sticky : true, setup : function( ed ) {ed.onInit.add( function(ed, e) { ed.pasteAsPlainText = true; ed.dom.hide('mceDeleteObj');});}});    
     jQuery(document).ready(function($){            
       //loading    
       setTimeout(function(){tinyMCE.execCommand( 'mceAddControl', false, 'mce_textedit' );}, 500);

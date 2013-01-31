@@ -4,6 +4,7 @@
 .col1 {float:left;width:74%;}
 .col2 {float:right;width:22%;margin-right:14px;}
 .need-support-box {margin-top: 50px;padding:10px;border: 1px solid #d0d0d0;}
+.need-support-box a {color:#0016ff !important; text-decoration:underline;}
 .need-support-box h2 {font-weight:normal;}
 .spread-the-word-box {margin-top: 10px;padding:10px;border: 1px solid #d0d0d0;}
 .spread-the-word-box h2 {font-weight:normal;}
@@ -49,5 +50,7 @@ margin-top: 8px;
 #optinrev-nag {font-size: 18px; font-weight: bold;margin-bottom: 15px;padding: 10px 0 10px 0;}
 .update-nag .red-text {color:red;}
 .update-nag a {color:#0016ff;}
-
 .popup-option div.rw {padding: 4px 0 4px 0;}
+
+.updated a {color:#0016ff !important; text-decoration:underline;}
+.get-help a {color:#0016ff !important; text-decoration:underline;}

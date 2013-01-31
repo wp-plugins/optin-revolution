@@ -1,11 +1,11 @@
 <?php
   require_once( '../../../../../../../wp-load.php' );
-  define( 'WP_CACHE', false ); 
-  define('DONOTCACHEPAGE', true);
-  define('DONOTCACHEDB', true);
-  define('DONOTMINIFY', true);
-  define('DONOTCDN', true);
-  define('DONOTCACHCEOBJECT', true);      
+  @define( 'WP_CACHE', false ); 
+  @define('DONOTCACHEPAGE', true);
+  @define('DONOTCACHEDB', true);
+  @define('DONOTMINIFY', true);
+  @define('DONOTCDN', true);
+  @define('DONOTCACHCEOBJECT', true);      
   $mce = includes_url() . 'js/tinymce/';
 ?>  
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
