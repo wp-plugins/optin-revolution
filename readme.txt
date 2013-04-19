@@ -1,6 +1,6 @@
 === Optin Revolution: WordPress Popup ===
 Contributors: optinrevolution
-Donate link: http://www.optinrevolution.com/
+Donate link: http://optinrevolution.com/
 Tags: wordpress popup, optin, pop-up, popup, optin popup, post, plugin, admin, post, posts, page, pages, email, administration, stats, statistics, stat, statistic,  affiliate, affiliates, automation, widget, widgets, dashboard, shortcode, sidebar 
 Requires at least: 3.3
 Tested up to: 3.5
@@ -12,7 +12,7 @@ Supercharged WordPress Popup Plugin. Possibly the best way in the world for you 
 
 = Optin Revolution Lite =
 
-Optin Revolution lite is a WordPress popup plugin is quite possibly the best way in the world for you to create supercharged unblockable popup windows to grow your list of subscribers! Optin Revolution is a killer free popup plugin for people who want to have unlimited customization on their optin popups, with the ability to be highly creative without having to know how to code.
+Optin Revolution Lite is a WordPress popup plugin is quite possibly the best way in the world for you to create supercharged unblockable popup windows to grow your list of subscribers! Optin Revolution is a killer free popup plugin for people who want to have unlimited customization on their optin popups, with the ability to be highly creative without having to know how to code.
 
 = Optin Revolution Lite Tutorial Videos =
 [Step-by-step video tutorials](http://optinrevolution.com/tutorials/?utm_source=wordpress.org&utm_medium=link&utm_campaign=plugin "Optin Revolution Lite Tutorial Videos")
@@ -23,13 +23,13 @@ Optin Revolution Lite step-by-step video tutorials that can help you on your Opt
 
 [Upgrade to Optin Revolution Pro](http://www.optinrevolution.com/?utm_source=wordpress.org&utm_medium=link&utm_campaign=plugin "Upgrade to Optin Revolution Pro")
 
-*Optin Revolution Pro* is a **Significant Upgrade** to *Optin Revolution Lite* Pro adds lots of cool tools including A/B/C/D/E WordPress optin popup split testing, A/B/C inline optin split testing, analytics with a conversation pixel that will allows you to track conversion and view statistics on your optin popups plus in-post forms. You can add YouTube or Vimeo videos to your WordPress popup windows and much, much more amazing stuff.
+*Optin Revolution Pro* is a **Significant Upgrade** to *Optin Revolution Lite.* Optin Revolution Pro adds lots of cool tools including A/B/C/D/E WordPress optin popup split testing, A/B/C inline optin split testing, analytics with a conversation pixel that will allows you to track conversion and view statistics on your optin popups plus in-post forms. You can add YouTube or Vimeo videos to your WordPress popup windows and much, much more amazing stuff.
 
-[Click Here to Find Out More About *Optin Revolution Pro*](http://www.optinrevolution.com/?utm_source=wordpress.org&utm_medium=link&utm_campaign=plugin "Optin Revolution Pro")
+[Click Here to Find Out More About Optin Revolution Pro](http://www.optinrevolution.com/?utm_source=wordpress.org&utm_medium=link&utm_campaign=plugin "Optin Revolution Pro")
 
 = Check out the video below on Optin Revolution Pro: =
 
-http://www.youtube.com/watch?v=m9B54jGyuqY&hd=1&rel=0&showinfo=0&controls=0
+http://www.youtube.com/watch?v=m9B54jGyuqY&hd=1
 
 = Optin Revolution Lite Features =
 
