@@ -10,9 +10,9 @@ Supercharged WordPress Popup Plugin. Possibly the best way in the world for you 
 
 == Description ==
 
-= Optin Revolution =
+= Optin Revolution Lite =
 
-Optin Revolution is a WordPress popup plugin is quite possibly the best way in the world for you to create supercharged unblockable popups to grow your list of subscribers! Optin Revolution is a killer free popup plugin for people who want to have unlimited customization on their optin popups, with the ability to be highly creative without having to know how to code.
+Optin Revolution Lite is a WordPress popup plugin is quite possibly the best way in the world for you to create supercharged unblockable popups to grow your list of subscribers! Optin Revolution is a killer free popup plugin for people who want to have unlimited customization on their optin popups, with the ability to be highly creative without having to know how to code.
 
 = Optin Revolution Lite Tutorial Videos =
 [Step-by-step video tutorials](http://optinrevolution.com/tutorials/?utm_source=wordpress.org&utm_medium=link&utm_campaign=plugin "Optin Revolution Lite Tutorial Videos")
@@ -25,14 +25,13 @@ Optin Revolution Lite step-by-step video tutorials that can help you on your Opt
 
 **Optin Revolution Pro** is a **Significant Upgrade** to *Optin Revolution Lite.* Optin Revolution Pro adds lots of cool tools including A/B/C/D/E WordPress optin popup split testing, A/B/C inline optin split testing, analytics with a conversation pixel that will allows you to track conversion and view statistics on your optin popups plus in-post forms. You can add YouTube or Vimeo videos to your WordPress popup windows and much, much more amazing stuff.
 
-[**Click Here to Find Out More About Optin Revolution Pro**](http://www.optinrevolution.com/?utm_source=wordpress.org&utm_medium=link&utm_campaign=plugin "Optin Revolution Pro")
+[Click Here to Find Out More About Optin Revolution Pro](http://www.optinrevolution.com/?utm_source=wordpress.org&utm_medium=link&utm_campaign=plugin "Optin Revolution Pro")
 
 = Check out the video below on Optin Revolution Pro: =
 
-http://www.youtube.com/watch?v=m9B54jGyuqY&hd=1&rel=0&showinfo=0&controls=0
+http://www.youtube.com/watch?v=m9B54jGyuqY&hd=1&rel=0
 
 = Optin Revolution Lite Features =
-
 
 * Integration with Aweber, iContact, GetResponse, MailChimp and Constant Contact, select your email marketing program and configure.
 * This plugin allow you to completely change the look and feel of the WordPress popup.
