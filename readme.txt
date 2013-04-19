@@ -10,9 +10,9 @@ Supercharged WordPress Popup Plugin. Possibly the best way in the world for you 
 
 == Description ==
 
-= Optin Revolution Lite =
+= Optin Revolution =
 
-Optin Revolution Lite is a WordPress popup plugin is quite possibly the best way in the world for you to create supercharged unblockable popup windows to grow your list of subscribers! Optin Revolution is a killer free popup plugin for people who want to have unlimited customization on their optin popups, with the ability to be highly creative without having to know how to code.
+Optin Revolution is a WordPress popup plugin is quite possibly the best way in the world for you to create supercharged unblockable popups to grow your list of subscribers! Optin Revolution is a killer free popup plugin for people who want to have unlimited customization on their optin popups, with the ability to be highly creative without having to know how to code.
 
 = Optin Revolution Lite Tutorial Videos =
 [Step-by-step video tutorials](http://optinrevolution.com/tutorials/?utm_source=wordpress.org&utm_medium=link&utm_campaign=plugin "Optin Revolution Lite Tutorial Videos")
