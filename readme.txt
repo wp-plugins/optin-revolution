@@ -23,15 +23,16 @@ Optin Revolution Lite step-by-step video tutorials that can help you on your Opt
 
 [Upgrade to Optin Revolution Pro](http://www.optinrevolution.com/?utm_source=wordpress.org&utm_medium=link&utm_campaign=plugin "Upgrade to Optin Revolution Pro")
 
-*Optin Revolution Pro* is a **Significant Upgrade** to *Optin Revolution Lite.* Optin Revolution Pro adds lots of cool tools including A/B/C/D/E WordPress optin popup split testing, A/B/C inline optin split testing, analytics with a conversation pixel that will allows you to track conversion and view statistics on your optin popups plus in-post forms. You can add YouTube or Vimeo videos to your WordPress popup windows and much, much more amazing stuff.
+**Optin Revolution Pro** is a **Significant Upgrade** to *Optin Revolution Lite.* Optin Revolution Pro adds lots of cool tools including A/B/C/D/E WordPress optin popup split testing, A/B/C inline optin split testing, analytics with a conversation pixel that will allows you to track conversion and view statistics on your optin popups plus in-post forms. You can add YouTube or Vimeo videos to your WordPress popup windows and much, much more amazing stuff.
 
-[Click Here to Find Out More About Optin Revolution Pro](http://www.optinrevolution.com/?utm_source=wordpress.org&utm_medium=link&utm_campaign=plugin "Optin Revolution Pro")
+[**Click Here to Find Out More About Optin Revolution Pro**](http://www.optinrevolution.com/?utm_source=wordpress.org&utm_medium=link&utm_campaign=plugin "Optin Revolution Pro")
 
 = Check out the video below on Optin Revolution Pro: =
 
-http://www.youtube.com/watch?v=m9B54jGyuqY&hd=1
+http://www.youtube.com/watch?v=m9B54jGyuqY&hd=1&rel=0&showinfo=0&controls=0
 
 = Optin Revolution Lite Features =
+
 
 * Integration with Aweber, iContact, GetResponse, MailChimp and Constant Contact, select your email marketing program and configure.
 * This plugin allow you to completely change the look and feel of the WordPress popup.
