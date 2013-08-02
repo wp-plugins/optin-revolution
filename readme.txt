@@ -5,6 +5,7 @@ Tags: wordpress popup, optin, pop-up, popup, optin popup, post, plugin, admin, p
 Requires at least: 3.3
 Tested up to: 3.5
 Stable tag: 1.2.2
+License: GPLv2
                  
 Supercharged WordPress Popup Plugin. Best way in the world for you to create unique unblockable WordPress popups to grow your list of subscribers!
 
