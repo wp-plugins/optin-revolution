@@ -32,7 +32,7 @@ Optin Revolution Lite step-by-step video tutorials that can help you on your Opt
 
 = Check out the video below on Optin Revolution Pro: =
 
-http://www.youtube.com/watch?v=ver0g1DOyqY
+http://www.youtube.com/watch?v=m9B54jGyuqY&hd=1&rel=0
 
 = Optin Revolution Lite Features =
 
