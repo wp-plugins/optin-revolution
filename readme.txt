@@ -4,7 +4,7 @@ Donate link: http://optinrevolution.com/
 Tags: wordpress popup, popup, popups, unblockable, optin, pop-up, optin popup, full screen popup, full screen pop, full page popup, popup window, popup box, onclick popup, popup message, aweber, icontact, getresponse, mailchimp, constant contact, wjsija, admin, post, posts, page, pages, email, widget, dashboard, shortcode 
 Requires at least: 3.3
 Tested up to: 3.5
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 License: GPLv2
                  
 Supercharged WordPress Popup Plugin. Best way in the world for you to create unique unblockable WordPress popups to grow your list of subscribers!
